@@ -34,7 +34,7 @@ export default function Admissions() {
               {
                 num: "1",
                 title: "Inquire",
-                text: "Submit our short inquiry form or email admissions@qafschool.ca. We\u2019ll respond within two business days.",
+                text: "Submit our short inquiry form or email admin@qafschool.ca. We\u2019ll respond within two business days.",
               },
               {
                 num: "2",
@@ -119,8 +119,8 @@ export default function Admissions() {
                 <p>+ $190 resource fee = <strong className="text-orange-dark text-lg">$7,090/year</strong></p>
                 <p className="text-sm mt-3">
                   Sibling discount available. Contact{" "}
-                  <a href="mailto:admissions@qafschool.ca" className="text-orange-dark hover:underline">
-                    admissions@qafschool.ca
+                  <a href="mailto:admin@qafschool.ca" className="text-orange-dark hover:underline">
+                    admin@qafschool.ca
                   </a>{" "}
                   for details.
                 </p>
@@ -176,10 +176,10 @@ export default function Admissions() {
               Submit Inquiry &rarr;
             </Link>
             <a
-              href="mailto:admissions@qafschool.ca"
+              href="mailto:admin@qafschool.ca"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-all"
             >
-              admissions@qafschool.ca
+              admin@qafschool.ca
             </a>
           </div>
         </div>

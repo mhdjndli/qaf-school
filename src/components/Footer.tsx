@@ -20,13 +20,13 @@ export default function Footer() {
               <p>900 Dynes Rd</p>
               <p>Ottawa, ON K2C 3L6</p>
               <p className="mt-2">
-                <a href="mailto:info@qafschool.ca" className="hover:text-orange transition-colors">
-                  info@qafschool.ca
+                <a href="mailto:admin@qafschool.ca" className="hover:text-orange transition-colors">
+                  admin@qafschool.ca
                 </a>
               </p>
               <p>
-                <a href="mailto:admissions@qafschool.ca" className="hover:text-orange transition-colors">
-                  admissions@qafschool.ca
+                <a href="tel:+16135818685" className="hover:text-orange transition-colors">
+                  +1 613 581 8685
                 </a>
               </p>
             </div>
@@ -108,10 +108,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:admissions@qafschool.ca"
+                  href="mailto:admin@qafschool.ca"
                   className="text-sm text-white/60 hover:text-orange transition-colors"
                 >
-                  admissions@qafschool.ca
+                  admin@qafschool.ca
                 </a>
               </li>
             </ul>

@@ -1,10 +1,6 @@
-"use client";
-
-import { useState } from "react";
+import InquiryForm from "@/components/InquiryForm";
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
-
   return (
     <>
       {/* HERO */}
@@ -14,8 +10,8 @@ export default function Contact() {
             Get in Touch
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto">
-            We&rsquo;d love to hear from you , whether you have a question,
-            want to submit an inquiry, or are ready to apply.
+            We&rsquo;d love to hear from you. Share your details below and
+            we&rsquo;ll be in touch within two business days.
           </p>
         </div>
       </section>
@@ -28,13 +24,15 @@ export default function Contact() {
             <div className="space-y-6">
               <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
-                  General Inquiries
+                  Email
                 </h3>
                 <div className="text-text-light text-[0.93rem] space-y-1">
                   <p>
-                    Email:{" "}
-                    <a href="mailto:info@qafschool.ca" className="text-orange-dark hover:underline font-medium">
-                      info@qafschool.ca
+                    <a
+                      href="mailto:admin@qafschool.ca"
+                      className="text-orange-dark hover:underline font-medium"
+                    >
+                      admin@qafschool.ca
                     </a>
                   </p>
                   <p>Office hours: Monday&ndash;Friday, 8:30 AM &ndash; 4:00 PM</p>
@@ -43,19 +41,15 @@ export default function Contact() {
 
               <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
-                  Admissions
+                  Phone
                 </h3>
-                <div className="text-text-light text-[0.93rem] space-y-1">
+                <div className="text-text-light text-[0.93rem]">
                   <p>
-                    Email:{" "}
-                    <a href="mailto:admissions@qafschool.ca" className="text-orange-dark hover:underline font-medium">
-                      admissions@qafschool.ca
-                    </a>
-                  </p>
-                  <p>
-                    Or{" "}
-                    <a href="/inquiry" className="text-orange-dark hover:underline font-medium">
-                      submit an inquiry directly
+                    <a
+                      href="tel:+16135818685"
+                      className="text-orange-dark hover:underline font-medium"
+                    >
+                      +1 613 581 8685
                     </a>
                   </p>
                 </div>
@@ -100,105 +94,12 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Contact Form */}
+            {/* Inquiry Form */}
             <div>
               <h2 className="font-heading text-2xl font-bold mb-6">
-                Send Us a Message
+                Submit an Inquiry
               </h2>
-              {submitted ? (
-                <div className="bg-green/10 border border-green rounded-xl p-8 text-center">
-                  <div className="text-4xl mb-3">&#10003;</div>
-                  <h3 className="font-heading text-xl font-bold mb-2 text-green">
-                    Message Sent!
-                  </h3>
-                  <p className="text-text-light">
-                    Thank you for reaching out. We&rsquo;ll get back to you within
-                    two business days.
-                  </p>
-                </div>
-              ) : (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSubmitted(true);
-                  }}
-                  className="space-y-5"
-                >
-                  <div>
-                    <label className="block text-sm font-semibold text-text mb-1.5">
-                      Your name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-text mb-1.5">
-                      Your email *
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-text mb-1.5">
-                      Your phone number
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-text mb-1.5">
-                      Subject *
-                    </label>
-                    <select
-                      required
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all bg-white"
-                    >
-                      <option value="">Select a subject</option>
-                      <option>Admissions</option>
-                      <option>Tour</option>
-                      <option>General Inquiry</option>
-                      <option>Careers</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-text mb-1.5">
-                      Your message *
-                    </label>
-                    <textarea
-                      required
-                      rows={5}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all resize-y"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2.5">
-                    <input type="checkbox" id="newsletter" className="w-4 h-4 accent-orange" />
-                    <label htmlFor="newsletter" className="text-text-light text-sm">
-                      I&rsquo;d like to be added to the QAF newsletter
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-orange text-white py-3.5 rounded-lg font-semibold text-lg hover:bg-orange-dark transition-all hover:-translate-y-0.5 hover:shadow-lg"
-                  >
-                    Send Message &rarr;
-                  </button>
-                </form>
-              )}
+              <InquiryForm />
             </div>
           </div>
         </div>

@@ -75,7 +75,7 @@ const faqData = [
       },
       {
         q: "Do you offer sibling discounts or financial aid?",
-        a: "Yes, we offer a sibling discount for families with more than one child enrolled. Contact admissions@qafschool.ca for details.",
+        a: "Yes, we offer a sibling discount for families with more than one child enrolled. Contact admin@qafschool.ca for details.",
       },
       {
         q: "When should I apply?",
@@ -162,10 +162,10 @@ export default function FAQ() {
               Submit Inquiry &rarr;
             </a>
             <a
-              href="mailto:info@qafschool.ca"
+              href="mailto:admin@qafschool.ca"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-all"
             >
-              info@qafschool.ca
+              admin@qafschool.ca
             </a>
           </div>
         </div>
