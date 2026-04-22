@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s · QAF",
   },
   description:
-    "QAF is Ottawa's Islamic Junior & Senior Kindergarten — Montessori-inspired learning, daily Arabic, and Islamic values. Ages 4-5. Book a tour today.",
+    "QAF is Ottawa's Islamic Junior & Senior Kindergarten — Montessori-inspired learning, daily Arabic, and Islamic values. Ages 4-5. Submit your inquiry today.",
 };
 
 export default function RootLayout({
@@ -33,9 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col font-[var(--font-inter)] antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

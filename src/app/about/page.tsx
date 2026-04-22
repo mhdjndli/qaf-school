@@ -236,14 +236,15 @@ export default function About() {
             Now that you know us, come meet us.
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            Book a tour, walk through our classroom, and see whether QAF feels
-            like the right first school for your child.
+            Submit an inquiry and we&rsquo;ll reach out to schedule a tour so
+            you can see whether QAF feels like the right first school for your
+            child.
           </p>
           <Link
-            href="/admissions#tour"
+            href="/inquiry"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Book a Tour &rarr;
+            Submit Inquiry &rarr;
           </Link>
         </div>
       </section>

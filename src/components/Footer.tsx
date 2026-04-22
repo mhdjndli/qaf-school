@@ -100,10 +100,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/admissions#tour"
+                  href="/inquiry"
                   className="text-sm text-white/60 hover:text-orange transition-colors"
                 >
-                  Book a Tour
+                  Submit Inquiry
                 </Link>
               </li>
               <li>

@@ -20,10 +20,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/admissions#tour"
+              href="/inquiry"
               className="bg-orange text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-dark transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Book a Tour &rarr;
+              Submit Inquiry &rarr;
             </Link>
             <Link
               href="/program"
@@ -385,10 +385,10 @@ export default function Home() {
             through the classroom. Tours run weekly during the school year.
           </p>
           <Link
-            href="/admissions#tour"
+            href="/inquiry"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Book Your Tour &rarr;
+            Submit Inquiry &rarr;
           </Link>
         </div>
       </section>

@@ -77,7 +77,7 @@ function ArabicImmersionContent() {
       <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
         <p className="text-text font-medium">
           Want to see Arabic immersion in action?{" "}
-          <Link href="/admissions#tour" className="text-orange-dark font-semibold hover:underline">Book a tour</Link>{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
           and visit our classroom. You&rsquo;ll hear the language being spoken, watch children engaging with Arabic materials, and see for yourself why our approach works.
         </p>
       </div>
@@ -138,7 +138,7 @@ function MontessoriContent() {
       <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
         <p className="text-text font-medium">
           Curious how this looks in practice?{" "}
-          <Link href="/admissions#tour" className="text-orange-dark font-semibold hover:underline">Book a tour</Link>{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
           and see our prepared environment, meet our educators, and watch how tarbiyah comes alive in a Montessori-inspired classroom.
         </p>
       </div>
@@ -198,7 +198,7 @@ function DayAtQAFContent() {
           See the full daily schedule, curriculum details, and learning outcomes on our{" "}
           <Link href="/program" className="text-orange-dark font-semibold hover:underline">JK/SK Program page</Link>.
           Ready to see it in person?{" "}
-          <Link href="/admissions#tour" className="text-orange-dark font-semibold hover:underline">Book a tour</Link>.
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>.
         </p>
       </div>
     </div>
@@ -265,7 +265,7 @@ function Grade1ReadinessContent() {
           Ready to learn more about{" "}
           <Link href="/admissions" className="text-orange-dark font-semibold hover:underline">admissions and tuition</Link>?
           Or{" "}
-          <Link href="/admissions#tour" className="text-orange-dark font-semibold hover:underline">book a tour</Link>{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">submit an inquiry</Link>{" "}
           to see our classroom and meet our educators in person.
         </p>
       </div>
@@ -317,7 +317,7 @@ function IslamicIdentityContent() {
       <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
         <p className="text-text font-medium">
           Want to see how we nurture Islamic identity in our classroom?{" "}
-          <Link href="/admissions#tour" className="text-orange-dark font-semibold hover:underline">Book a tour</Link>{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
           and experience the warmth and faith of QAF for yourself. Questions?{" "}
           <Link href="/contact" className="text-orange-dark font-semibold hover:underline">Get in touch</Link>.
         </p>
@@ -437,14 +437,14 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
             See QAF for yourself.
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            The best way to experience QAF is in person. Book a tour and see our
-            classroom for yourself.
+            The best way to experience QAF is in person. Submit an inquiry and
+            we&rsquo;ll invite you in to see our classroom.
           </p>
           <Link
-            href="/admissions#tour"
+            href="/inquiry"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Book a Tour &rarr;
+            Submit Inquiry &rarr;
           </Link>
         </div>
       </section>

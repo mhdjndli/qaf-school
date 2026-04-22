@@ -105,14 +105,14 @@ export default function Blog() {
             Ready to learn more about QAF?
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            The best way to experience QAF is in person. Book a tour and see our
-            classroom for yourself.
+            The best way to experience QAF is in person. Submit an inquiry and
+            we&rsquo;ll invite you in to see our classroom.
           </p>
           <Link
-            href="/admissions#tour"
+            href="/inquiry"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Book a Tour &rarr;
+            Submit Inquiry &rarr;
           </Link>
         </div>
       </section>

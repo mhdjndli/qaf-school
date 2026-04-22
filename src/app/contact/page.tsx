@@ -15,7 +15,7 @@ export default function Contact() {
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto">
             We&rsquo;d love to hear from you , whether you have a question,
-            want to book a tour, or are ready to apply.
+            want to submit an inquiry, or are ready to apply.
           </p>
         </div>
       </section>
@@ -54,8 +54,8 @@ export default function Contact() {
                   </p>
                   <p>
                     Or{" "}
-                    <a href="/admissions#tour" className="text-orange-dark hover:underline font-medium">
-                      book a tour directly
+                    <a href="/inquiry" className="text-orange-dark hover:underline font-medium">
+                      submit an inquiry directly
                     </a>
                   </p>
                 </div>

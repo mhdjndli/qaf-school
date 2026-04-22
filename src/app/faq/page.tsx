@@ -152,14 +152,14 @@ export default function FAQ() {
             Still have questions?
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            Reach out to us directly or book a tour to see QAF in person.
+            Reach out to us directly or submit an inquiry to see QAF in person.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="/contact"
+              href="/inquiry"
               className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Contact Us &rarr;
+              Submit Inquiry &rarr;
             </a>
             <a
               href="mailto:info@qafschool.ca"

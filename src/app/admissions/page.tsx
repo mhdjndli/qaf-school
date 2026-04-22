@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Admissions & Tuition · Islamic Kindergarten Ottawa · QAF",
   description:
-    "Apply to QAF for 2026/2027. Tuition $690/month plus $190 annual resource fee. Four-step admissions process. Book your tour today.",
+    "Apply to QAF for 2026/2027. Tuition $690/month plus $190 annual resource fee. Four-step admissions process. Submit your inquiry today.",
 };
 
 export default function Admissions() {
@@ -157,23 +157,23 @@ export default function Admissions() {
         </div>
       </section>
 
-      {/* BOOK A TOUR */}
+      {/* SUBMIT AN INQUIRY */}
       <section id="tour" className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-3xl font-bold mb-4 text-white">
-            Book a Tour
+            Submit an Inquiry
           </h2>
           <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">
-            Tours are the best way to decide whether QAF is right for your child.
-            Pick a time that works for you. Our admissions team will confirm
-            within two business days.
+            Share a few details about your family and your child. Our admissions
+            team will review your inquiry and, if it looks like a good fit,
+            reach out to schedule a tour.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/contact"
+              href="/inquiry"
               className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Book Your Tour &rarr;
+              Submit Inquiry &rarr;
             </Link>
             <a
               href="mailto:admissions@qafschool.ca"

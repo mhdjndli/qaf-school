@@ -54,10 +54,10 @@ export default function Navbar() {
           ))}
           <li>
             <Link
-              href="/admissions#tour"
+              href="/inquiry"
               className="bg-orange text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-orange-dark transition-all hover:-translate-y-0.5"
             >
-              Book a Tour
+              Submit Inquiry
             </Link>
           </li>
         </ul>
@@ -107,11 +107,11 @@ export default function Navbar() {
             ))}
             <li>
               <Link
-                href="/admissions#tour"
+                href="/inquiry"
                 onClick={() => setOpen(false)}
                 className="block mt-3 bg-orange text-white text-center px-5 py-3 rounded-lg font-semibold"
               >
-                Book a Tour
+                Submit Inquiry
               </Link>
             </li>
           </ul>

@@ -5,7 +5,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Junior & Senior Kindergarten Program · QAF Ottawa",
   description:
-    "Full-day JK and SK at QAF. Ontario curriculum, Montessori-inspired classroom, daily Arabic, Islamic values. See a day in the life and book your tour.",
+    "Full-day JK and SK at QAF. Ontario curriculum, Montessori-inspired classroom, daily Arabic, Islamic values. See a day in the life and submit your inquiry.",
 };
 
 export default function Program() {
@@ -295,13 +295,13 @@ export default function Program() {
             Ready to see the QAF classroom for yourself?
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            Book a tour. We&rsquo;d love to show you around.
+            Submit an inquiry. We&rsquo;d love to show you around.
           </p>
           <Link
-            href="/admissions#tour"
+            href="/inquiry"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Book a Tour &rarr;
+            Submit Inquiry &rarr;
           </Link>
         </div>
       </section>
