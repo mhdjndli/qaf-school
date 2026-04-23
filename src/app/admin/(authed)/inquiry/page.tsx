@@ -17,8 +17,7 @@ function shortDate(iso: string): string {
 }
 
 export default async function AdminInquiryPage() {
-  const all = await listInquiries();
-  const inquiries = all.filter((i) => !i.enrolledAt);
+  const inquiries = await listInquiries();
 
   return (
     <div>
@@ -28,7 +27,7 @@ export default async function AdminInquiryPage() {
             Inquiries
           </h1>
           <p className="text-text-light text-sm mt-1">
-            {inquiries.length} active &middot; review and move strong candidates
+            {inquiries.length} total &middot; review and move strong candidates
             to the waitlist or enrol directly.
           </p>
         </div>
@@ -81,7 +80,11 @@ export default async function AdminInquiryPage() {
                     <Td>{inq.wantsTour ? "Yes" : "No"}</Td>
                     <Td>{inq.source}</Td>
                     <Td>
-                      {inq.waitlistedAt ? (
+                      {inq.enrolledAt ? (
+                        <span className="inline-block bg-green text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                          Enrolled
+                        </span>
+                      ) : inq.waitlistedAt ? (
                         <span className="inline-block bg-green/10 text-green text-xs font-semibold px-2.5 py-1 rounded-full">
                           Added to waitlist
                         </span>
@@ -94,7 +97,7 @@ export default async function AdminInquiryPage() {
                     <Td className="text-right pr-6">
                       <div className="flex justify-end items-center gap-3">
                         <InquiryDetails inquiry={inq} />
-                        {!inq.waitlistedAt ? (
+                        {!inq.waitlistedAt && !inq.enrolledAt ? (
                           <form action={addToWaitlistAction}>
                             <input type="hidden" name="id" value={inq.id} />
                             <button
@@ -105,15 +108,17 @@ export default async function AdminInquiryPage() {
                             </button>
                           </form>
                         ) : null}
-                        <form action={enrolAction}>
-                          <input type="hidden" name="id" value={inq.id} />
-                          <button
-                            type="submit"
-                            className="text-sm bg-green text-white px-3 py-1.5 rounded-md font-semibold hover:brightness-95 transition-colors"
-                          >
-                            Enrol
-                          </button>
-                        </form>
+                        {!inq.enrolledAt ? (
+                          <form action={enrolAction}>
+                            <input type="hidden" name="id" value={inq.id} />
+                            <button
+                              type="submit"
+                              className="text-sm bg-green text-white px-3 py-1.5 rounded-md font-semibold hover:brightness-95 transition-colors"
+                            >
+                              Enrol
+                            </button>
+                          </form>
+                        ) : null}
                         <form action={deleteInquiryAction}>
                           <input type="hidden" name="id" value={inq.id} />
                           <button

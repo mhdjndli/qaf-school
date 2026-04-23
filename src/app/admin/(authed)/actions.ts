@@ -3,10 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import {
+  addTemplate,
   deleteInquiry,
+  deleteTemplate,
   setEnrolled,
   setPaidSupply,
   setWaitlisted,
+  updateTemplate,
 } from "@/lib/store";
 
 function revalidateAll() {
@@ -56,4 +59,30 @@ export async function deleteInquiryAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (id) await deleteInquiry(id);
   revalidateAll();
+}
+
+export async function createTemplateAction(formData: FormData) {
+  await requireAdmin();
+  const title = String(formData.get("title") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!title) return;
+  await addTemplate({ title, body });
+  revalidatePath("/admin/templates");
+}
+
+export async function updateTemplateAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const body = String(formData.get("body") ?? "");
+  if (!id || !title) return;
+  await updateTemplate(id, { title, body });
+  revalidatePath("/admin/templates");
+}
+
+export async function deleteTemplateAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (id) await deleteTemplate(id);
+  revalidatePath("/admin/templates");
 }
