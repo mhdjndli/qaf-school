@@ -1,6 +1,7 @@
 import { listInquiries } from "@/lib/store";
 import { enrolAction, removeFromWaitlistAction } from "../actions";
 import InquiryDetails from "../InquiryDetails";
+import ManualInquiryForm from "../ManualInquiryForm";
 
 function shortDate(iso: string): string {
   const d = new Date(iso);
@@ -22,12 +23,15 @@ export default async function AdminWaitlistPage() {
 
   return (
     <div>
-      <header className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-text">Waitlist</h1>
-        <p className="text-text-light text-sm mt-1">
-          {waitlisted.length} on the waitlist. Families here were promoted from
-          the inquiries list.
-        </p>
+      <header className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-heading text-3xl font-bold text-text">Waitlist</h1>
+          <p className="text-text-light text-sm mt-1">
+            {waitlisted.length} on the waitlist. Families here were promoted
+            from the inquiries list.
+          </p>
+        </div>
+        <ManualInquiryForm status="waitlist" />
       </header>
 
       {waitlisted.length === 0 ? (

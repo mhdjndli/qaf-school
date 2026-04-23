@@ -1,6 +1,7 @@
 import { listInquiries } from "@/lib/store";
 import { togglePaidSupplyAction, unenrolAction } from "../actions";
 import InquiryDetails from "../InquiryDetails";
+import ManualInquiryForm from "../ManualInquiryForm";
 
 function shortDate(iso: string): string {
   const d = new Date(iso);
@@ -22,11 +23,14 @@ export default async function AdminEnrolledPage() {
 
   return (
     <div>
-      <header className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-text">Enrolled</h1>
-        <p className="text-text-light text-sm mt-1">
-          {enrolled.length} enrolled. Mark supplies as paid once received.
-        </p>
+      <header className="mb-8 flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-heading text-3xl font-bold text-text">Enrolled</h1>
+          <p className="text-text-light text-sm mt-1">
+            {enrolled.length} enrolled. Mark supplies as paid once received.
+          </p>
+        </div>
+        <ManualInquiryForm status="enrolled" />
       </header>
 
       {enrolled.length === 0 ? (
