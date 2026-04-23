@@ -387,14 +387,16 @@ export async function setEnrolled(
   enrolled: boolean,
 ): Promise<Inquiry | null> {
   if (USE_PG) {
-    const { rows } = await pgQuery<InquiryRow>(
-      `UPDATE inquiries
-         SET enrolled_at = $2,
-             waitlisted_at = CASE WHEN $2 IS NOT NULL THEN NULL ELSE waitlisted_at END,
-             paid_supply_at = CASE WHEN $2 IS NOT NULL THEN paid_supply_at ELSE NULL END
-       WHERE id = $1 RETURNING *`,
-      [id, enrolled ? new Date() : null],
-    );
+    const sql = enrolled
+      ? `UPDATE inquiries
+           SET enrolled_at = NOW(),
+               waitlisted_at = NULL
+         WHERE id = $1 RETURNING *`
+      : `UPDATE inquiries
+           SET enrolled_at = NULL,
+               paid_supply_at = NULL
+         WHERE id = $1 RETURNING *`;
+    const { rows } = await pgQuery<InquiryRow>(sql, [id]);
     return rows[0] ? rowToInquiry(rows[0]) : null;
   }
   const all = await readInquiriesFile();
