@@ -23,11 +23,13 @@ export type Inquiry = {
   notes: string | null;
   source: InquirySource;
   waitlistedAt: string | null;
+  enrolledAt: string | null;
+  paidSupplyAt: string | null;
 };
 
 export type NewInquiryInput = Omit<
   Inquiry,
-  "id" | "createdAt" | "waitlistedAt"
+  "id" | "createdAt" | "waitlistedAt" | "enrolledAt" | "paidSupplyAt"
 >;
 
 const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
@@ -64,6 +66,8 @@ export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
     id: randomUUID(),
     createdAt: new Date().toISOString(),
     waitlistedAt: null,
+    enrolledAt: null,
+    paidSupplyAt: null,
   };
   const all = await listInquiries();
   all.unshift(inquiry);
@@ -81,6 +85,38 @@ export async function setWaitlisted(
   all[idx] = {
     ...all[idx],
     waitlistedAt: waitlisted ? new Date().toISOString() : null,
+  };
+  await writeAll(all);
+  return all[idx];
+}
+
+export async function setEnrolled(
+  id: string,
+  enrolled: boolean,
+): Promise<Inquiry | null> {
+  const all = await listInquiries();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    enrolledAt: enrolled ? new Date().toISOString() : null,
+    waitlistedAt: enrolled ? null : all[idx].waitlistedAt,
+    paidSupplyAt: enrolled ? all[idx].paidSupplyAt : null,
+  };
+  await writeAll(all);
+  return all[idx];
+}
+
+export async function setPaidSupply(
+  id: string,
+  paid: boolean,
+): Promise<Inquiry | null> {
+  const all = await listInquiries();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    paidSupplyAt: paid ? new Date().toISOString() : null,
   };
   await writeAll(all);
   return all[idx];

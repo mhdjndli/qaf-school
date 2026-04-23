@@ -2,6 +2,7 @@ import { listInquiries } from "@/lib/store";
 import {
   addToWaitlistAction,
   deleteInquiryAction,
+  enrolAction,
 } from "../actions";
 import InquiryDetails from "../InquiryDetails";
 
@@ -16,7 +17,8 @@ function shortDate(iso: string): string {
 }
 
 export default async function AdminInquiryPage() {
-  const inquiries = await listInquiries();
+  const all = await listInquiries();
+  const inquiries = all.filter((i) => !i.enrolledAt);
 
   return (
     <div>
@@ -26,8 +28,8 @@ export default async function AdminInquiryPage() {
             Inquiries
           </h1>
           <p className="text-text-light text-sm mt-1">
-            {inquiries.length} total &middot; review and move strong candidates
-            to the waitlist.
+            {inquiries.length} active &middot; review and move strong candidates
+            to the waitlist or enrol directly.
           </p>
         </div>
       </header>
@@ -103,6 +105,15 @@ export default async function AdminInquiryPage() {
                             </button>
                           </form>
                         ) : null}
+                        <form action={enrolAction}>
+                          <input type="hidden" name="id" value={inq.id} />
+                          <button
+                            type="submit"
+                            className="text-sm bg-green text-white px-3 py-1.5 rounded-md font-semibold hover:brightness-95 transition-colors"
+                          >
+                            Enrol
+                          </button>
+                        </form>
                         <form action={deleteInquiryAction}>
                           <input type="hidden" name="id" value={inq.id} />
                           <button

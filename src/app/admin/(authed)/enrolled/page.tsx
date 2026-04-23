@@ -1,5 +1,5 @@
 import { listInquiries } from "@/lib/store";
-import { enrolAction, removeFromWaitlistAction } from "../actions";
+import { togglePaidSupplyAction, unenrolAction } from "../actions";
 import InquiryDetails from "../InquiryDetails";
 
 function shortDate(iso: string): string {
@@ -12,34 +12,40 @@ function shortDate(iso: string): string {
   });
 }
 
-export default async function AdminWaitlistPage() {
+export default async function AdminEnrolledPage() {
   const all = await listInquiries();
-  const waitlisted = all
-    .filter((i) => i.waitlistedAt && !i.enrolledAt)
+  const enrolled = all
+    .filter((i) => i.enrolledAt)
     .sort((a, b) =>
-      (b.waitlistedAt ?? "").localeCompare(a.waitlistedAt ?? ""),
+      (b.enrolledAt ?? "").localeCompare(a.enrolledAt ?? ""),
     );
 
   return (
     <div>
       <header className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-text">Waitlist</h1>
+        <h1 className="font-heading text-3xl font-bold text-text">Enrolled</h1>
         <p className="text-text-light text-sm mt-1">
-          {waitlisted.length} on the waitlist. Families here were promoted from
-          the inquiries list.
+          {enrolled.length} enrolled. Mark supplies as paid once received.
         </p>
       </header>
 
-      {waitlisted.length === 0 ? (
+      {enrolled.length === 0 ? (
         <div className="bg-white border border-border rounded-xl p-10 text-center text-text-light">
-          No one on the waitlist yet. Promote an inquiry from the{" "}
+          No enrolled families yet. Enrol a family from the{" "}
           <a
             href="/admin/inquiry"
             className="text-orange-dark font-medium hover:underline"
           >
             Inquiries
           </a>{" "}
-          list.
+          or{" "}
+          <a
+            href="/admin/waitlist"
+            className="text-orange-dark font-medium hover:underline"
+          >
+            Waitlist
+          </a>
+          .
         </div>
       ) : (
         <div className="bg-white border border-border rounded-xl overflow-hidden shadow-sm">
@@ -47,22 +53,23 @@ export default async function AdminWaitlistPage() {
             <table className="w-full text-sm">
               <thead className="bg-cream border-b border-border text-text-light">
                 <tr>
-                  <Th>Added</Th>
+                  <Th>Enrolled</Th>
                   <Th>Parent</Th>
                   <Th>Child</Th>
                   <Th>Start</Th>
                   <Th>Contact</Th>
+                  <Th>Paid Supply</Th>
                   <Th className="text-right pr-6">Actions</Th>
                 </tr>
               </thead>
               <tbody>
-                {waitlisted.map((inq) => (
+                {enrolled.map((inq) => (
                   <tr
                     key={inq.id}
                     className="border-b border-border last:border-0 hover:bg-orange/[0.03]"
                   >
                     <Td>
-                      {inq.waitlistedAt ? shortDate(inq.waitlistedAt) : "\u2014"}
+                      {inq.enrolledAt ? shortDate(inq.enrolledAt) : "\u2014"}
                     </Td>
                     <Td>
                       <div className="font-medium text-text">
@@ -96,25 +103,42 @@ export default async function AdminWaitlistPage() {
                         </a>
                       </div>
                     </Td>
+                    <Td>
+                      <form action={togglePaidSupplyAction}>
+                        <input type="hidden" name="id" value={inq.id} />
+                        <input
+                          type="hidden"
+                          name="paid"
+                          value={inq.paidSupplyAt ? "false" : "true"}
+                        />
+                        {inq.paidSupplyAt ? (
+                          <button
+                            type="submit"
+                            title={`Paid ${shortDate(inq.paidSupplyAt)} — click to unmark`}
+                            className="inline-block bg-green/10 text-green text-xs font-semibold px-2.5 py-1 rounded-full hover:bg-green/20 transition-colors"
+                          >
+                            Paid &middot; {shortDate(inq.paidSupplyAt)}
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            className="text-sm bg-orange text-white px-3 py-1.5 rounded-md font-semibold hover:bg-orange-dark transition-colors"
+                          >
+                            Mark Paid Supply
+                          </button>
+                        )}
+                      </form>
+                    </Td>
                     <Td className="text-right pr-6">
                       <div className="flex justify-end items-center gap-3">
                         <InquiryDetails inquiry={inq} />
-                        <form action={enrolAction}>
-                          <input type="hidden" name="id" value={inq.id} />
-                          <button
-                            type="submit"
-                            className="text-sm bg-green text-white px-3 py-1.5 rounded-md font-semibold hover:brightness-95 transition-colors"
-                          >
-                            Enrol
-                          </button>
-                        </form>
-                        <form action={removeFromWaitlistAction}>
+                        <form action={unenrolAction}>
                           <input type="hidden" name="id" value={inq.id} />
                           <button
                             type="submit"
                             className="text-sm text-red hover:underline"
                           >
-                            Remove
+                            Unenrol
                           </button>
                         </form>
                       </div>
