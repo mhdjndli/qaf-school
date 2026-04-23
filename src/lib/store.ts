@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
+import { Pool, type QueryResultRow } from "pg";
 
 export type InquirySource =
   | "Google Search"
@@ -39,19 +40,6 @@ export type EmailTemplate = {
   createdAt: string;
   updatedAt: string;
 };
-
-const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
-const INQUIRIES_FILE = path.join(DATA_DIR, "inquiries.json");
-const TEMPLATES_FILE = path.join(DATA_DIR, "templates.json");
-
-async function ensureFile() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  try {
-    await fs.access(INQUIRIES_FILE);
-  } catch {
-    await fs.writeFile(INQUIRIES_FILE, "[]", "utf8");
-  }
-}
 
 const SEED_TEMPLATES: Array<Pick<EmailTemplate, "title" | "body">> = [
   {
@@ -110,6 +98,167 @@ QAF School Admissions`,
   },
 ];
 
+// -------------------- backend selection --------------------
+// Postgres is used whenever DATABASE_URL is set (Railway provides it
+// automatically). Otherwise we fall back to a local JSON file so
+// development without a database still works.
+
+const DATABASE_URL = process.env.DATABASE_URL;
+const USE_PG = Boolean(DATABASE_URL);
+
+// -------------------- Postgres backend --------------------
+
+type GlobalWithPool = typeof globalThis & { __qafPgPool?: Pool };
+
+function getPool(): Pool {
+  const g = globalThis as GlobalWithPool;
+  if (!g.__qafPgPool) {
+    g.__qafPgPool = new Pool({
+      connectionString: DATABASE_URL,
+      ssl:
+        process.env.PGSSLMODE === "disable"
+          ? undefined
+          : { rejectUnauthorized: false },
+    });
+  }
+  return g.__qafPgPool;
+}
+
+let pgReady: Promise<void> | null = null;
+
+function ensurePg(): Promise<void> {
+  if (!pgReady) {
+    pgReady = (async () => {
+      const pool = getPool();
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS inquiries (
+          id UUID PRIMARY KEY,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          parent_first_name TEXT NOT NULL,
+          parent_last_name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          phone TEXT NOT NULL,
+          child_first_name TEXT NOT NULL,
+          child_last_name TEXT NOT NULL,
+          child_dob TEXT NOT NULL,
+          expected_start_date TEXT NOT NULL,
+          wants_tour BOOLEAN NOT NULL,
+          notes TEXT,
+          source TEXT NOT NULL,
+          waitlisted_at TIMESTAMPTZ,
+          enrolled_at TIMESTAMPTZ,
+          paid_supply_at TIMESTAMPTZ
+        );
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS templates (
+          id UUID PRIMARY KEY,
+          title TEXT NOT NULL,
+          body TEXT NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      const { rows } = await pool.query<{ count: string }>(
+        `SELECT COUNT(*)::text AS count FROM templates`,
+      );
+      if (rows[0] && Number(rows[0].count) === 0) {
+        for (const t of SEED_TEMPLATES) {
+          await pool.query(
+            `INSERT INTO templates (id, title, body) VALUES ($1, $2, $3)`,
+            [randomUUID(), t.title, t.body],
+          );
+        }
+      }
+    })().catch((err) => {
+      pgReady = null;
+      throw err;
+    });
+  }
+  return pgReady;
+}
+
+type InquiryRow = {
+  id: string;
+  created_at: Date;
+  parent_first_name: string;
+  parent_last_name: string;
+  email: string;
+  phone: string;
+  child_first_name: string;
+  child_last_name: string;
+  child_dob: string;
+  expected_start_date: string;
+  wants_tour: boolean;
+  notes: string | null;
+  source: string;
+  waitlisted_at: Date | null;
+  enrolled_at: Date | null;
+  paid_supply_at: Date | null;
+};
+
+function rowToInquiry(r: InquiryRow): Inquiry {
+  return {
+    id: r.id,
+    createdAt: r.created_at.toISOString(),
+    parentFirstName: r.parent_first_name,
+    parentLastName: r.parent_last_name,
+    email: r.email,
+    phone: r.phone,
+    childFirstName: r.child_first_name,
+    childLastName: r.child_last_name,
+    childDob: r.child_dob,
+    expectedStartDate: r.expected_start_date,
+    wantsTour: r.wants_tour,
+    notes: r.notes,
+    source: r.source as InquirySource,
+    waitlistedAt: r.waitlisted_at ? r.waitlisted_at.toISOString() : null,
+    enrolledAt: r.enrolled_at ? r.enrolled_at.toISOString() : null,
+    paidSupplyAt: r.paid_supply_at ? r.paid_supply_at.toISOString() : null,
+  };
+}
+
+type TemplateRow = {
+  id: string;
+  title: string;
+  body: string;
+  created_at: Date;
+  updated_at: Date;
+};
+
+function rowToTemplate(r: TemplateRow): EmailTemplate {
+  return {
+    id: r.id,
+    title: r.title,
+    body: r.body,
+    createdAt: r.created_at.toISOString(),
+    updatedAt: r.updated_at.toISOString(),
+  };
+}
+
+async function pgQuery<R extends QueryResultRow>(
+  sql: string,
+  params: unknown[] = [],
+) {
+  await ensurePg();
+  return getPool().query<R>(sql, params);
+}
+
+// -------------------- File backend (local dev fallback) --------------------
+
+const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
+const INQUIRIES_FILE = path.join(DATA_DIR, "inquiries.json");
+const TEMPLATES_FILE = path.join(DATA_DIR, "templates.json");
+
+async function ensureInquiriesFile() {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    await fs.access(INQUIRIES_FILE);
+  } catch {
+    await fs.writeFile(INQUIRIES_FILE, "[]", "utf8");
+  }
+}
+
 async function ensureTemplatesFile() {
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
@@ -126,8 +275,8 @@ async function ensureTemplatesFile() {
   }
 }
 
-export async function listInquiries(): Promise<Inquiry[]> {
-  await ensureFile();
+async function readInquiriesFile(): Promise<Inquiry[]> {
+  await ensureInquiriesFile();
   const text = await fs.readFile(INQUIRIES_FILE, "utf8");
   try {
     const parsed = JSON.parse(text);
@@ -137,82 +286,12 @@ export async function listInquiries(): Promise<Inquiry[]> {
   }
 }
 
-async function writeAll(list: Inquiry[]): Promise<void> {
-  await ensureFile();
+async function writeInquiriesFile(list: Inquiry[]): Promise<void> {
+  await ensureInquiriesFile();
   await fs.writeFile(INQUIRIES_FILE, JSON.stringify(list, null, 2), "utf8");
 }
 
-export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
-  const inquiry: Inquiry = {
-    ...input,
-    id: randomUUID(),
-    createdAt: new Date().toISOString(),
-    waitlistedAt: null,
-    enrolledAt: null,
-    paidSupplyAt: null,
-  };
-  const all = await listInquiries();
-  all.unshift(inquiry);
-  await writeAll(all);
-  return inquiry;
-}
-
-export async function setWaitlisted(
-  id: string,
-  waitlisted: boolean,
-): Promise<Inquiry | null> {
-  const all = await listInquiries();
-  const idx = all.findIndex((i) => i.id === id);
-  if (idx === -1) return null;
-  all[idx] = {
-    ...all[idx],
-    waitlistedAt: waitlisted ? new Date().toISOString() : null,
-  };
-  await writeAll(all);
-  return all[idx];
-}
-
-export async function setEnrolled(
-  id: string,
-  enrolled: boolean,
-): Promise<Inquiry | null> {
-  const all = await listInquiries();
-  const idx = all.findIndex((i) => i.id === id);
-  if (idx === -1) return null;
-  all[idx] = {
-    ...all[idx],
-    enrolledAt: enrolled ? new Date().toISOString() : null,
-    waitlistedAt: enrolled ? null : all[idx].waitlistedAt,
-    paidSupplyAt: enrolled ? all[idx].paidSupplyAt : null,
-  };
-  await writeAll(all);
-  return all[idx];
-}
-
-export async function setPaidSupply(
-  id: string,
-  paid: boolean,
-): Promise<Inquiry | null> {
-  const all = await listInquiries();
-  const idx = all.findIndex((i) => i.id === id);
-  if (idx === -1) return null;
-  all[idx] = {
-    ...all[idx],
-    paidSupplyAt: paid ? new Date().toISOString() : null,
-  };
-  await writeAll(all);
-  return all[idx];
-}
-
-export async function deleteInquiry(id: string): Promise<boolean> {
-  const all = await listInquiries();
-  const next = all.filter((i) => i.id !== id);
-  if (next.length === all.length) return false;
-  await writeAll(next);
-  return true;
-}
-
-export async function listTemplates(): Promise<EmailTemplate[]> {
+async function readTemplatesFile(): Promise<EmailTemplate[]> {
   await ensureTemplatesFile();
   const text = await fs.readFile(TEMPLATES_FILE, "utf8");
   try {
@@ -223,14 +302,168 @@ export async function listTemplates(): Promise<EmailTemplate[]> {
   }
 }
 
-async function writeTemplates(list: EmailTemplate[]): Promise<void> {
+async function writeTemplatesFile(list: EmailTemplate[]): Promise<void> {
   await ensureTemplatesFile();
   await fs.writeFile(TEMPLATES_FILE, JSON.stringify(list, null, 2), "utf8");
+}
+
+// -------------------- Public API --------------------
+
+export async function listInquiries(): Promise<Inquiry[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `SELECT * FROM inquiries ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToInquiry);
+  }
+  return readInquiriesFile();
+}
+
+export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
+  if (USE_PG) {
+    const id = randomUUID();
+    const { rows } = await pgQuery<InquiryRow>(
+      `INSERT INTO inquiries (
+         id, parent_first_name, parent_last_name, email, phone,
+         child_first_name, child_last_name, child_dob, expected_start_date,
+         wants_tour, notes, source
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+       RETURNING *`,
+      [
+        id,
+        input.parentFirstName,
+        input.parentLastName,
+        input.email,
+        input.phone,
+        input.childFirstName,
+        input.childLastName,
+        input.childDob,
+        input.expectedStartDate,
+        input.wantsTour,
+        input.notes,
+        input.source,
+      ],
+    );
+    return rowToInquiry(rows[0]);
+  }
+  const inquiry: Inquiry = {
+    ...input,
+    id: randomUUID(),
+    createdAt: new Date().toISOString(),
+    waitlistedAt: null,
+    enrolledAt: null,
+    paidSupplyAt: null,
+  };
+  const all = await readInquiriesFile();
+  all.unshift(inquiry);
+  await writeInquiriesFile(all);
+  return inquiry;
+}
+
+export async function setWaitlisted(
+  id: string,
+  waitlisted: boolean,
+): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `UPDATE inquiries SET waitlisted_at = $2 WHERE id = $1 RETURNING *`,
+      [id, waitlisted ? new Date() : null],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    waitlistedAt: waitlisted ? new Date().toISOString() : null,
+  };
+  await writeInquiriesFile(all);
+  return all[idx];
+}
+
+export async function setEnrolled(
+  id: string,
+  enrolled: boolean,
+): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `UPDATE inquiries
+         SET enrolled_at = $2,
+             waitlisted_at = CASE WHEN $2 IS NOT NULL THEN NULL ELSE waitlisted_at END,
+             paid_supply_at = CASE WHEN $2 IS NOT NULL THEN paid_supply_at ELSE NULL END
+       WHERE id = $1 RETURNING *`,
+      [id, enrolled ? new Date() : null],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    enrolledAt: enrolled ? new Date().toISOString() : null,
+    waitlistedAt: enrolled ? null : all[idx].waitlistedAt,
+    paidSupplyAt: enrolled ? all[idx].paidSupplyAt : null,
+  };
+  await writeInquiriesFile(all);
+  return all[idx];
+}
+
+export async function setPaidSupply(
+  id: string,
+  paid: boolean,
+): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `UPDATE inquiries SET paid_supply_at = $2 WHERE id = $1 RETURNING *`,
+      [id, paid ? new Date() : null],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    paidSupplyAt: paid ? new Date().toISOString() : null,
+  };
+  await writeInquiriesFile(all);
+  return all[idx];
+}
+
+export async function deleteInquiry(id: string): Promise<boolean> {
+  if (USE_PG) {
+    const res = await pgQuery(`DELETE FROM inquiries WHERE id = $1`, [id]);
+    return (res.rowCount ?? 0) > 0;
+  }
+  const all = await readInquiriesFile();
+  const next = all.filter((i) => i.id !== id);
+  if (next.length === all.length) return false;
+  await writeInquiriesFile(next);
+  return true;
+}
+
+export async function listTemplates(): Promise<EmailTemplate[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<TemplateRow>(
+      `SELECT * FROM templates ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToTemplate);
+  }
+  return readTemplatesFile();
 }
 
 export async function addTemplate(
   input: Pick<EmailTemplate, "title" | "body">,
 ): Promise<EmailTemplate> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<TemplateRow>(
+      `INSERT INTO templates (id, title, body) VALUES ($1, $2, $3) RETURNING *`,
+      [randomUUID(), input.title, input.body],
+    );
+    return rowToTemplate(rows[0]);
+  }
   const now = new Date().toISOString();
   const tpl: EmailTemplate = {
     id: randomUUID(),
@@ -239,9 +472,9 @@ export async function addTemplate(
     createdAt: now,
     updatedAt: now,
   };
-  const all = await listTemplates();
+  const all = await readTemplatesFile();
   all.unshift(tpl);
-  await writeTemplates(all);
+  await writeTemplatesFile(all);
   return tpl;
 }
 
@@ -249,7 +482,16 @@ export async function updateTemplate(
   id: string,
   input: Pick<EmailTemplate, "title" | "body">,
 ): Promise<EmailTemplate | null> {
-  const all = await listTemplates();
+  if (USE_PG) {
+    const { rows } = await pgQuery<TemplateRow>(
+      `UPDATE templates
+         SET title = $2, body = $3, updated_at = NOW()
+       WHERE id = $1 RETURNING *`,
+      [id, input.title, input.body],
+    );
+    return rows[0] ? rowToTemplate(rows[0]) : null;
+  }
+  const all = await readTemplatesFile();
   const idx = all.findIndex((t) => t.id === id);
   if (idx === -1) return null;
   all[idx] = {
@@ -258,14 +500,18 @@ export async function updateTemplate(
     body: input.body,
     updatedAt: new Date().toISOString(),
   };
-  await writeTemplates(all);
+  await writeTemplatesFile(all);
   return all[idx];
 }
 
 export async function deleteTemplate(id: string): Promise<boolean> {
-  const all = await listTemplates();
+  if (USE_PG) {
+    const res = await pgQuery(`DELETE FROM templates WHERE id = $1`, [id]);
+    return (res.rowCount ?? 0) > 0;
+  }
+  const all = await readTemplatesFile();
   const next = all.filter((t) => t.id !== id);
   if (next.length === all.length) return false;
-  await writeTemplates(next);
+  await writeTemplatesFile(next);
   return true;
 }
