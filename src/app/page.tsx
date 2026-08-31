@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import PhotoStrip from "@/components/PhotoStrip";
 
 export default function Home() {
   return (
@@ -35,23 +36,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== PHOTO BANNER ===== */}
-      <section className="py-4 bg-warm-white overflow-hidden">
-        <div className="flex gap-4 animate-none">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-6 w-full">
-            {[
-              { src: "/gallery/IMG_1805.jpg", alt: "Children working together on hands-on activities" },
-              { src: "/gallery/IMG_1800.jpg", alt: "Child proudly showing art project with Arabic letter" },
-              { src: "/gallery/IMG_1795.jpg", alt: "Building a snowman during outdoor play" },
-              { src: "/gallery/IMG_1809.jpg", alt: "Children learning with clothespin activity at the chalkboard" },
-            ].map((img, i) => (
-              <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
-                <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ===== SCHOOL PHOTOS (carousel) ===== */}
+      <PhotoStrip />
 
       {/* ===== QAF DIFFERENCE ===== */}
       <section className="py-20 bg-warm-white">
