@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import InquiryForm from "@/components/InquiryForm";
+
+export const metadata: Metadata = {
+  title: "Submit an Inquiry",
+  description:
+    "Start your child's journey at QAF School, Ottawa's Islamic JK & SK kindergarten. Tell us about your family and we'll reach out to schedule a tour.",
+  alternates: { canonical: "/inquiry" },
+};
 
 export default function InquiryPage() {
   return (

@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About QAF · Islamic Kindergarten Ottawa · Qabas Academic Foundation",
+  title: "About Our Islamic Kindergarten in Ottawa",
+  alternates: { canonical: "/about" },
   description:
     "Meet QAF, Ottawa's Islamic JK/SK serving families since 2021. Learn our Montessori-inspired philosophy, meet our team, and see what makes us different.",
 };

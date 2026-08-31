@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Junior & Senior Kindergarten Program · QAF Ottawa",
+  title: "Islamic JK & SK Program in Ottawa",
+  alternates: { canonical: "/program" },
   description:
     "Full-day JK and SK at QAF. Ontario curriculum, Montessori-inspired classroom, daily Arabic, Islamic values. See a day in the life and submit your inquiry.",
 };

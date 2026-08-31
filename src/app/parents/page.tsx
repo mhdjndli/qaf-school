@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "For QAF Families · Parent Portal & Resources",
+  title: "Parent Portal & Resources",
+  alternates: { canonical: "/parents" },
   description:
     "Parent portal, school calendar, handbook, and resources for current QAF families.",
 };

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { posts } from "@/data/blog-posts";
 
 export const metadata: Metadata = {
-  title: "Blog · QAF Islamic Kindergarten Ottawa",
+  title: "Blog · Islamic Early Education in Ottawa",
+  alternates: { canonical: "/blog" },
   description:
     "Insights, tips, and stories from QAF. Learn about Islamic early education, Arabic immersion, Montessori-inspired learning, and life at our Ottawa kindergarten.",
 };
