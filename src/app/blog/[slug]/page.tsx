@@ -326,7 +326,218 @@ function IslamicIdentityContent() {
   );
 }
 
+
+function WhyChooseQAFContent() {
+  const thStyle = "text-left font-heading font-bold text-text px-4 py-3 text-sm";
+  const tdStyle = "px-4 py-3 text-text-light text-sm leading-relaxed align-top";
+  return (
+    <div className="space-y-6">
+      <p className="text-text-light leading-relaxed">
+        Choosing where your child spends their first years of school is one of the biggest decisions a Muslim family makes. You are not just choosing a classroom; you are choosing the environment that will shape how your child sees learning, language, and their own faith. In Ottawa, families usually weigh three options: public school kindergarten, a daycare or preschool, or an Islamic school. This post lays out, honestly and specifically, what QAF offers so you can decide whether we are the right fit for your family.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">QAF at a Glance</h2>
+      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+        <table className="w-full border-collapse bg-white">
+          <tbody>
+            {[
+              ["Program", "Junior & Senior Kindergarten (JK/SK)"],
+              ["Ages", "4 and 5 years old"],
+              ["Hours", "9:00 AM \u2013 3:00 PM, Monday to Friday (drop-off from 8:45 AM)"],
+              ["Curriculum", "Ontario Kindergarten Program + Montessori-inspired practice"],
+              ["Languages", "Daily Arabic immersion alongside English"],
+              ["Faith", "Quran, duas, Islamic studies, and adab woven through the day"],
+              ["Location", "900 Dynes Rd, Ottawa \u2014 minutes from Mooney's Bay"],
+              ["Tuition", "$690/month (Sept\u2013June) + $190 annual resource fee"],
+              ["Serving families", "Since 2021"],
+            ].map(([label, value], i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}>
+                <td className="px-4 py-3 font-semibold text-text text-sm whitespace-nowrap">{label}</td>
+                <td className={tdStyle}>{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">1. Faith Is the Environment, Not a Subject</h2>
+      <p className="text-text-light leading-relaxed">
+        In most schools, even good ones, Islam is at best an add-on: a weekend class, an after-school program, something separate from &ldquo;real&rdquo; school. At QAF it is the air the classroom breathes. Mornings open with duas. Children hear and recite Quran daily, practice the adab of eating and sharing, and celebrate Ramadan and Eid as the highlights of the year. Because this happens at ages 4 and 5, when identity is forming, children internalize that being Muslim is normal, joyful, and theirs. We wrote more about this in{" "}
+        <Link href="/blog/building-islamic-identity-in-early-years" className="text-orange-dark font-medium hover:underline">Building Islamic Identity in the Early Years</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">2. Daily Arabic Immersion That Actually Works</h2>
+      <p className="text-text-light leading-relaxed">
+        Arabic at QAF is not a 30-minute weekly lesson. It is the language of morning circle, songs, routines, and play, every single day. Children between 4 and 6 are in the critical window for language acquisition, and immersion is how they learn best. Families who speak no Arabic at home routinely watch their child counting, greeting, and singing in Arabic within months. By the end of SK, children recognize Arabic letters in all positions and follow classroom instructions in Arabic. The science and the outcomes are detailed in{" "}
+        <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">Why Early Arabic Immersion Matters</Link>.
+      </p>
+
+      <div className="relative aspect-[16/10] rounded-xl overflow-hidden shadow-md my-2">
+        <Image
+          src="/gallery/IMG_3076.jpg"
+          alt="Arabic alphabet wall and class schedule in the QAF classroom"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      </div>
+      <p className="text-center text-text-light text-sm !-mt-1">
+        Arabic surrounds the children &mdash; on the walls, in songs, and in daily routines.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">3. Montessori-Inspired, Ontario-Aligned</h2>
+      <p className="text-text-light leading-relaxed">
+        Parents should not have to choose between a nurturing environment and academic rigor. QAF combines the best of Montessori practice &mdash; the prepared environment, long uninterrupted work cycles, practical life activities, respect for each child&rsquo;s pace &mdash; with full alignment to Ontario&rsquo;s Kindergarten Program. That means your child develops deep concentration and independence <em>and</em> meets or exceeds every Grade 1 readiness expectation. Read how the two traditions fit together in{" "}
+        <Link href="/blog/montessori-meets-islamic-values" className="text-orange-dark font-medium hover:underline">Montessori Meets Islamic Values</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">How QAF Compares to Other Options in Ottawa</h2>
+      <p className="text-text-light leading-relaxed">
+        Every option below can be a good choice for the right family. The question is what you want your child&rsquo;s day to contain. Here is a fair, side-by-side look:
+      </p>
+      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+        <table className="w-full border-collapse bg-white">
+          <thead>
+            <tr className="bg-orange/10">
+              <th className={thStyle}>What you get</th>
+              <th className={thStyle}>QAF</th>
+              <th className={thStyle}>Public school JK/SK</th>
+              <th className={thStyle}>Typical daycare/preschool</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["Ontario Kindergarten curriculum", "\u2713 Fully aligned", "\u2713 Yes", "Varies by centre"],
+              ["Daily Arabic immersion", "\u2713 Every day", "\u2014", "Rarely"],
+              ["Quran, duas & Islamic studies", "\u2713 Woven into the day", "\u2014", "\u2014"],
+              ["Montessori-inspired materials", "\u2713 Daily work cycle", "Play-based (varies)", "Varies by centre"],
+              ["Halal, nut-free food environment", "\u2713 Policy", "Not guaranteed", "Varies"],
+              ["Islamic holidays celebrated", "\u2713 Ramadan & Eid centred", "\u2014", "Varies"],
+              ["Small, family-like community", "\u2713 By design", "Class sizes vary", "\u2713 Often"],
+            ].map(([row, qaf, pub, dc], i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}>
+                <td className="px-4 py-3 font-medium text-text text-sm">{row}</td>
+                <td className={`${tdStyle} text-green font-semibold`}>{qaf}</td>
+                <td className={tdStyle}>{pub}</td>
+                <td className={tdStyle}>{dc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What a Day Looks Like</h2>
+      <p className="text-text-light leading-relaxed">
+        Structure matters at this age, and so does joy. Our day balances both &mdash; here is the rhythm your child would live every weekday:
+      </p>
+      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+        <table className="w-full border-collapse bg-white">
+          <thead>
+            <tr className="bg-orange/10">
+              <th className={thStyle}>Time</th>
+              <th className={thStyle}>Activity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["8:45 \u2013 9:00", "Drop-off, Arabic greetings, free choice in the prepared environment"],
+              ["9:00 \u2013 9:20", "Morning circle: duas, calendar & weather in Arabic, short surah"],
+              ["9:20 \u2013 11:00", "Montessori-inspired work cycle: literacy, numeracy, practical life"],
+              ["11:00 \u2013 11:30", "Outdoor play in our fenced, supervised green space"],
+              ["11:30 \u2013 12:15", "Lunch with Islamic adab (halal, nut-free)"],
+              ["12:15 \u2013 1:30", "Quiet rest period"],
+              ["1:30 \u2013 2:15", "Arabic lessons / Islamic studies (alternating daily)"],
+              ["2:15 \u2013 3:00", "Art, music, science exploration, small-group enrichment"],
+              ["3:00 \u2013 3:15", "Closing circle, dua, and pick-up"],
+            ].map(([time, activity], i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}>
+                <td className="px-4 py-3 font-semibold text-orange-dark text-sm whitespace-nowrap tabular-nums">{time}</td>
+                <td className={tdStyle}>{activity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-text-light leading-relaxed">
+        For the full narrative version, see{" "}
+        <Link href="/blog/what-a-day-looks-like-at-qaf" className="text-orange-dark font-medium hover:underline">What a Day Looks Like at QAF</Link>.
+      </p>
+
+      <div className="relative aspect-[16/10] rounded-xl overflow-hidden shadow-md my-2">
+        <Image
+          src="/gallery/IMG_3078.jpg"
+          alt="QAF play area with activity tables, climbing triangle, and play kitchen"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      </div>
+      <p className="text-center text-text-light text-sm !-mt-1">
+        Purpose-built spaces for both focused work and joyful play.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Transparent, Simple Tuition</h2>
+      <p className="text-text-light leading-relaxed">
+        Private Islamic education in Ottawa is an investment, and we keep ours straightforward &mdash; no hidden fees, no surprise charges:
+      </p>
+      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+        <table className="w-full border-collapse bg-white">
+          <tbody>
+            {[
+              ["Monthly tuition (JK and SK)", "$690 / month"],
+              ["Billing period", "September \u2013 June (10 months)"],
+              ["Annual resource & supplies fee", "$190 / year"],
+              ["Total per school year", "$6,900 tuition + $190 fee"],
+            ].map(([label, value], i) => (
+              <tr key={i} className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}>
+                <td className="px-4 py-3 font-medium text-text text-sm">{label}</td>
+                <td className="px-4 py-3 font-semibold text-orange-dark text-sm whitespace-nowrap">{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-text-light leading-relaxed">
+        Full details, payment terms, and our four-step admissions process are on the{" "}
+        <Link href="/admissions" className="text-orange-dark font-medium hover:underline">Admissions & Tuition page</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Questions to Ask Any School You Visit</h2>
+      <p className="text-text-light leading-relaxed">
+        Whether or not you choose QAF, ask these questions on every tour &mdash; they reveal more than any brochure:
+      </p>
+      <ul className="space-y-3 ml-1">
+        {[
+          "How is faith actually present in a normal Tuesday \u2014 not just on special occasions?",
+          "How much Arabic will my child hear per day, and from whom?",
+          "Is the program aligned with Ontario's Kindergarten Program for Grade 1 readiness?",
+          "How long are uninterrupted work or play periods? (Longer periods build concentration.)",
+          "How do teachers communicate with parents day to day?",
+          "What does the food policy look like \u2014 halal, allergies, nut-free?",
+        ].map((item, i) => (
+          <li key={i} className="pl-7 relative text-text-light leading-relaxed before:content-['\2713'] before:absolute before:left-0 before:text-green before:font-bold">
+            {item}
+          </li>
+        ))}
+      </ul>
+      <p className="text-text-light leading-relaxed">
+        We answer all of these (and many more) on our{" "}
+        <Link href="/faq" className="text-orange-dark font-medium hover:underline">FAQ page</Link>.
+      </p>
+
+      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+        <p className="text-text font-medium">
+          The best way to choose a school is to stand in the classroom.{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+          and come see QAF for yourself &mdash; meet our educators, watch the work cycle, and hear the Arabic in the air.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 const contentMap: Record<string, () => React.ReactNode> = {
+  "why-choose-qaf-islamic-school-ottawa": WhyChooseQAFContent,
   "why-early-arabic-immersion-matters": ArabicImmersionContent,
   "montessori-meets-islamic-values": MontessoriContent,
   "what-a-day-looks-like-at-qaf": DayAtQAFContent,

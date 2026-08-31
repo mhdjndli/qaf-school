@@ -17,6 +17,36 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
   {
+    slug: "why-choose-qaf-islamic-school-ottawa",
+    title: "Why Choose QAF Islamic School in Ottawa?",
+    excerpt:
+      "Choosing a school is one of the biggest decisions a Muslim family makes. Here is an honest, detailed look at what makes QAF different — faith, Arabic, Montessori-inspired learning, and Ontario curriculum alignment, all under one roof.",
+    metaDescription:
+      "Why choose QAF Islamic School in Ottawa? Compare our Islamic JK & SK kindergarten: daily Arabic immersion, Quran, Montessori-inspired learning, Ontario curriculum, tuition, and daily schedule.",
+    image: "/gallery/IMG_3075.jpg",
+    date: "August 31, 2026",
+    category: "Choosing a School",
+    relatedSlugs: ["why-early-arabic-immersion-matters", "montessori-meets-islamic-values", "what-a-day-looks-like-at-qaf"],
+    faqs: [
+      {
+        q: "What ages does QAF Islamic School accept?",
+        a: "QAF offers Junior Kindergarten (JK) and Senior Kindergarten (SK) for children ages 4 and 5. Children should turn 4 by December 31 of the school year for JK.",
+      },
+      {
+        q: "How much does QAF Islamic School cost?",
+        a: "Tuition is $690 per month, billed September through June (10 months), plus a $190 annual resource and supplies fee. That works out to $6,900 in tuition per school year.",
+      },
+      {
+        q: "Do children need to speak Arabic to enrol at QAF?",
+        a: "No. Many QAF families do not speak Arabic at home. Our daily Arabic immersion approach is designed so children absorb the language naturally through songs, routines, stories, and play — no prior Arabic is needed.",
+      },
+      {
+        q: "Will my child be ready for Grade 1 after QAF?",
+        a: "Yes. Our program is fully aligned with Ontario's Kindergarten Program, so QAF graduates meet or exceed Grade 1 readiness expectations for any Ontario school — public, Catholic, private, or Islamic.",
+      },
+    ],
+  },
+  {
     slug: "why-early-arabic-immersion-matters",
     title: "Why Early Arabic Immersion Matters for Your Child",
     excerpt:
