@@ -90,12 +90,12 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li>
                 <a
-                  href="https://instagram.com/qafott"
+                  href="https://instagram.com/qafottawa"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-white/60 hover:text-orange transition-colors"
                 >
-                  Instagram @qafott
+                  Instagram @qafottawa
                 </a>
               </li>
               <li>

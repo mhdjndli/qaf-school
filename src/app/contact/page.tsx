@@ -70,12 +70,12 @@ export default function Contact() {
                   Follow Us
                 </h3>
                 <a
-                  href="https://instagram.com/qafott"
+                  href="https://instagram.com/qafottawa"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-orange-dark hover:underline font-medium text-[0.93rem]"
                 >
-                  Instagram @qafott
+                  Instagram @qafottawa
                 </a>
               </div>
 
