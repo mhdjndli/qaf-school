@@ -8,12 +8,12 @@ const SITE_URL = "https://qafschool.com";
 export const metadata: Metadata = {
   title: "Sunday Camp · Quran, Arabic, Math & STEM, Soccer · Ages 8–15",
   description:
-    "QAF Sunday Camp in Ottawa: four hours of Quran, Arabic, math & STEM, and soccer every Sunday, 11 AM–3 PM, ages 8–15. September 2026 – June 2027. $190/month or $1,710/year. Enrol online.",
+    "QAF Sunday Camp in Ottawa: four hours of Quran, Arabic, math & STEM, and soccer every Sunday, 11 AM–3 PM, ages 8–15. September 2026 – June 2027. $190/month. Enrol online.",
   alternates: { canonical: "/sunday-camp" },
   openGraph: {
     title: "Sunday Camp at QAF · Ottawa · Ages 8–15",
     description:
-      "Quran, Arabic, math & STEM, and soccer — every Sunday, 11 AM–3 PM at 900 Dynes Rd. $190/month or $1,710/year.",
+      "Quran, Arabic, math & STEM, and soccer — every Sunday, 11 AM–3 PM at 900 Dynes Rd. $190/month.",
     url: `${SITE_URL}/sunday-camp`,
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "QAF School classroom in Ottawa" }],
   },
@@ -62,13 +62,6 @@ const campJsonLd = {
       price: "190",
       priceCurrency: "CAD",
       category: "Monthly tuition",
-    },
-    {
-      "@type": "Offer",
-      name: "Full year plan",
-      price: "1710",
-      priceCurrency: "CAD",
-      category: "Annual tuition",
     },
   ],
   hasCourseInstance: {
@@ -277,43 +270,27 @@ export default function SundayCamp() {
       <section id="pricing" className="py-16 md:py-20 bg-cream scroll-mt-20">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="font-heading text-3xl md:text-4xl font-bold mb-3 text-center">
-            Two ways to pay
+            Simple monthly tuition
           </h2>
           <p className="text-text-light text-lg text-center max-w-2xl mx-auto mb-12">
             The camp year runs September 2026 to June 2027 — ten months of
-            Sundays. Both plans cover the same program.
+            Sundays. One flat monthly amount, no surprises.
           </p>
-          <div className="grid md:grid-cols-2 gap-7 max-w-3xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-border flex flex-col">
+          <div className="max-w-md mx-auto">
+            <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-orange flex flex-col text-center">
               <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-text-light mb-3">
                 Monthly
               </h3>
               <p className="mb-1">
-                <span className="font-heading text-5xl font-bold text-text">$190</span>
+                <span className="font-heading text-6xl font-bold text-text">$190</span>
                 <span className="text-text-light text-lg"> / month</span>
               </p>
-              <p className="text-text-light text-[0.95rem] leading-relaxed mt-3 mb-8 flex-1">
-                Ten payments of $190, September through June. Simple and
-                predictable: the same amount each month of the camp year.
+              <p className="text-text-light text-[0.95rem] leading-relaxed mt-3 mb-8">
+                Ten payments of $190, September through June. Covers all four
+                hours every Sunday: Quran, Arabic, math &amp; STEM, and soccer
+                or indoor play.
               </p>
-              <EnrolButton plan="monthly" label="Enrol Monthly" variant="outline" />
-            </div>
-            <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-orange relative flex flex-col">
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-orange text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full whitespace-nowrap">
-                Save $190 — one month free
-              </span>
-              <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-text-light mb-3">
-                Full year
-              </h3>
-              <p className="mb-1">
-                <span className="font-heading text-5xl font-bold text-text">$1,710</span>
-                <span className="text-text-light text-lg"> / year</span>
-              </p>
-              <p className="text-text-light text-[0.95rem] leading-relaxed mt-3 mb-8 flex-1">
-                One payment for all ten months. You save $190 — a full month of
-                tuition — compared with paying monthly.
-              </p>
-              <EnrolButton plan="annual" label="Enrol for the Year" variant="solid" />
+              <EnrolButton plan="monthly" label="Enrol Now" variant="solid" />
             </div>
           </div>
           <p className="text-center text-text-light text-sm mt-8">
@@ -347,8 +324,8 @@ export default function SundayCamp() {
                 a: "The learning hours are unchanged. The last hour moves indoors: board games, team challenges, and group play in our classrooms.",
               },
               {
-                q: "Can we try before committing to the year?",
-                a: "Yes — start on the monthly plan ($190/month). If you switch to the annual plan, you get the same program and save a full month of tuition.",
+                q: "Is there a long-term commitment?",
+                a: "No — tuition is a simple $190/month subscription for the camp year, September through June. You pay month to month.",
               },
             ].map((item) => (
               <div key={item.q} className="bg-white rounded-xl p-6 shadow-sm border border-border">
