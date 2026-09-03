@@ -41,6 +41,22 @@ export type EmailTemplate = {
   updatedAt: string;
 };
 
+export type CampPlan = "monthly" | "annual";
+
+export type CampEnrolment = {
+  id: string;
+  createdAt: string;
+  parentName: string;
+  email: string;
+  phone: string | null;
+  childName: string | null;
+  plan: CampPlan;
+  amountCents: number;
+  currency: string;
+  stripeSessionId: string;
+  stripeSubscriptionId: string | null;
+};
+
 const SEED_TEMPLATES: Array<Pick<EmailTemplate, "title" | "body">> = [
   {
     title: "We received your inquiry — seat available",
@@ -159,6 +175,21 @@ function ensurePg(): Promise<void> {
           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
       `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS camp_enrolments (
+          id UUID PRIMARY KEY,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          parent_name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          phone TEXT,
+          child_name TEXT,
+          plan TEXT NOT NULL,
+          amount_cents INTEGER NOT NULL,
+          currency TEXT NOT NULL,
+          stripe_session_id TEXT NOT NULL UNIQUE,
+          stripe_subscription_id TEXT
+        );
+      `);
       const { rows } = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM templates`,
       );
@@ -236,6 +267,36 @@ function rowToTemplate(r: TemplateRow): EmailTemplate {
   };
 }
 
+type CampRow = {
+  id: string;
+  created_at: Date;
+  parent_name: string;
+  email: string;
+  phone: string | null;
+  child_name: string | null;
+  plan: string;
+  amount_cents: number;
+  currency: string;
+  stripe_session_id: string;
+  stripe_subscription_id: string | null;
+};
+
+function rowToCamp(r: CampRow): CampEnrolment {
+  return {
+    id: r.id,
+    createdAt: r.created_at.toISOString(),
+    parentName: r.parent_name,
+    email: r.email,
+    phone: r.phone,
+    childName: r.child_name,
+    plan: r.plan as CampPlan,
+    amountCents: r.amount_cents,
+    currency: r.currency,
+    stripeSessionId: r.stripe_session_id,
+    stripeSubscriptionId: r.stripe_subscription_id,
+  };
+}
+
 async function pgQuery<R extends QueryResultRow>(
   sql: string,
   params: unknown[] = [],
@@ -305,6 +366,24 @@ async function readTemplatesFile(): Promise<EmailTemplate[]> {
 async function writeTemplatesFile(list: EmailTemplate[]): Promise<void> {
   await ensureTemplatesFile();
   await fs.writeFile(TEMPLATES_FILE, JSON.stringify(list, null, 2), "utf8");
+}
+
+const CAMP_FILE = path.join(DATA_DIR, "camp-enrolments.json");
+
+async function readCampFile(): Promise<CampEnrolment[]> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    const text = await fs.readFile(CAMP_FILE, "utf8");
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? (parsed as CampEnrolment[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeCampFile(list: CampEnrolment[]): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(CAMP_FILE, JSON.stringify(list, null, 2), "utf8");
 }
 
 // -------------------- Public API --------------------
@@ -516,4 +595,57 @@ export async function deleteTemplate(id: string): Promise<boolean> {
   if (next.length === all.length) return false;
   await writeTemplatesFile(next);
   return true;
+}
+
+export async function listCampEnrolments(): Promise<CampEnrolment[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<CampRow>(
+      `SELECT * FROM camp_enrolments ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToCamp);
+  }
+  const list = await readCampFile();
+  return [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function upsertCampEnrolment(
+  input: Omit<CampEnrolment, "id" | "createdAt">,
+): Promise<CampEnrolment> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<CampRow>(
+      `INSERT INTO camp_enrolments
+         (id, parent_name, email, phone, child_name, plan, amount_cents,
+          currency, stripe_session_id, stripe_subscription_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       ON CONFLICT (stripe_session_id) DO UPDATE
+         SET stripe_subscription_id = EXCLUDED.stripe_subscription_id
+       RETURNING *`,
+      [
+        randomUUID(),
+        input.parentName,
+        input.email,
+        input.phone,
+        input.childName,
+        input.plan,
+        input.amountCents,
+        input.currency,
+        input.stripeSessionId,
+        input.stripeSubscriptionId,
+      ],
+    );
+    return rowToCamp(rows[0]);
+  }
+  const list = await readCampFile();
+  const existing = list.find(
+    (e) => e.stripeSessionId === input.stripeSessionId,
+  );
+  if (existing) return existing;
+  const record: CampEnrolment = {
+    ...input,
+    id: randomUUID(),
+    createdAt: new Date().toISOString(),
+  };
+  list.push(record);
+  await writeCampFile(list);
+  return record;
 }

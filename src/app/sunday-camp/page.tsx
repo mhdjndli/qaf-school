@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-// TODO: replace with the real Stripe payment links for the Sunday Camp.
-// Until then both buttons safely route families to the inquiry form.
-const STRIPE_MONTHLY_URL = "/inquiry";
-const STRIPE_ANNUAL_URL = "/inquiry";
+import EnrolButton from "./EnrolButton";
 
 const SITE_URL = "https://qafschool.com";
 
@@ -300,12 +296,7 @@ export default function SundayCamp() {
                 Ten payments of $190, September through June. Simple and
                 predictable: the same amount each month of the camp year.
               </p>
-              <a
-                href={STRIPE_MONTHLY_URL}
-                className="block text-center border-2 border-orange text-orange-dark px-6 py-4 rounded-lg font-semibold text-lg hover:bg-orange hover:text-white transition-all"
-              >
-                Enrol Monthly
-              </a>
+              <EnrolButton plan="monthly" label="Enrol Monthly" variant="outline" />
             </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-orange relative flex flex-col">
               <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-orange text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full whitespace-nowrap">
@@ -322,12 +313,7 @@ export default function SundayCamp() {
                 One payment for all ten months. You save $190 — a full month of
                 tuition — compared with paying monthly.
               </p>
-              <a
-                href={STRIPE_ANNUAL_URL}
-                className="block text-center bg-orange text-white px-6 py-4 rounded-lg font-semibold text-lg hover:bg-orange-dark transition-all hover:shadow-lg"
-              >
-                Enrol for the Year
-              </a>
+              <EnrolButton plan="annual" label="Enrol for the Year" variant="solid" />
             </div>
           </div>
           <p className="text-center text-text-light text-sm mt-8">

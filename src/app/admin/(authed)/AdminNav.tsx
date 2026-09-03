@@ -7,6 +7,7 @@ const items = [
   { href: "/admin/inquiry", label: "Inquiries" },
   { href: "/admin/waitlist", label: "Waitlist" },
   { href: "/admin/enrolled", label: "Enrolled" },
+  { href: "/admin/camp", label: "Sunday Camp" },
   { href: "/admin/templates", label: "Templates" },
 ];
 
