@@ -347,7 +347,7 @@ function WhyChooseQAFContent() {
               ["Curriculum", "Ontario Kindergarten Program + Montessori-inspired practice"],
               ["Languages", "Daily Arabic immersion alongside English"],
               ["Faith", "Quran, duas, Islamic studies, and adab woven through the day"],
-              ["Location", "900 Dynes Rd, Ottawa \u2014 minutes from Mooney's Bay"],
+              ["Location", "900 Dynes Rd, Ottawa — minutes from Mooney's Bay"],
               ["Tuition", "$690/month (Sept\u2013June) + $190 annual resource fee"],
               ["Serving families", "Since 2021"],
             ].map(([label, value], i) => (
@@ -408,11 +408,11 @@ function WhyChooseQAFContent() {
           <tbody>
             {[
               ["Ontario Kindergarten curriculum", "\u2713 Fully aligned", "\u2713 Yes", "Varies by centre"],
-              ["Daily Arabic immersion", "\u2713 Every day", "\u2014", "Rarely"],
-              ["Quran, duas & Islamic studies", "\u2713 Woven into the day", "\u2014", "\u2014"],
+              ["Daily Arabic immersion", "\u2713 Every day", "—", "Rarely"],
+              ["Quran, duas & Islamic studies", "\u2713 Woven into the day", "—", "—"],
               ["Montessori-inspired materials", "\u2713 Daily work cycle", "Play-based (varies)", "Varies by centre"],
               ["Halal, nut-free food environment", "\u2713 Policy", "Not guaranteed", "Varies"],
-              ["Islamic holidays celebrated", "\u2713 Ramadan & Eid centred", "\u2014", "Varies"],
+              ["Islamic holidays celebrated", "\u2713 Ramadan & Eid centred", "—", "Varies"],
               ["Small, family-like community", "\u2713 By design", "Class sizes vary", "\u2713 Often"],
             ].map(([row, qaf, pub, dc], i) => (
               <tr key={i} className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}>
@@ -508,12 +508,12 @@ function WhyChooseQAFContent() {
       </p>
       <ul className="space-y-3 ml-1">
         {[
-          "How is faith actually present in a normal Tuesday \u2014 not just on special occasions?",
+          "How is faith actually present in a normal Tuesday — not just on special occasions?",
           "How much Arabic will my child hear per day, and from whom?",
           "Is the program aligned with Ontario's Kindergarten Program for Grade 1 readiness?",
           "How long are uninterrupted work or play periods? (Longer periods build concentration.)",
           "How do teachers communicate with parents day to day?",
-          "What does the food policy look like \u2014 halal, allergies, nut-free?",
+          "What does the food policy look like — halal, allergies, nut-free?",
         ].map((item, i) => (
           <li key={i} className="pl-7 relative text-text-light leading-relaxed before:content-['\2713'] before:absolute before:left-0 before:text-green before:font-bold">
             {item}
@@ -536,7 +536,238 @@ function WhyChooseQAFContent() {
   );
 }
 
+
+function IslamicSchoolsGuideContent() {
+  return (
+    <div className="space-y-6">
+      <p className="text-text-light leading-relaxed">
+        If you have typed &ldquo;Islamic schools in Ottawa&rdquo; into a search bar recently, you already know the problem: the results are a scattered mix of school websites, outdated directories, and forum threads from years ago. Ottawa actually has a rich and growing landscape of Islamic education, but there is no single honest map of it. This guide is our attempt to draw one — including where QAF fits, and where another school might serve your family better.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">The Four Types of Islamic Schooling in Ottawa</h2>
+      <p className="text-text-light leading-relaxed">
+        <strong className="text-text">Full-time elementary schools.</strong> Ottawa is home to several established full-time Islamic schools serving kindergarten through Grade 8, including Abraar School, Ottawa Islamic School, Ahlul-Bayt Islamic School, and Tarbiyah Learning Academy. These offer a complete elementary pathway with Islamic Studies, Quran, and Arabic layered on top of Ontario academics. Programs and availability change from year to year, so confirm details with each school directly.
+      </p>
+      <p className="text-text-light leading-relaxed">
+        <strong className="text-text">Specialized early-years programs.</strong> This is where QAF School sits. Rather than serving every grade, we focus exclusively on{" "}
+        <Link href="/program" className="text-orange-dark font-medium hover:underline">Junior and Senior Kindergarten</Link>{" "}
+        for ages 4 and 5. The advantage of specialization is depth: every shelf, material, routine, and teacher in the building is purpose-built for one developmental stage — the stage researchers consistently identify as the most formative.
+      </p>
+      <p className="text-text-light leading-relaxed">
+        <strong className="text-text">Weekend and evening programs.</strong> Many masajid and community centres across Ottawa run Saturday or Sunday schools teaching Quran, Arabic, and Islamic Studies. These are a wonderful supplement for children attending public school during the week. QAF runs its own{" "}
+        <Link href="/sunday-camp" className="text-orange-dark font-medium hover:underline">Sunday Camp</Link>{" "}
+        in this spirit.
+      </p>
+      <p className="text-text-light leading-relaxed">
+        <strong className="text-text">Hifz and Quran academies.</strong> For families prioritizing Quran memorization, several Ottawa institutions offer dedicated hifz tracks, usually for older children who already read Arabic fluently.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What &ldquo;Best&rdquo; Actually Means</h2>
+      <p className="text-text-light leading-relaxed">
+        Parents often ask us which Islamic school in Ottawa is the best. The honest answer is that &ldquo;best&rdquo; is the wrong frame — the right one is <em>fit</em>. A school that is perfect for an eight-year-old working toward hifz may be a poor match for a four-year-old who needs hands-on learning and a gentle introduction to Arabic. When you compare schools, weigh five things: the depth of the Arabic and Quran program (daily immersion or a weekly class?), the teaching approach (worksheets or hands-on materials?), class size and ratios, alignment with Ontario curriculum expectations, and the total yearly cost — which we break down honestly in our{" "}
+        <Link href="/blog/ottawa-islamic-school-fees-explained" className="text-orange-dark font-medium hover:underline">guide to Ottawa Islamic school fees</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Seven Questions to Ask on Any School Tour</h2>
+      <p className="text-text-light leading-relaxed">
+        A website tells you what a school wants to say. A visit tells you what it actually is. When you tour any Islamic school in Ottawa — including ours — ask: How much Arabic will my child hear per day, and from whom? How is Quran taught — with love and understanding, or memorization under pressure? What does discipline look like in practice? What are the actual class sizes this year? How do teachers communicate with parents, and how often? Is the academic program aligned with Ontario&rsquo;s curriculum? And finally: may I see a classroom in session? A school confident in its answers will welcome every one of these questions.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Why the Early Years Deserve Special Attention</h2>
+      <p className="text-text-light leading-relaxed">
+        Between ages 4 and 6, children are in the critical window for language acquisition and identity formation. A child who spends JK and SK immersed in Arabic, Quran, and Islamic adab does not just learn content — they form a self-image in which being Muslim is natural, joyful, and theirs. This is why we built QAF as an early-years specialist:{" "}
+        <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">daily Arabic immersion</Link>,{" "}
+        <Link href="/blog/montessori-meets-islamic-values" className="text-orange-dark font-medium hover:underline">Montessori-inspired learning</Link>, and full{" "}
+        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">Ontario Grade 1 readiness</Link>{" "}
+        — whether your child continues to a full-time Islamic school afterward or moves to a public school with their identity firmly rooted.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Start With a Visit</h2>
+      <p className="text-text-light leading-relaxed">
+        Wherever your search leads, visit in person before you decide. If your child is 4 or 5, we would love for QAF to be one of your visits. We are located at 900 Dynes Rd in Ottawa — see our{" "}
+        <Link href="/admissions" className="text-orange-dark font-medium hover:underline">admissions process</Link>{" "}
+        or browse our{" "}
+        <Link href="/faq" className="text-orange-dark font-medium hover:underline">FAQ</Link>{" "}
+        for the details parents ask about most.
+      </p>
+
+      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+        <p className="text-text font-medium">
+          Comparing schools for 2026/2027?{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+          and we&rsquo;ll invite you to see our classroom in person.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function FeesGuideContent() {
+  return (
+    <div className="space-y-6">
+      <p className="text-text-light leading-relaxed">
+        Ask most private schools what a year actually costs and you will get a number that grows every time you ask a follow-up question. Tuition, then a registration fee, then a resource fee, then uniforms, then activity fees. We believe fee transparency is part of amanah — so this guide explains how Islamic school fees in Ottawa typically work, and then shows you exactly what QAF charges, with nothing held back.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">How Islamic School Fees Are Structured in Ottawa</h2>
+      <p className="text-text-light leading-relaxed">
+        Most Islamic schools in Ottawa — and private schools generally — build their fees from the same components: <strong className="text-text">base tuition</strong> (billed monthly or annually), a <strong className="text-text">registration or application fee</strong> (usually non-refundable, paid at enrollment), an <strong className="text-text">annual resource or supplies fee</strong>, and sometimes <strong className="text-text">extras</strong> such as uniforms, field trips, or before-and-after care. Fees vary widely between schools and grade levels, and published numbers are not always complete. The single most useful thing you can do when comparing schools is to ask each one, in writing: &ldquo;What is the total amount I will pay for one full school year, including every mandatory fee?&rdquo;
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">QAF School Fees for 2026/2027</h2>
+      <p className="text-text-light leading-relaxed">
+        Here is our complete fee structure — the same one published on our{" "}
+        <Link href="/admissions" className="text-orange-dark font-medium hover:underline">admissions page</Link>:
+      </p>
+      <ul className="space-y-2 text-text-light leading-relaxed list-disc pl-6">
+        <li><strong className="text-text">Tuition: $690 per month</strong>, billed on the 1st of each month, September through June (10 months)</li>
+        <li><strong className="text-text">Resource &amp; supplies fee: $190 per year</strong>, due once at enrollment (non-refundable)</li>
+        <li><strong className="text-text">Total for the year: $690 &times; 10 + $190 = $7,090</strong></li>
+      </ul>
+      <p className="text-text-light leading-relaxed">
+        That is the entire list. No application fee, no hidden charges, no surprise invoices in February.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What Your Tuition Actually Pays For</h2>
+      <p className="text-text-light leading-relaxed">
+        A fee only makes sense next to what it buys. QAF tuition covers the full school day from 9:00 AM to 3:00 PM, taught by educators trained for the early years. That includes complete{" "}
+        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">Ontario-aligned literacy and numeracy</Link>, daily{" "}
+        <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">Arabic immersion</Link>{" "}
+        woven through the whole day rather than a single period, Quran and Islamic Studies, Montessori-inspired classroom materials, and daily photos and updates for parents through ClassDojo. The $190 resource fee covers your child&rsquo;s consumable supplies — art materials, workbooks, and classroom consumables — for the entire year. See{" "}
+        <Link href="/blog/what-a-day-looks-like-at-qaf" className="text-orange-dark font-medium hover:underline">what a full day looks like</Link>{" "}
+        to picture exactly what those hours contain.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Questions to Ask Any School About Fees</h2>
+      <p className="text-text-light leading-relaxed">
+        Before you enrol anywhere, ask: Is the registration fee refundable if plans change? What happens to tuition if we withdraw mid-year? Are there sibling discounts? What is <em>not</em> included — lunches, uniforms, trips, aftercare? And when do fees increase, and by how much historically? Clear, direct answers are a good sign about everything else the school does.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Thinking About Value, Not Just Cost</h2>
+      <p className="text-text-light leading-relaxed">
+        $7,090 a year is real money for any family. The question worth asking is what it purchases: two years in which your child learns to read, count, and problem-solve to Ontario standards — while also learning to love the Quran, speak and understand Arabic, and feel at home in their identity, during the exact window when identity forms. Families weighing this decision may find our post on{" "}
+        <Link href="/blog/why-choose-qaf-islamic-school-ottawa" className="text-orange-dark font-medium hover:underline">why families choose QAF</Link>{" "}
+        a useful companion to this one.
+      </p>
+
+      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+        <p className="text-text font-medium">
+          Have a question about fees we didn&rsquo;t answer?{" "}
+          <Link href="/contact" className="text-orange-dark font-semibold hover:underline">Contact us</Link>{" "}
+          or{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">submit an inquiry</Link>{" "}
+          — we&rsquo;ll give you a straight answer.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function MuslimDaycareContent() {
+  return (
+    <div className="space-y-6">
+      <p className="text-text-light leading-relaxed">
+        When a parent searches for a &ldquo;Muslim daycare near me,&rdquo; they are rarely just looking for supervision. They are looking for four things at once: food they can trust to be halal, adults who share their values, an environment where duas and adab are part of the day rather than an afterthought, and — for many families — exposure to Arabic while their child&rsquo;s brain is most ready for it. This guide walks through how to evaluate Islamic child care in Ottawa, and explains a distinction that matters more than most parents realize once a child turns four.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What Makes Child Care Genuinely &ldquo;Islamic&rdquo;</h2>
+      <p className="text-text-light leading-relaxed">
+        Anyone can put the word Islamic on a sign. What you are actually looking for is practice: halal food policies that are enforced rather than assumed, bismillah and daily duas woven into routines, gentle teaching of adab — how we speak, share, and treat one another — educators who model the character you want your child to absorb, and ideally daily Arabic in songs, greetings, and play. When you visit, do not ask &ldquo;is this an Islamic environment?&rdquo; Ask &ldquo;what did the children do this morning?&rdquo; and listen for whether the deen shows up in the answer.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Daycares, Home Care, and Schools: Know What You Are Comparing</h2>
+      <p className="text-text-light leading-relaxed">
+        In Ontario, licensed child care centres and licensed home child care operate under the Child Care and Early Years Act, with regulated ratios and inspections — if you are considering a daycare, ask to see the licence. Unlicensed home daycares are legal within strict limits on the number of children, but carry fewer safeguards, so ask more questions. Private schools like QAF are a different category altogether: an educational institution with a structured curriculum, a school day, and a school year. None of these is automatically better — an infant needs different care than a five-year-old — but you should know which one you are standing in.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">A Practical Checklist for Your Visit</h2>
+      <p className="text-text-light leading-relaxed">
+        Whatever option you tour, check the same things: How many children per adult, really, at busy times? Is the space clean, organized, and set up for children rather than for adult convenience? How will you hear about your child&rsquo;s day — photos, messages, a daily report, or nothing? What is the sick policy and the discipline approach? Is the facility nut-aware or nut-free? And trust the small signals: how staff speak to children when they think no one is watching tells you more than any brochure.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">The Question Nobody Asks: Is Your Child Ready for More Than Daycare?</h2>
+      <p className="text-text-light leading-relaxed">
+        Here is the distinction that matters at age four. In Ontario, children can begin Junior Kindergarten the year they turn four — and this is the age when a play-based but <em>structured</em> educational program starts to matter. A four-year-old in an excellent daycare is cared for; a four-year-old in an excellent kindergarten is cared for <em>and</em> systematically taught early literacy, numeracy, self-regulation, and — at an Islamic school — Quran and Arabic through daily immersion. If your child is 4 or 5, the real comparison is no longer between daycares. It is between daycare and school.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Where QAF Fits</h2>
+      <p className="text-text-light leading-relaxed">
+        QAF School is not a daycare — we are Ottawa&rsquo;s Islamic{" "}
+        <Link href="/program" className="text-orange-dark font-medium hover:underline">JK and SK kindergarten</Link>{" "}
+        at 900 Dynes Rd, serving ages 4 and 5 from 9:00 AM to 3:00 PM. Children get everything families hope to find in a Muslim daycare — a nut-free, halal environment, daily duas, adab, warm Muslim educators — plus a full{" "}
+        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">Ontario-aligned academic program</Link>{" "}
+        and{" "}
+        <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">daily Arabic immersion</Link>. Curious what the day actually contains? Read{" "}
+        <Link href="/blog/what-a-day-looks-like-at-qaf" className="text-orange-dark font-medium hover:underline">what a day looks like at QAF</Link>{" "}
+        from drop-off to pick-up.
+      </p>
+
+      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+        <p className="text-text font-medium">
+          Is your child turning 4 or 5?{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+          and come see the difference a real kindergarten makes.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function IslamicMontessoriContent() {
+  return (
+    <div className="space-y-6">
+      <p className="text-text-light leading-relaxed">
+        &ldquo;Islamic Montessori&rdquo; has become one of the most-searched phrases among Muslim parents in North America — and one of the most loosely used labels in early education. Some programs that use it are deeply Montessori in practice; others own a few wooden toys. This guide explains what the pairing really means, how to tell substance from marketing, and what to look for when you visit a classroom in Ottawa.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Why Muslim Parents Keep Finding Montessori</h2>
+      <p className="text-text-light leading-relaxed">
+        The attraction is not a trend — it is a genuine philosophical match. Maria Montessori built her method on deep respect for the child, purposeful hands-on work, care for the environment, and discipline that grows from within rather than being imposed from outside. Islamic tarbiyah is built on the same foundations: every child born upon the fitrah, character cultivated through practice and habit, knowledge honored, and the murabbi guiding rather than forcing. Montessori&rsquo;s &ldquo;grace and courtesy&rdquo; lessons are, almost line for line, lessons in adab. We explore this alignment in depth in{" "}
+        <Link href="/blog/montessori-meets-islamic-values" className="text-orange-dark font-medium hover:underline">How Montessori-Inspired Learning Aligns with Islamic Tarbiyah</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">&ldquo;Certified&rdquo; vs. &ldquo;Montessori-Inspired&rdquo;: An Honest Distinction</h2>
+      <p className="text-text-light leading-relaxed">
+        The word Montessori is not trademarked, so schools use it freely — which makes one distinction worth understanding. <strong className="text-text">Certified Montessori schools</strong> are accredited by bodies like AMI or AMS and implement the full method, including three-year mixed-age classrooms and a complete Montessori curriculum sequence. <strong className="text-text">Montessori-inspired programs</strong> adopt selected elements and combine them with other frameworks. QAF is Montessori-inspired, and we say so plainly: we practice the prepared environment, the uninterrupted work cycle, hands-on materials, and freedom within limits — combined with Ontario&rsquo;s Kindergarten Program and a daily Islamic and Arabic curriculum that a strict Montessori sequence was never designed to carry. Whichever school you consider, the question to ask is not &ldquo;are you Montessori?&rdquo; but &ldquo;<em>which Montessori practices will my child experience daily?</em>&rdquo;
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What to Look For When You Visit</h2>
+      <p className="text-text-light leading-relaxed">
+        A real Montessori-informed classroom is recognizable within minutes. Look for child-sized furniture and materials on open shelves at the child&rsquo;s height, so children choose work independently. Look for a long, protected work period — not a day chopped into fifteen-minute rotations. Look for children concentrating on real, purposeful activity: pouring, buttoning, sorting, building words with letter tiles. Look for calm teachers who observe and guide rather than direct from the front. And in an Islamic Montessori setting, look for the deen inside the environment itself — Arabic letter materials on the shelves, duas in the daily rhythm, adab practiced as grace and courtesy — not a religion corner bolted onto a secular room.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">What Islamic Montessori Looks Like at QAF</h2>
+      <p className="text-text-light leading-relaxed">
+        At QAF in Ottawa, the morning work cycle is the heart of the day: children choose hands-on materials for literacy, numeracy, practical life, and Arabic at their own pace, while teachers give small individual lessons. Arabic is not a subject on a schedule — it is{" "}
+        <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">immersed through the entire day</Link>, from morning greetings to lunch adab. Quran is taught with love and repetition, and Ontario&rsquo;s Kindergarten Program runs underneath it all, so children leave SK fully{" "}
+        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">ready for Grade 1</Link>{" "}
+        in any school. You can see the full daily rhythm on our{" "}
+        <Link href="/program" className="text-orange-dark font-medium hover:underline">Program page</Link>.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">The Only Reliable Test</h2>
+      <p className="text-text-light leading-relaxed">
+        Websites — including ours — can only tell you so much. The reliable test of any Islamic Montessori school is standing in the classroom: watching whether children are concentrated or waiting, whether Arabic is alive or laminated, whether the adults kneel down to a child&rsquo;s eye level. Our{" "}
+        <Link href="/admissions" className="text-orange-dark font-medium hover:underline">admissions process</Link>{" "}
+        begins with exactly that visit.
+      </p>
+
+      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+        <p className="text-text font-medium">
+          Want to see a Montessori-inspired Islamic classroom in action?{" "}
+          <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+          and we&rsquo;ll arrange your visit.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 const contentMap: Record<string, () => React.ReactNode> = {
+  "islamic-schools-in-ottawa-guide": IslamicSchoolsGuideContent,
+  "ottawa-islamic-school-fees-explained": FeesGuideContent,
+  "muslim-daycare-ottawa-guide": MuslimDaycareContent,
+  "islamic-montessori-school-ottawa": IslamicMontessoriContent,
   "why-choose-qaf-islamic-school-ottawa": WhyChooseQAFContent,
   "why-early-arabic-immersion-matters": ArabicImmersionContent,
   "montessori-meets-islamic-values": MontessoriContent,
