@@ -366,6 +366,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== VISIT US / MAP ===== */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4">
+            Come Visit Us
+          </h2>
+          <p className="text-text-light text-center mb-10 max-w-xl mx-auto">
+            QAF Islamic School &mdash; 900 Dynes Rd, Ottawa, ON K2C 3L6
+          </p>
+          <div className="rounded-xl overflow-hidden shadow-sm border border-border">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2802.264!2d-75.7043661!3d45.3694474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce07e4d6c4381f%3A0xbe973bba6dfa410b!2sQAF%20Islamic%20School!5e0!3m2!1sen!2sca!4v1757116800000"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="QAF Islamic School on Google Maps"
+            />
+          </div>
+          <div className="text-center mt-6">
+            <a
+              href="https://maps.app.goo.gl/Coy9Zj73r6gshPh7A"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-dark font-medium hover:underline"
+            >
+              Open in Google Maps &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ===== CTA BANNER ===== */}
       <section className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
         <div className="max-w-3xl mx-auto px-6">

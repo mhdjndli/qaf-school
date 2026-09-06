@@ -90,14 +90,14 @@ export default function Contact() {
               {/* Map */}
               <div className="rounded-xl overflow-hidden shadow-sm">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2802.3!2d-75.7!3d45.37!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s900+Dynes+Rd%2C+Ottawa%2C+ON+K2C+3L6!5e0!3m2!1sen!2sca!4v1"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2802.264!2d-75.7043661!3d45.3694474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce07e4d6c4381f%3A0xbe973bba6dfa410b!2sQAF%20Islamic%20School!5e0!3m2!1sen!2sca!4v1757116800000"
                   width="100%"
                   height="250"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="QAF Location"
+                  title="QAF Islamic School on Google Maps"
                 />
               </div>
             </div>
