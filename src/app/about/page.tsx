@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "About Our Islamic Kindergarten in Ottawa",
   alternates: { canonical: "/about" },
   description:
-    "Meet QAF, Ottawa's Islamic JK/SK serving families since 2021. Learn our Montessori-inspired philosophy, meet our team, and see what makes us different.",
+    "Meet QAF, Ottawa's Islamic JK/SK serving families since 2021. Learn our Montessori-inspired philosophy and see what makes us different.",
 };
 
 export default function About() {
@@ -164,45 +164,6 @@ export default function About() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* MEET OUR TEAM */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-3xl font-bold mb-4">
-            Meet Our Team
-          </h2>
-          <p className="text-text-light leading-relaxed mb-8">
-            Our educators are what make QAF, QAF. Each one is chosen not just
-            for their credentials but for the warmth they bring to our
-            classroom.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((n) => (
-              <div
-                key={n}
-                className="bg-warm-white rounded-lg p-6 border border-card-line text-center"
-              >
-                <div className="w-24 h-24 rounded-full bg-cream mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-3xl text-orange/40">&#128100;</span>
-                </div>
-                <h3 className="font-heading text-lg font-bold mb-1">
-                  Educator Name
-                </h3>
-                <p className="text-orange-dark text-sm font-medium mb-2">
-                  Role &middot; RECE
-                </p>
-                <p className="text-text-light text-sm">
-                  Languages: English, Arabic
-                </p>
-              </div>
-            ))}
-          </div>
-          <p className="text-text-light text-sm mt-6 italic text-center">
-            Staff profiles coming soon. Please check back or visit us during a
-            tour to meet the team in person.
-          </p>
         </div>
       </section>
 
