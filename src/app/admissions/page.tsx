@@ -108,7 +108,7 @@ export default function Admissions() {
             <div className="bg-warm-white rounded-lg p-6 border border-card-line">
               <h3 className="font-heading text-lg font-bold mb-3">Payment Schedule</h3>
               <ul className="space-y-2 text-text-light text-[0.93rem]">
-                <li>Tuition: $690/month, billed 1st of each month, September\u2013June (10 months)</li>
+                <li>Tuition: $690/month, billed 1st of each month, September–June (10 months)</li>
                 <li>Resource fee: $190 due once per school year at enrollment</li>
                 <li>Payment via credit card, direct debit, or e-transfer through Parent Portal</li>
               </ul>
