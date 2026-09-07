@@ -10,7 +10,7 @@ import type { BlogFAQ } from "@/data/blog-posts";
 function FAQItem({ q, a }: BlogFAQ) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="bg-white rounded-lg border border-border overflow-hidden shadow-sm">
+    <div className="bg-warm-white rounded-lg border border-card-line overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full text-left px-6 py-4 flex justify-between items-center gap-4 hover:bg-orange/[0.03] transition-colors"
@@ -74,7 +74,7 @@ function ArabicImmersionContent() {
         <Link href="/program" className="text-orange-dark font-medium hover:underline">learning outcomes on our Program page</Link>.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Want to see Arabic immersion in action?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -135,7 +135,7 @@ function MontessoriContent() {
         for more details about our approach.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Curious how this looks in practice?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -193,7 +193,7 @@ function DayAtQAFContent() {
         The day ends with a closing circle where children reflect on what they learned, say their closing dua, and prepare for pick-up. Parents often tell us their children come home full of stories, eager to show off a new Arabic word, a craft, or a surah they&rsquo;ve been practicing.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           See the full daily schedule, curriculum details, and learning outcomes on our{" "}
           <Link href="/program" className="text-orange-dark font-semibold hover:underline">JK/SK Program page</Link>.
@@ -260,7 +260,7 @@ function Grade1ReadinessContent() {
         The children who leave QAF are not just academically prepared. They are confident, kind, and grounded in their identity. They know how to greet someone with salam, how to share generously, and how to persevere when something is hard. They carry the duas they&rsquo;ve learned, the Arabic they&rsquo;ve absorbed, and the Islamic values they&rsquo;ve practiced into every classroom they enter after QAF.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Ready to learn more about{" "}
           <Link href="/admissions" className="text-orange-dark font-semibold hover:underline">admissions and tuition</Link>?
@@ -314,7 +314,7 @@ function IslamicIdentityContent() {
         Parents often tell us that the most meaningful changes they see at home are not academic. They are spiritual. A child who starts saying morning duas without being prompted. A child who reminds a sibling to say bismillah. A child who asks to hear more about a Prophet they learned about at school. A child who says &ldquo;alhamdulillah&rdquo; when they see something beautiful. These are the signs that a strong Islamic identity is taking root, and they are the moments that make our work at QAF so deeply rewarding.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Want to see how we nurture Islamic identity in our classroom?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -337,7 +337,7 @@ function WhyChooseQAFContent() {
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">QAF at a Glance</h2>
-      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-card-line">
         <table className="w-full border-collapse bg-white">
           <tbody>
             {[
@@ -372,7 +372,7 @@ function WhyChooseQAFContent() {
         <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">Why Early Arabic Immersion Matters</Link>.
       </p>
 
-      <div className="relative aspect-[16/10] rounded-xl overflow-hidden shadow-md my-2">
+      <div className="relative aspect-[16/10] rounded-lg overflow-hidden shadow-md my-2">
         <Image
           src="/gallery/IMG_3076.jpg"
           alt="Arabic alphabet wall and class schedule in the QAF classroom"
@@ -395,7 +395,7 @@ function WhyChooseQAFContent() {
       <p className="text-text-light leading-relaxed">
         Every option below can be a good choice for the right family. The question is what you want your child&rsquo;s day to contain. Here is a fair, side-by-side look:
       </p>
-      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-card-line">
         <table className="w-full border-collapse bg-white">
           <thead>
             <tr className="bg-orange/10">
@@ -430,7 +430,7 @@ function WhyChooseQAFContent() {
       <p className="text-text-light leading-relaxed">
         Structure matters at this age, and so does joy. Our day balances both &mdash; here is the rhythm your child would live every weekday:
       </p>
-      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-card-line">
         <table className="w-full border-collapse bg-white">
           <thead>
             <tr className="bg-orange/10">
@@ -463,7 +463,7 @@ function WhyChooseQAFContent() {
         <Link href="/blog/what-a-day-looks-like-at-qaf" className="text-orange-dark font-medium hover:underline">What a Day Looks Like at QAF</Link>.
       </p>
 
-      <div className="relative aspect-[16/10] rounded-xl overflow-hidden shadow-md my-2">
+      <div className="relative aspect-[16/10] rounded-lg overflow-hidden shadow-md my-2">
         <Image
           src="/gallery/IMG_3078.jpg"
           alt="QAF play area with activity tables, climbing triangle, and play kitchen"
@@ -480,7 +480,7 @@ function WhyChooseQAFContent() {
       <p className="text-text-light leading-relaxed">
         Private Islamic education in Ottawa is an investment, and we keep ours straightforward &mdash; no hidden fees, no surprise charges:
       </p>
-      <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+      <div className="overflow-x-auto rounded-lg border border-card-line">
         <table className="w-full border-collapse bg-white">
           <tbody>
             {[
@@ -525,7 +525,7 @@ function WhyChooseQAFContent() {
         <Link href="/faq" className="text-orange-dark font-medium hover:underline">FAQ page</Link>.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           The best way to choose a school is to stand in the classroom.{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -591,7 +591,7 @@ function IslamicSchoolsGuideContent() {
         for the details parents ask about most.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Comparing schools for 2026/2027?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -650,7 +650,7 @@ function FeesGuideContent() {
         a useful companion to this one.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Have a question about fees we didn&rsquo;t answer?{" "}
           <Link href="/contact" className="text-orange-dark font-semibold hover:underline">Contact us</Link>{" "}
@@ -702,7 +702,7 @@ function MuslimDaycareContent() {
         from drop-off to pick-up.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Is your child turning 4 or 5?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -752,7 +752,7 @@ function IslamicMontessoriContent() {
         begins with exactly that visit.
       </p>
 
-      <div className="bg-cream rounded-xl p-6 mt-8 border border-border">
+      <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
         <p className="text-text font-medium">
           Want to see a Montessori-inspired Islamic classroom in action?{" "}
           <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
@@ -845,7 +845,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
                 <Link
                   key={rp.slug}
                   href={`/blog/${rp.slug}`}
-                  className="bg-white rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-lg transition-shadow group"
+                  className="bg-warm-white rounded-lg border border-card-line overflow-hidden transition-colors hover:border-orange group"
                 >
                   <div className="relative aspect-[16/9]">
                     <Image

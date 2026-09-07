@@ -56,7 +56,7 @@ export default function Home() {
               Three pillars that make QAF unlike any other kindergarten in Ottawa.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-7">
+          <div className="grid md:grid-cols-3 gap-10 md:gap-0 md:divide-x md:divide-card-line">
             {[
               {
                 icon: "\u262A",
@@ -79,10 +79,10 @@ export default function Home() {
             ].map((card, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-8 shadow-sm border border-border hover:shadow-lg hover:-translate-y-1 transition-all"
+                className="bg-warm-white rounded-lg p-8 border border-card-line transition-colors hover:border-orange"
               >
                 <div
-                  className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-5 ${card.color}`}
+                  className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl mb-5 ${card.color}`}
                 >
                   {card.icon}
                 </div>
@@ -105,10 +105,10 @@ export default function Home() {
             Our Program at a Glance
           </h2>
           <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
               <Image src="/gallery/IMG_1798.jpg" alt="Child painting during art time" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-border">
+            <div className="bg-warm-white rounded-lg p-8 border border-card-line">
               <h3 className="font-heading text-2xl font-bold mb-3 text-orange-dark">
                 Junior &amp; Senior Kindergarten (Ages 4&ndash;5)
               </h3>
@@ -135,7 +135,7 @@ export default function Home() {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
             Why QAF
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-y-10">
             {[
               {
                 title: "Small, nurturing classrooms",
@@ -156,7 +156,7 @@ export default function Home() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-7 shadow-sm border border-border"
+                className="bg-warm-white rounded-lg p-7 border border-card-line"
               >
                 <h3 className="font-heading text-lg font-bold mb-2">
                   {item.title}
@@ -176,7 +176,7 @@ export default function Home() {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-10">
             A Day at QAF
           </h2>
-          <div className="overflow-x-auto rounded-xl shadow-sm">
+          <div className="overflow-x-auto rounded-lg border border-card-line">
             <table className="w-full bg-white">
               <thead className="bg-orange text-white">
                 <tr>
@@ -200,7 +200,7 @@ export default function Home() {
                   ["2:15 - 3:00 PM", "Art, music, science exploration, or small-group enrichment"],
                   ["3:00 - 3:15 PM", "Pick-up, closing dua, goodbye"],
                 ].map(([time, desc], i) => (
-                  <tr key={i} className="border-b border-border last:border-0 hover:bg-orange/[0.03]">
+                  <tr key={i} className="border-b border-card-line last:border-0 hover:bg-orange/[0.03]">
                     <td className="py-3.5 px-6 font-semibold text-orange-dark whitespace-nowrap text-sm">
                       {time}
                     </td>
@@ -247,16 +247,16 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm">
+              <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image src="/gallery/IMG_1803.jpg" alt="Classroom learning activity" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm">
+              <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image src="/gallery/IMG_1806.jpg" alt="Children during group time" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm">
+              <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image src="/gallery/IMG_1802.jpg" alt="Art project in progress" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-sm">
+              <div className="relative aspect-square rounded-lg overflow-hidden">
                 <Image src="/gallery/IMG_1807.jpg" alt="Children reading together" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
               </div>
             </div>
@@ -284,7 +284,7 @@ export default function Home() {
               { src: "/gallery/IMG_1799.jpg", alt: "Classroom exploration" },
               { src: "/gallery/IMG_1813.jpg", alt: "Winter fun at QAF" },
             ].map((img, i) => (
-              <div key={i} className="relative aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+              <div key={i} className="relative aspect-square rounded-lg overflow-hidden transition-colors hover:border-orange">
                 <Image src={img.src} alt={img.alt} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw" />
               </div>
             ))}
@@ -298,7 +298,7 @@ export default function Home() {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
             Parent Voices
           </h2>
-          <div className="grid md:grid-cols-3 gap-7">
+          <div className="grid md:grid-cols-3 gap-10 md:gap-0 md:divide-x md:divide-card-line">
             {[
               {
                 quote:
@@ -319,21 +319,20 @@ export default function Home() {
                 role: "Mother of a QAF alumna",
               },
             ].map((t, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl p-8 shadow-sm border-l-4 border-l-orange border border-border relative"
-              >
-                <span className="absolute top-3 left-5 text-6xl text-orange/15 font-serif leading-none">
+              <figure key={i} className="flex flex-col md:px-8 md:first:pl-0 md:last:pr-0">
+                <span aria-hidden className="font-heading text-6xl text-orange leading-none mb-5">
                   &ldquo;
                 </span>
-                <p className="italic text-text mb-4 relative leading-relaxed text-[0.95rem]">
+                <blockquote className="font-heading text-xl leading-relaxed mb-6">
                   {t.quote}
-                </p>
-                <cite className="not-italic font-semibold text-orange-dark text-sm">
-                  {t.author},{" "}
-                  <span className="font-normal text-text-light">{t.role}</span>
-                </cite>
-              </div>
+                </blockquote>
+                <figcaption className="mt-auto text-sm text-text-light">
+                  <span className="font-semibold uppercase tracking-wider text-text text-xs">
+                    {t.author}
+                  </span>{" "}
+                  &mdash; {t.role}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
@@ -345,7 +344,7 @@ export default function Home() {
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
             By the Numbers
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-y-10">
             {[
               { stat: "2021", label: "Serving Ottawa families since" },
               { stat: "8:1", label: "Student-to-teacher ratio" },
@@ -354,12 +353,12 @@ export default function Home() {
             ].map((s, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-8 text-center shadow-sm border-t-4 border-t-orange"
+                className="text-center px-6 lg:border-l lg:border-card-line lg:first:border-l-0"
               >
-                <div className="font-heading text-4xl font-bold text-orange-dark mb-2">
+                <div className="font-heading text-5xl font-bold text-orange-dark mb-3">
                   {s.stat}
                 </div>
-                <p className="text-text-light text-sm">{s.label}</p>
+                <p className="text-text-light text-sm max-w-[190px] mx-auto">{s.label}</p>
               </div>
             ))}
           </div>
@@ -375,7 +374,7 @@ export default function Home() {
           <p className="text-text-light text-center mb-10 max-w-xl mx-auto">
             QAF Islamic School &mdash; 900 Dynes Rd, Ottawa, ON K2C 3L6
           </p>
-          <div className="rounded-xl overflow-hidden shadow-sm border border-border">
+          <div className="rounded-lg overflow-hidden border border-card-line">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2802.264!2d-75.7043661!3d45.3694474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce07e4d6c4381f%3A0xbe973bba6dfa410b!2sQAF%20Islamic%20School!5e0!3m2!1sen!2sca!4v1757116800000"
               width="100%"

@@ -64,7 +64,7 @@ export default function Parents() {
             ].map((card, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 shadow-sm border border-border hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer flex items-start gap-4"
+                className="bg-warm-white rounded-lg p-6 border border-card-line transition-colors hover:border-orange cursor-pointer flex items-start gap-4"
               >
                 <div
                   className="w-11 h-11 bg-orange/10 rounded-lg flex items-center justify-center text-xl flex-shrink-0"
@@ -95,7 +95,7 @@ export default function Parents() {
               "Update your payment method",
               "See your payment history",
             ].map((item, i) => (
-              <div key={i} className="bg-white rounded-lg p-4 shadow-sm border border-border flex items-center gap-3">
+              <div key={i} className="bg-warm-white rounded-lg p-4 border border-card-line flex items-center gap-3">
                 <span className="text-green font-bold">&#10003;</span>
                 <span className="text-text text-[0.93rem]">{item}</span>
               </div>
@@ -137,7 +137,7 @@ export default function Parents() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white rounded-lg p-5 shadow-sm border-l-3 border-l-orange border border-border"
+                className="bg-warm-white rounded-lg p-5 border border-card-line"
               >
                 <strong className="text-orange-dark">{item.freq}.</strong>{" "}
                 <span className="text-text-light text-[0.93rem]">{item.text}</span>
@@ -178,7 +178,7 @@ export default function Parents() {
             ].map((policy, i) => (
               <div
                 key={i}
-                className="bg-white rounded-lg p-5 shadow-sm border border-border"
+                className="bg-warm-white rounded-lg p-5 border border-card-line"
               >
                 <h3 className="font-bold text-[0.95rem] text-orange-dark mb-1">
                   {policy.title}

@@ -30,7 +30,7 @@ export default function Contact() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Info */}
             <div className="space-y-6">
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 border border-card-line">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
                   Email
                 </h3>
@@ -47,7 +47,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 border border-card-line">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
                   Phone
                 </h3>
@@ -63,7 +63,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 border border-card-line">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
                   Visit Us
                 </h3>
@@ -73,7 +73,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 border border-card-line">
                 <h3 className="font-heading text-lg font-bold text-orange-dark mb-3">
                   Follow Us
                 </h3>
@@ -88,7 +88,7 @@ export default function Contact() {
               </div>
 
               {/* Map */}
-              <div className="rounded-xl overflow-hidden shadow-sm">
+              <div className="rounded-lg overflow-hidden border border-card-line">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2802.264!2d-75.7043661!3d45.3694474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cce07e4d6c4381f%3A0xbe973bba6dfa410b!2sQAF%20Islamic%20School!5e0!3m2!1sen!2sca!4v1757116800000"
                   width="100%"

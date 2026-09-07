@@ -33,7 +33,7 @@ export default function Blog() {
             href={`/blog/${posts[0].slug}`}
             className="grid md:grid-cols-2 gap-8 items-center mb-16 group"
           >
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-lg">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
               <Image
                 src={posts[0].image}
                 alt={posts[0].title}
@@ -65,7 +65,7 @@ export default function Blog() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="bg-white rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-lg transition-shadow group"
+                className="bg-warm-white rounded-lg border border-card-line overflow-hidden transition-colors hover:border-orange group"
               >
                 <div className="relative aspect-[16/9]">
                   <Image

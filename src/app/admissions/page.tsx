@@ -79,7 +79,7 @@ export default function Admissions() {
             We believe in transparent pricing. No hidden charges, no surprises
             mid-year.
           </p>
-          <div className="overflow-x-auto rounded-xl shadow-sm mb-10">
+          <div className="overflow-x-auto rounded-lg border border-card-line mb-10">
             <table className="w-full bg-white">
               <thead className="bg-red text-white">
                 <tr>
@@ -93,7 +93,7 @@ export default function Admissions() {
                   ["Annual resource & supplies fee", "$190 / year (non-refundable)"],
                   ["Application fee", "Contact us"],
                 ].map(([item, amount], i) => (
-                  <tr key={i} className="border-b border-border last:border-0">
+                  <tr key={i} className="border-b border-card-line last:border-0">
                     <td className="py-4 px-6 text-sm">{item}</td>
                     <td className="py-4 px-6 font-bold text-orange-dark text-sm whitespace-nowrap">
                       {amount}
@@ -105,7 +105,7 @@ export default function Admissions() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+            <div className="bg-warm-white rounded-lg p-6 border border-card-line">
               <h3 className="font-heading text-lg font-bold mb-3">Payment Schedule</h3>
               <ul className="space-y-2 text-text-light text-[0.93rem]">
                 <li>Tuition: $690/month, billed 1st of each month, September\u2013June (10 months)</li>
@@ -113,7 +113,7 @@ export default function Admissions() {
                 <li>Payment via credit card, direct debit, or e-transfer through Parent Portal</li>
               </ul>
             </div>
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-border">
+            <div className="bg-warm-white rounded-lg p-6 border border-card-line">
               <h3 className="font-heading text-lg font-bold mb-3">Annual Total</h3>
               <div className="text-text-light text-[0.93rem] space-y-2">
                 <p>$690 &times; 10 months = <strong className="text-text">$6,900</strong> tuition</p>
@@ -148,7 +148,7 @@ export default function Admissions() {
             ].map((doc, i) => (
               <div
                 key={i}
-                className="bg-white rounded-lg px-5 py-3.5 shadow-sm border border-border flex items-center gap-3"
+                className="bg-warm-white rounded-lg px-5 py-3.5 border border-card-line flex items-center gap-3"
               >
                 <span className="text-orange text-lg">&#128196;</span>
                 <span className="text-text text-[0.93rem]">{doc}</span>

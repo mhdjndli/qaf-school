@@ -8,7 +8,7 @@ import { faqData } from "@/data/faqs";
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="bg-white rounded-lg border border-border overflow-hidden shadow-sm">
+    <div className="bg-warm-white rounded-lg border border-card-line overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
         className="w-full text-left px-6 py-4 flex justify-between items-center gap-4 hover:bg-orange/[0.03] transition-colors"

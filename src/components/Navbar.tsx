@@ -21,7 +21,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white border-b border-card-line sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[72px]">
         <Link href="/" className="flex items-center gap-3">
           <Image
@@ -90,14 +90,14 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="xl:hidden bg-white border-t border-border shadow-lg">
+        <div className="xl:hidden bg-white border-t border-card-line shadow-lg">
           <ul className="px-6 py-4 space-y-1">
             {links.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className={`block py-3 border-b border-border/50 text-base font-medium ${
+                  className={`block py-3 border-b border-card-line/50 text-base font-medium ${
                     pathname === l.href ? "text-orange-dark" : "text-text"
                   }`}
                 >

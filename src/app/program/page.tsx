@@ -32,7 +32,7 @@ export default function Program() {
               { label: "Tuition", value: "$690/month" },
               { label: "Start", value: "September 2026" },
             ].map((f, i) => (
-              <div key={i} className="bg-white rounded-lg p-4 shadow-sm border border-border">
+              <div key={i} className="bg-warm-white rounded-lg p-4 border border-card-line">
                 <p className="text-xs text-text-light uppercase tracking-wide mb-1">{f.label}</p>
                 <p className="font-bold text-orange-dark text-sm">{f.value}</p>
               </div>
@@ -49,7 +49,7 @@ export default function Program() {
             { src: "/gallery/IMG_1805.jpg", alt: "Group table activity" },
             { src: "/gallery/IMG_1800.jpg", alt: "Child showing Arabic letter art" },
           ].map((img, i) => (
-            <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-sm">
+            <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden">
               <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="(max-width: 768px) 33vw, 33vw" />
             </div>
           ))}
@@ -71,7 +71,6 @@ export default function Program() {
             {[
               {
                 title: "From the Ontario Kindergarten Program",
-                color: "border-t-red",
                 items: [
                   "Four frames of learning: Belonging, Self-Regulation, Literacy & Mathematics, Problem Solving",
                   "Play-based, inquiry-led instruction",
@@ -81,7 +80,6 @@ export default function Program() {
               },
               {
                 title: "From Montessori",
-                color: "border-t-orange",
                 items: [
                   "A prepared environment with materials at the child\u2019s level",
                   "Long, uninterrupted work periods that build concentration",
@@ -92,7 +90,6 @@ export default function Program() {
               },
               {
                 title: "Uniquely Islamic",
-                color: "border-t-green",
                 items: [
                   "Daily morning duas and the language of dhikr throughout the day",
                   "Short, age-appropriate Quran memorization (Juz Amma)",
@@ -103,7 +100,6 @@ export default function Program() {
               },
               {
                 title: "Uniquely Arabic",
-                color: "border-t-orange",
                 items: [
                   "Arabic spoken daily by our educators",
                   "Songs, stories, and routines happen in Arabic",
@@ -114,7 +110,7 @@ export default function Program() {
             ].map((block, i) => (
               <div
                 key={i}
-                className={`bg-white rounded-xl p-7 shadow-sm border border-border border-t-4 ${block.color}`}
+                className="bg-warm-white rounded-lg p-7 border border-card-line"
               >
                 <h3 className="font-heading text-lg font-bold mb-4">
                   {block.title}
@@ -145,7 +141,7 @@ export default function Program() {
             Every day follows a rhythm: predictable enough to feel safe, flexible
             enough to follow curiosity.
           </p>
-          <div className="overflow-x-auto rounded-xl shadow-sm">
+          <div className="overflow-x-auto rounded-lg border border-card-line">
             <table className="w-full bg-white">
               <thead className="bg-orange text-white">
                 <tr>
@@ -165,7 +161,7 @@ export default function Program() {
                   ["2:15 - 3:00 PM", "Art, music, science exploration, or small-group enrichment"],
                   ["3:00 - 3:15 PM", "Pick-up, closing dua, goodbye"],
                 ].map(([time, activity], i) => (
-                  <tr key={i} className="border-b border-border last:border-0 hover:bg-orange/[0.03]">
+                  <tr key={i} className="border-b border-card-line last:border-0 hover:bg-orange/[0.03]">
                     <td className="py-3.5 px-6 font-semibold text-orange-dark whitespace-nowrap text-sm w-40">
                       {time}
                     </td>
@@ -185,7 +181,7 @@ export default function Program() {
             Learning Outcomes
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-border">
+            <div className="bg-warm-white rounded-lg p-8 border border-card-line">
               <h3 className="font-heading text-xl font-bold text-orange-dark mb-5">
                 By the End of JK
               </h3>
@@ -209,7 +205,7 @@ export default function Program() {
               </ul>
             </div>
 
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-border">
+            <div className="bg-warm-white rounded-lg p-8 border border-card-line">
               <h3 className="font-heading text-xl font-bold text-orange-dark mb-5">
                 By the End of SK
               </h3>
@@ -243,7 +239,7 @@ export default function Program() {
             What&rsquo;s Included, What&rsquo;s Not
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl p-7 shadow-sm border-t-4 border-t-green">
+            <div className="bg-warm-white rounded-lg p-7 border border-card-line">
               <h3 className="font-heading text-lg font-bold mb-4 text-green">
                 Included in Tuition
               </h3>
@@ -265,7 +261,7 @@ export default function Program() {
               </ul>
             </div>
 
-            <div className="bg-white rounded-xl p-7 shadow-sm border-t-4 border-t-red">
+            <div className="bg-warm-white rounded-lg p-7 border border-card-line">
               <h3 className="font-heading text-lg font-bold mb-4 text-red">
                 Not Included
               </h3>

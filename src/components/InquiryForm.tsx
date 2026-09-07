@@ -81,7 +81,7 @@ export default function InquiryForm() {
 
   if (status === "done") {
     return (
-      <div className="bg-green/10 border border-green rounded-xl p-8 text-center">
+      <div className="bg-green/10 border border-green rounded-lg p-8 text-center">
         <div className="text-4xl mb-3">&#10003;</div>
         <h2 className="font-heading text-2xl font-bold mb-2 text-green">
           Inquiry Received
@@ -97,7 +97,7 @@ export default function InquiryForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-border space-y-6"
+      className="bg-warm-white rounded-lg p-6 md:p-8 border border-card-line space-y-6"
     >
       <fieldset className="space-y-4">
         <legend className="font-heading text-lg font-bold text-orange-dark">
@@ -260,7 +260,7 @@ export default function InquiryForm() {
 }
 
 const inputCls =
-  "w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all";
+  "w-full px-4 py-3 border border-card-line rounded-lg focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/10 transition-all";
 
 function Field({
   label,

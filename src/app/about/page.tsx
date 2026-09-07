@@ -115,7 +115,7 @@ export default function About() {
             ].map((v, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 shadow-sm border border-border"
+                className="bg-warm-white rounded-lg p-6 border border-card-line"
               >
                 <h4 className="font-heading text-lg font-bold text-orange-dark mb-2">
                   {v.title}
@@ -152,7 +152,7 @@ export default function About() {
             ].map((photo, i) => (
               <div
                 key={i}
-                className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-sm border border-border"
+                className="relative aspect-[4/3] rounded-lg overflow-hidden border border-card-line"
               >
                 <Image
                   src={photo.src}
@@ -182,7 +182,7 @@ export default function About() {
             {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
-                className="bg-white rounded-xl p-6 shadow-sm border border-border text-center"
+                className="bg-warm-white rounded-lg p-6 border border-card-line text-center"
               >
                 <div className="w-24 h-24 rounded-full bg-cream mx-auto mb-4 flex items-center justify-center">
                   <span className="text-3xl text-orange/40">&#128100;</span>

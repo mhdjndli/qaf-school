@@ -119,7 +119,7 @@ export default function SundayCamp() {
             </p>
             <div className="flex flex-wrap gap-2.5 justify-center md:justify-start mb-8">
               {["Ages 8–15", "Sundays 11 AM – 3 PM", "900 Dynes Rd, Ottawa", "$190/month"].map((chip) => (
-                <span key={chip} className="bg-white border border-border text-text text-sm font-medium px-4 py-2 rounded-full shadow-sm">
+                <span key={chip} className="bg-warm-white border border-card-line text-text text-sm font-medium px-4 py-2 rounded-full">
                   {chip}
                 </span>
               ))}
@@ -191,9 +191,9 @@ export default function SundayCamp() {
             ].map((card) => (
               <div
                 key={card.title}
-                className="bg-white rounded-xl p-7 shadow-sm border border-border hover:shadow-lg hover:-translate-y-1 transition-all text-center"
+                className="bg-warm-white rounded-lg p-7 border border-card-line transition-colors hover:border-orange text-center"
               >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-4 mx-auto ${card.color}`}>
+                <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl mb-4 mx-auto ${card.color}`}>
                   {card.icon}
                 </div>
                 <h3 className="font-heading text-xl font-bold mb-2">{card.title}</h3>
@@ -217,7 +217,7 @@ export default function SundayCamp() {
             {scheduleRows.map((row) => (
               <div
                 key={row.time}
-                className="bg-white rounded-xl p-6 shadow-sm border border-border flex flex-col sm:flex-row gap-3 sm:gap-6"
+                className="bg-warm-white rounded-lg p-6 border border-card-line flex flex-col sm:flex-row gap-3 sm:gap-6"
               >
                 <div className="sm:w-36 shrink-0">
                   <span className="inline-block bg-orange/10 text-orange-dark font-bold text-sm px-3 py-1.5 rounded-lg whitespace-nowrap tabular-nums">
@@ -253,13 +253,13 @@ export default function SundayCamp() {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-md">
               <Image src="/gallery/IMG_3077.jpg" alt="QAF classroom with tables and whiteboard" fill className="object-cover" sizes="(max-width: 768px) 50vw, 280px" />
             </div>
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-md">
               <Image src="/gallery/IMG_3086.jpg" alt="Green field beside the school where campers play soccer" fill className="object-cover" sizes="(max-width: 768px) 50vw, 280px" />
             </div>
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md col-span-2">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-md col-span-2">
               <Image src="/gallery/IMG_3080.jpg" alt="QAF learning room with whiteboard and materials" fill className="object-cover" sizes="(max-width: 768px) 100vw, 560px" />
             </div>
           </div>
@@ -328,7 +328,7 @@ export default function SundayCamp() {
                 a: "No — tuition is a simple $190/month subscription for the camp year, September through June. You pay month to month.",
               },
             ].map((item) => (
-              <div key={item.q} className="bg-white rounded-xl p-6 shadow-sm border border-border">
+              <div key={item.q} className="bg-warm-white rounded-lg p-6 border border-card-line">
                 <h3 className="font-heading text-lg font-bold mb-2">{item.q}</h3>
                 <p className="text-text-light text-[0.95rem] leading-relaxed">{item.a}</p>
               </div>
