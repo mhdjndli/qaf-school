@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
+      // Admin uploads (signed handbooks, invoices) go through server actions.
+      bodySizeLimit: "16mb",
       allowedOrigins: [
         "qafschool.com",
         "www.qafschool.com",

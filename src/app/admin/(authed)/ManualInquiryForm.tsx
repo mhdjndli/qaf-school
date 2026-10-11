@@ -131,6 +131,36 @@ export default function ManualInquiryForm({ status }: { status: Status }) {
           </div>
         </fieldset>
 
+        {status === "enrolled" ? (
+          <fieldset className="space-y-3">
+            <legend className="font-heading text-base font-bold text-orange-dark">
+              Enrolment
+            </legend>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <Field label="Full-time or part-time">
+                <select
+                  name="enrolmentType"
+                  defaultValue="full_time"
+                  className={inputCls}
+                >
+                  <option value="full_time">Full-time</option>
+                  <option value="part_time">Part-time</option>
+                  <option value="">Not set yet</option>
+                </select>
+              </Field>
+              <Field label="Monthly payment committed (CAD)">
+                <input
+                  name="monthlyFee"
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="e.g. 1250.00"
+                  className={inputCls}
+                />
+              </Field>
+            </div>
+          </fieldset>
+        ) : null}
+
         <div className="grid sm:grid-cols-2 gap-3">
           <Field label="Source">
             <select name="source" defaultValue="Other" className={inputCls}>

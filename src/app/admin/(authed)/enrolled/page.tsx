@@ -1,25 +1,30 @@
-import { listInquiries } from "@/lib/store";
+import Link from "next/link";
+import { listAllStudentDocuments, listInquiries } from "@/lib/store";
+import { enrolmentTypeLabel, money, shortDate } from "@/lib/format";
 import { togglePaidSupplyAction, unenrolAction } from "../actions";
-import InquiryDetails from "../InquiryDetails";
 import ManualInquiryForm from "../ManualInquiryForm";
 
-function shortDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+export const dynamic = "force-dynamic";
 
 export default async function AdminEnrolledPage() {
-  const all = await listInquiries();
+  const [all, docs] = await Promise.all([
+    listInquiries(),
+    listAllStudentDocuments(),
+  ]);
   const enrolled = all
     .filter((i) => i.enrolledAt)
     .sort((a, b) =>
       (b.enrolledAt ?? "").localeCompare(a.enrolledAt ?? ""),
     );
+  const handbookSigned = new Set(
+    docs.filter((d) => d.kind === "handbook").map((d) => d.inquiryId),
+  );
+  const fullTime = enrolled.filter((i) => i.enrolmentType === "full_time").length;
+  const partTime = enrolled.filter((i) => i.enrolmentType === "part_time").length;
+  const monthlyTotal = enrolled.reduce(
+    (sum, i) => sum + (i.monthlyFeeCents ?? 0),
+    0,
+  );
 
   return (
     <div>
@@ -27,7 +32,9 @@ export default async function AdminEnrolledPage() {
         <div>
           <h1 className="font-heading text-3xl font-bold text-text">Enrolled</h1>
           <p className="text-text-light text-sm mt-1">
-            {enrolled.length} enrolled. Mark supplies as paid once received.
+            {enrolled.length} enrolled &middot; {fullTime} full-time &middot;{" "}
+            {partTime} part-time &middot; {money(monthlyTotal)} committed per
+            month. Click a child to open their file.
           </p>
         </div>
         <ManualInquiryForm status="enrolled" />
@@ -58,97 +65,157 @@ export default async function AdminEnrolledPage() {
               <thead className="bg-cream border-b border-border text-text-light">
                 <tr>
                   <Th>Enrolled</Th>
-                  <Th>Parent</Th>
                   <Th>Child</Th>
-                  <Th>Start</Th>
-                  <Th>Contact</Th>
+                  <Th>Parent</Th>
+                  <Th>Type</Th>
+                  <Th>Monthly</Th>
+                  <Th>Handbook</Th>
                   <Th>Paid Supply</Th>
                   <Th className="text-right pr-6">Actions</Th>
                 </tr>
               </thead>
               <tbody>
-                {enrolled.map((inq) => (
-                  <tr
-                    key={inq.id}
-                    className="border-b border-border last:border-0 hover:bg-orange/[0.03]"
-                  >
-                    <Td>
-                      {inq.enrolledAt ? shortDate(inq.enrolledAt) : "\u2014"}
-                    </Td>
-                    <Td>
-                      <div className="font-medium text-text">
-                        {inq.parentFirstName} {inq.parentLastName}
-                      </div>
-                    </Td>
-                    <Td>
-                      <div className="font-medium text-text">
-                        {inq.childFirstName} {inq.childLastName}
-                      </div>
-                      <div className="text-text-light text-xs">
-                        DOB {inq.childDob}
-                      </div>
-                    </Td>
-                    <Td>{inq.expectedStartDate}</Td>
-                    <Td>
-                      <div className="text-text-light text-xs">
-                        <a
-                          href={`mailto:${inq.email}`}
-                          className="hover:text-orange-dark"
-                        >
-                          {inq.email}
-                        </a>
-                      </div>
-                      <div className="text-text-light text-xs">
-                        <a
-                          href={`tel:${inq.phone}`}
-                          className="hover:text-orange-dark"
-                        >
-                          {inq.phone}
-                        </a>
-                      </div>
-                    </Td>
-                    <Td>
-                      <form action={togglePaidSupplyAction}>
-                        <input type="hidden" name="id" value={inq.id} />
-                        <input
-                          type="hidden"
-                          name="paid"
-                          value={inq.paidSupplyAt ? "false" : "true"}
-                        />
-                        {inq.paidSupplyAt ? (
-                          <button
-                            type="submit"
-                            title={`Paid ${shortDate(inq.paidSupplyAt)} — click to unmark`}
-                            className="inline-block bg-green/10 text-green text-xs font-semibold px-2.5 py-1 rounded-full hover:bg-green/20 transition-colors"
+                {enrolled.map((inq) => {
+                  const href = `/admin/enrolled/${inq.id}`;
+                  return (
+                    <tr
+                      key={inq.id}
+                      className="border-b border-border last:border-0 hover:bg-orange/[0.03]"
+                    >
+                      <Td>
+                        <Link href={href} className="block">
+                          {shortDate(inq.enrolledAt)}
+                        </Link>
+                      </Td>
+                      <Td>
+                        <Link href={href} className="block group">
+                          <div className="font-medium text-text group-hover:text-orange-dark group-hover:underline">
+                            {inq.childFirstName} {inq.childLastName}
+                          </div>
+                          <div className="text-text-light text-xs">
+                            DOB {inq.childDob} &middot; starts{" "}
+                            {inq.expectedStartDate}
+                          </div>
+                        </Link>
+                      </Td>
+                      <Td>
+                        <div className="font-medium text-text">
+                          {inq.parentFirstName} {inq.parentLastName}
+                        </div>
+                        <div className="text-text-light text-xs">
+                          <a
+                            href={`mailto:${inq.email}`}
+                            className="hover:text-orange-dark"
                           >
-                            Paid &middot; {shortDate(inq.paidSupplyAt)}
-                          </button>
-                        ) : (
-                          <button
-                            type="submit"
-                            className="text-sm bg-orange text-white px-3 py-1.5 rounded-md font-semibold hover:bg-orange-dark transition-colors"
+                            {inq.email}
+                          </a>
+                        </div>
+                        <div className="text-text-light text-xs">
+                          <a
+                            href={`tel:${inq.phone}`}
+                            className="hover:text-orange-dark"
                           >
-                            Mark Paid Supply
-                          </button>
-                        )}
-                      </form>
-                    </Td>
-                    <Td className="text-right pr-6">
-                      <div className="flex justify-end items-center gap-3">
-                        <InquiryDetails inquiry={inq} />
-                        <form action={unenrolAction}>
+                            {inq.phone}
+                          </a>
+                        </div>
+                      </Td>
+                      <Td>
+                        <Link href={href} className="block">
+                          {inq.enrolmentType ? (
+                            <span
+                              className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${
+                                inq.enrolmentType === "full_time"
+                                  ? "bg-green/10 text-green"
+                                  : "bg-orange/10 text-orange-dark"
+                              }`}
+                            >
+                              {enrolmentTypeLabel(inq.enrolmentType)}
+                            </span>
+                          ) : (
+                            <span className="text-text-light text-xs italic">
+                              Not set
+                            </span>
+                          )}
+                        </Link>
+                      </Td>
+                      <Td>
+                        <Link href={href} className="block">
+                          {inq.monthlyFeeCents !== null ? (
+                            <span className="font-medium text-text whitespace-nowrap">
+                              {money(inq.monthlyFeeCents)}
+                              <span className="text-text-light font-normal text-xs">
+                                {" "}
+                                /mo
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-text-light text-xs italic">
+                              Not set
+                            </span>
+                          )}
+                        </Link>
+                      </Td>
+                      <Td>
+                        <Link href={href} className="block">
+                          {handbookSigned.has(inq.id) ? (
+                            <span className="inline-block bg-green/10 text-green text-xs font-semibold px-2.5 py-1 rounded-full">
+                              Signed
+                            </span>
+                          ) : (
+                            <span className="inline-block bg-red/10 text-red text-xs font-semibold px-2.5 py-1 rounded-full">
+                              Missing
+                            </span>
+                          )}
+                        </Link>
+                      </Td>
+                      <Td>
+                        <form action={togglePaidSupplyAction}>
                           <input type="hidden" name="id" value={inq.id} />
-                          <button
-                            type="submit"
-                            className="text-sm text-red hover:underline"
-                          >
-                            Unenrol
-                          </button>
+                          <input
+                            type="hidden"
+                            name="paid"
+                            value={inq.paidSupplyAt ? "false" : "true"}
+                          />
+                          {inq.paidSupplyAt ? (
+                            <button
+                              type="submit"
+                              title={`Paid ${shortDate(inq.paidSupplyAt)} — click to unmark`}
+                              className="inline-block bg-green/10 text-green text-xs font-semibold px-2.5 py-1 rounded-full hover:bg-green/20 transition-colors whitespace-nowrap"
+                            >
+                              Paid &middot; {shortDate(inq.paidSupplyAt)}
+                            </button>
+                          ) : (
+                            <button
+                              type="submit"
+                              className="text-sm bg-orange text-white px-3 py-1.5 rounded-md font-semibold hover:bg-orange-dark transition-colors whitespace-nowrap"
+                            >
+                              Mark Paid Supply
+                            </button>
+                          )}
                         </form>
-                      </div>
-                    </Td>
-                  </tr>
-                ))}
+                      </Td>
+                      <Td className="text-right pr-6">
+                        <div className="flex justify-end items-center gap-3">
+                          <Link
+                            href={href}
+                            className="text-orange-dark hover:underline font-medium text-sm whitespace-nowrap"
+                          >
+                            Open file
+                          </Link>
+                          <form action={unenrolAction}>
+                            <input type="hidden" name="id" value={inq.id} />
+                            <button
+                              type="submit"
+                              className="text-sm text-red hover:underline"
+                            >
+                              Unenrol
+                            </button>
+                          </form>
+                        </div>
+                      </Td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -167,7 +234,7 @@ function Th({
 }) {
   return (
     <th
-      className={`text-left font-semibold text-xs uppercase tracking-wide py-3 px-4 ${className}`}
+      className={`text-left font-semibold text-xs uppercase tracking-wide py-3 px-4 whitespace-nowrap ${className}`}
     >
       {children}
     </th>

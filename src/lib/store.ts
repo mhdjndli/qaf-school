@@ -9,6 +9,8 @@ export type InquirySource =
   | "Instagram"
   | "Other";
 
+export type EnrolmentType = "full_time" | "part_time";
+
 export type Inquiry = {
   id: string;
   createdAt: string;
@@ -26,12 +28,38 @@ export type Inquiry = {
   waitlistedAt: string | null;
   enrolledAt: string | null;
   paidSupplyAt: string | null;
+  enrolmentType: EnrolmentType | null;
+  monthlyFeeCents: number | null;
 };
 
 export type NewInquiryInput = Omit<
   Inquiry,
-  "id" | "createdAt" | "waitlistedAt" | "enrolledAt" | "paidSupplyAt"
->;
+  | "id"
+  | "createdAt"
+  | "waitlistedAt"
+  | "enrolledAt"
+  | "paidSupplyAt"
+  | "enrolmentType"
+  | "monthlyFeeCents"
+> &
+  Partial<Pick<Inquiry, "enrolmentType" | "monthlyFeeCents">>;
+
+export type StudentDocumentKind = "handbook" | "invoice" | "payment";
+
+export type StudentDocument = {
+  id: string;
+  inquiryId: string;
+  kind: StudentDocumentKind;
+  label: string;
+  amountCents: number | null;
+  docDate: string | null;
+  filename: string;
+  mimeType: string;
+  sizeBytes: number;
+  createdAt: string;
+};
+
+export type NewStudentDocumentInput = Omit<StudentDocument, "id" | "createdAt">;
 
 export type EmailTemplate = {
   id: string;
@@ -166,6 +194,31 @@ function ensurePg(): Promise<void> {
           paid_supply_at TIMESTAMPTZ
         );
       `);
+      await pool.query(
+        `ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS enrolment_type TEXT`,
+      );
+      await pool.query(
+        `ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS monthly_fee_cents INTEGER`,
+      );
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS student_documents (
+          id UUID PRIMARY KEY,
+          inquiry_id UUID NOT NULL REFERENCES inquiries(id) ON DELETE CASCADE,
+          kind TEXT NOT NULL,
+          label TEXT NOT NULL,
+          amount_cents INTEGER,
+          doc_date TEXT,
+          filename TEXT NOT NULL,
+          mime_type TEXT NOT NULL,
+          size_bytes INTEGER NOT NULL,
+          data BYTEA NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      await pool.query(
+        `CREATE INDEX IF NOT EXISTS student_documents_inquiry_idx
+           ON student_documents (inquiry_id)`,
+      );
       await pool.query(`
         CREATE TABLE IF NOT EXISTS templates (
           id UUID PRIMARY KEY,
@@ -226,6 +279,8 @@ type InquiryRow = {
   waitlisted_at: Date | null;
   enrolled_at: Date | null;
   paid_supply_at: Date | null;
+  enrolment_type: string | null;
+  monthly_fee_cents: number | null;
 };
 
 function rowToInquiry(r: InquiryRow): Inquiry {
@@ -246,6 +301,39 @@ function rowToInquiry(r: InquiryRow): Inquiry {
     waitlistedAt: r.waitlisted_at ? r.waitlisted_at.toISOString() : null,
     enrolledAt: r.enrolled_at ? r.enrolled_at.toISOString() : null,
     paidSupplyAt: r.paid_supply_at ? r.paid_supply_at.toISOString() : null,
+    enrolmentType:
+      r.enrolment_type === "full_time" || r.enrolment_type === "part_time"
+        ? r.enrolment_type
+        : null,
+    monthlyFeeCents: r.monthly_fee_cents ?? null,
+  };
+}
+
+type StudentDocumentRow = {
+  id: string;
+  inquiry_id: string;
+  kind: string;
+  label: string;
+  amount_cents: number | null;
+  doc_date: string | null;
+  filename: string;
+  mime_type: string;
+  size_bytes: number;
+  created_at: Date;
+};
+
+function rowToDocument(r: StudentDocumentRow): StudentDocument {
+  return {
+    id: r.id,
+    inquiryId: r.inquiry_id,
+    kind: r.kind as StudentDocumentKind,
+    label: r.label,
+    amountCents: r.amount_cents ?? null,
+    docDate: r.doc_date,
+    filename: r.filename,
+    mimeType: r.mime_type,
+    sizeBytes: r.size_bytes,
+    createdAt: r.created_at.toISOString(),
   };
 }
 
@@ -341,7 +429,15 @@ async function readInquiriesFile(): Promise<Inquiry[]> {
   const text = await fs.readFile(INQUIRIES_FILE, "utf8");
   try {
     const parsed = JSON.parse(text);
-    return Array.isArray(parsed) ? (parsed as Inquiry[]) : [];
+    if (!Array.isArray(parsed)) return [];
+    return (parsed as Partial<Inquiry>[]).map(
+      (i) =>
+        ({
+          ...i,
+          enrolmentType: i.enrolmentType ?? null,
+          monthlyFeeCents: i.monthlyFeeCents ?? null,
+        }) as Inquiry,
+    );
   } catch {
     return [];
   }
@@ -386,6 +482,29 @@ async function writeCampFile(list: CampEnrolment[]): Promise<void> {
   await fs.writeFile(CAMP_FILE, JSON.stringify(list, null, 2), "utf8");
 }
 
+const DOCUMENTS_FILE = path.join(DATA_DIR, "student-documents.json");
+const UPLOADS_DIR = path.join(DATA_DIR, "uploads");
+
+function uploadPath(docId: string): string {
+  return path.join(UPLOADS_DIR, docId);
+}
+
+async function readDocumentsFile(): Promise<StudentDocument[]> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    const text = await fs.readFile(DOCUMENTS_FILE, "utf8");
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? (parsed as StudentDocument[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeDocumentsFile(list: StudentDocument[]): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(DOCUMENTS_FILE, JSON.stringify(list, null, 2), "utf8");
+}
+
 // -------------------- Public API --------------------
 
 export async function listInquiries(): Promise<Inquiry[]> {
@@ -398,6 +517,43 @@ export async function listInquiries(): Promise<Inquiry[]> {
   return readInquiriesFile();
 }
 
+export async function getInquiry(id: string): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `SELECT * FROM inquiries WHERE id = $1`,
+      [id],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  return all.find((i) => i.id === id) ?? null;
+}
+
+export async function setEnrolmentDetails(
+  id: string,
+  details: { enrolmentType: EnrolmentType | null; monthlyFeeCents: number | null },
+): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `UPDATE inquiries
+         SET enrolment_type = $2, monthly_fee_cents = $3
+       WHERE id = $1 RETURNING *`,
+      [id, details.enrolmentType, details.monthlyFeeCents],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = {
+    ...all[idx],
+    enrolmentType: details.enrolmentType,
+    monthlyFeeCents: details.monthlyFeeCents,
+  };
+  await writeInquiriesFile(all);
+  return all[idx];
+}
+
 export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
   if (USE_PG) {
     const id = randomUUID();
@@ -405,8 +561,8 @@ export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
       `INSERT INTO inquiries (
          id, parent_first_name, parent_last_name, email, phone,
          child_first_name, child_last_name, child_dob, expected_start_date,
-         wants_tour, notes, source
-       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+         wants_tour, notes, source, enrolment_type, monthly_fee_cents
+       ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
        RETURNING *`,
       [
         id,
@@ -421,6 +577,8 @@ export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
         input.wantsTour,
         input.notes,
         input.source,
+        input.enrolmentType ?? null,
+        input.monthlyFeeCents ?? null,
       ],
     );
     return rowToInquiry(rows[0]);
@@ -432,6 +590,8 @@ export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
     waitlistedAt: null,
     enrolledAt: null,
     paidSupplyAt: null,
+    enrolmentType: input.enrolmentType ?? null,
+    monthlyFeeCents: input.monthlyFeeCents ?? null,
   };
   const all = await readInquiriesFile();
   all.unshift(inquiry);
@@ -522,6 +682,14 @@ export async function deleteInquiry(id: string): Promise<boolean> {
   const next = all.filter((i) => i.id !== id);
   if (next.length === all.length) return false;
   await writeInquiriesFile(next);
+  const docs = await readDocumentsFile();
+  const orphaned = docs.filter((d) => d.inquiryId === id);
+  if (orphaned.length) {
+    await writeDocumentsFile(docs.filter((d) => d.inquiryId !== id));
+    await Promise.all(
+      orphaned.map((d) => fs.rm(uploadPath(d.id), { force: true })),
+    );
+  }
   return true;
 }
 
@@ -648,4 +816,124 @@ export async function upsertCampEnrolment(
   list.push(record);
   await writeCampFile(list);
   return record;
+}
+
+// -------------------- Student documents --------------------
+// Signed parent handbooks, invoices and payment receipts uploaded by an
+// admin for an enrolled student. File bytes live in Postgres (BYTEA) when
+// a database is configured, otherwise under data/uploads/ locally.
+
+const DOCUMENT_COLUMNS = `id, inquiry_id, kind, label, amount_cents, doc_date,
+  filename, mime_type, size_bytes, created_at`;
+
+function sortDocuments(list: StudentDocument[]): StudentDocument[] {
+  return [...list].sort((a, b) => {
+    const ad = a.docDate ?? a.createdAt.slice(0, 10);
+    const bd = b.docDate ?? b.createdAt.slice(0, 10);
+    if (ad !== bd) return bd.localeCompare(ad);
+    return b.createdAt.localeCompare(a.createdAt);
+  });
+}
+
+/** Metadata for every document (no file bytes). */
+export async function listAllStudentDocuments(): Promise<StudentDocument[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentDocumentRow>(
+      `SELECT ${DOCUMENT_COLUMNS} FROM student_documents ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToDocument);
+  }
+  return sortDocuments(await readDocumentsFile());
+}
+
+export async function listStudentDocuments(
+  inquiryId: string,
+): Promise<StudentDocument[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentDocumentRow>(
+      `SELECT ${DOCUMENT_COLUMNS} FROM student_documents
+        WHERE inquiry_id = $1 ORDER BY created_at DESC`,
+      [inquiryId],
+    );
+    return sortDocuments(rows.map(rowToDocument));
+  }
+  const all = await readDocumentsFile();
+  return sortDocuments(all.filter((d) => d.inquiryId === inquiryId));
+}
+
+export async function addStudentDocument(
+  input: NewStudentDocumentInput,
+  data: Buffer,
+): Promise<StudentDocument> {
+  const id = randomUUID();
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentDocumentRow>(
+      `INSERT INTO student_documents
+         (id, inquiry_id, kind, label, amount_cents, doc_date,
+          filename, mime_type, size_bytes, data)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+       RETURNING ${DOCUMENT_COLUMNS}`,
+      [
+        id,
+        input.inquiryId,
+        input.kind,
+        input.label,
+        input.amountCents,
+        input.docDate,
+        input.filename,
+        input.mimeType,
+        input.sizeBytes,
+        data,
+      ],
+    );
+    return rowToDocument(rows[0]);
+  }
+  await fs.mkdir(UPLOADS_DIR, { recursive: true });
+  await fs.writeFile(uploadPath(id), data);
+  const doc: StudentDocument = {
+    ...input,
+    id,
+    createdAt: new Date().toISOString(),
+  };
+  const all = await readDocumentsFile();
+  all.unshift(doc);
+  await writeDocumentsFile(all);
+  return doc;
+}
+
+export async function getStudentDocumentFile(
+  id: string,
+): Promise<{ doc: StudentDocument; data: Buffer } | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentDocumentRow & { data: Buffer }>(
+      `SELECT ${DOCUMENT_COLUMNS}, data FROM student_documents WHERE id = $1`,
+      [id],
+    );
+    if (!rows[0]) return null;
+    return { doc: rowToDocument(rows[0]), data: rows[0].data };
+  }
+  const all = await readDocumentsFile();
+  const doc = all.find((d) => d.id === id);
+  if (!doc) return null;
+  try {
+    const data = await fs.readFile(uploadPath(id));
+    return { doc, data };
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteStudentDocument(id: string): Promise<boolean> {
+  if (USE_PG) {
+    const res = await pgQuery(`DELETE FROM student_documents WHERE id = $1`, [
+      id,
+    ]);
+    return (res.rowCount ?? 0) > 0;
+  }
+  const all = await readDocumentsFile();
+  const next = all.filter((d) => d.id !== id);
+  if (next.length === all.length) return false;
+  await writeDocumentsFile(next);
+  await fs.rm(uploadPath(id), { force: true });
+  return true;
 }
