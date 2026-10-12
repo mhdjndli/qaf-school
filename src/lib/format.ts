@@ -57,3 +57,8 @@ export function fileSize(bytes: number): string {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+/** Today's date as YYYY-MM-DD in Ottawa, for date-input defaults. */
+export function todayISO(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+}

@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { listAllStudentDocuments, listInquiries } from "@/lib/store";
-import { enrolmentTypeLabel, money, shortDate } from "@/lib/format";
-import { togglePaidSupplyAction, unenrolAction } from "../actions";
+import {
+  enrolmentTypeLabel,
+  money,
+  plainDate,
+  shortDate,
+  todayISO,
+} from "@/lib/format";
+import {
+  reinstateAction,
+  togglePaidSupplyAction,
+  unenrolAction,
+} from "../actions";
 import ManualInquiryForm from "../ManualInquiryForm";
+import WithdrawButton from "../WithdrawButton";
 
 export const dynamic = "force-dynamic";
 
@@ -13,18 +24,23 @@ export default async function AdminEnrolledPage() {
   ]);
   const enrolled = all
     .filter((i) => i.enrolledAt)
-    .sort((a, b) =>
-      (b.enrolledAt ?? "").localeCompare(a.enrolledAt ?? ""),
-    );
+    .sort((a, b) => {
+      // Active kids first, withdrawn at the bottom; newest enrolment first.
+      if (!a.withdrawnOn !== !b.withdrawnOn) return a.withdrawnOn ? 1 : -1;
+      return (b.enrolledAt ?? "").localeCompare(a.enrolledAt ?? "");
+    });
+  const active = enrolled.filter((i) => !i.withdrawnOn);
+  const withdrawnCount = enrolled.length - active.length;
+  const today = todayISO();
   const handbookSigned = new Set(
     docs.filter((d) => d.kind === "handbook").map((d) => d.inquiryId),
   );
-  const fullTime = enrolled.filter((i) => i.enrolmentType === "full_time").length;
-  const partTime = enrolled.filter((i) => i.enrolmentType === "part_time").length;
-  const monthlyTotal = enrolled.reduce(
-    (sum, i) => sum + (i.monthlyFeeCents ?? 0),
-    0,
-  );
+  const fullTime = active.filter((i) => i.enrolmentType === "full_time");
+  const partTime = active.filter((i) => i.enrolmentType === "part_time");
+  const sumFees = (list: typeof active) =>
+    list.reduce((sum, i) => sum + (i.monthlyFeeCents ?? 0), 0);
+  const monthlyTotal = sumFees(active);
+  const missingFee = active.filter((i) => i.monthlyFeeCents === null).length;
 
   return (
     <div>
@@ -32,9 +48,13 @@ export default async function AdminEnrolledPage() {
         <div>
           <h1 className="font-heading text-3xl font-bold text-text">Enrolled</h1>
           <p className="text-text-light text-sm mt-1">
-            {enrolled.length} enrolled &middot; {fullTime} full-time &middot;{" "}
-            {partTime} part-time &middot; {money(monthlyTotal)} committed per
-            month. Click a child to open their file.
+            {[
+              `${active.length} active`,
+              `${fullTime.length} full-time`,
+              `${partTime.length} part-time`,
+              ...(withdrawnCount > 0 ? [`${withdrawnCount} withdrawn`] : []),
+            ].join(" · ")}
+            . Click a child to open their file.
           </p>
         </div>
         <ManualInquiryForm status="enrolled" />
@@ -77,29 +97,41 @@ export default async function AdminEnrolledPage() {
               <tbody>
                 {enrolled.map((inq) => {
                   const href = `/admin/enrolled/${inq.id}`;
+                  const withdrawn = Boolean(inq.withdrawnOn);
                   return (
                     <tr
                       key={inq.id}
-                      className="border-b border-border last:border-0 hover:bg-orange/[0.03]"
+                      className={`border-b border-border last:border-0 ${
+                        withdrawn
+                          ? "bg-border/20 text-text-light"
+                          : "hover:bg-orange/[0.03]"
+                      }`}
                     >
                       <Td>
-                        <Link href={href} className="block">
+                        <Link href={href} className="block whitespace-nowrap">
                           {shortDate(inq.enrolledAt)}
                         </Link>
+                        {withdrawn ? (
+                          <span className="mt-1 inline-block bg-red/10 text-red text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
+                            Withdrawn &middot; {plainDate(inq.withdrawnOn)}
+                          </span>
+                        ) : null}
                       </Td>
                       <Td>
                         <Link href={href} className="block group">
-                          <div className="font-medium text-text group-hover:text-orange-dark group-hover:underline">
+                          <div className="font-medium text-text whitespace-nowrap group-hover:text-orange-dark group-hover:underline">
                             {inq.childFirstName} {inq.childLastName}
                           </div>
-                          <div className="text-text-light text-xs">
-                            DOB {inq.childDob} &middot; starts{" "}
-                            {inq.expectedStartDate}
+                          <div className="text-text-light text-xs whitespace-nowrap">
+                            DOB {inq.childDob}
+                          </div>
+                          <div className="text-text-light text-xs whitespace-nowrap">
+                            Starts {inq.expectedStartDate}
                           </div>
                         </Link>
                       </Td>
                       <Td>
-                        <div className="font-medium text-text">
+                        <div className="font-medium text-text whitespace-nowrap">
                           {inq.parentFirstName} {inq.parentLastName}
                         </div>
                         <div className="text-text-light text-xs">
@@ -123,7 +155,7 @@ export default async function AdminEnrolledPage() {
                         <Link href={href} className="block">
                           {inq.enrolmentType ? (
                             <span
-                              className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${
+                              className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
                                 inq.enrolmentType === "full_time"
                                   ? "bg-green/10 text-green"
                                   : "bg-orange/10 text-orange-dark"
@@ -141,7 +173,12 @@ export default async function AdminEnrolledPage() {
                       <Td>
                         <Link href={href} className="block">
                           {inq.monthlyFeeCents !== null ? (
-                            <span className="font-medium text-text whitespace-nowrap">
+                            <span
+                              className={`font-medium whitespace-nowrap ${
+                                withdrawn ? "line-through text-text-light" : "text-text"
+                              }`}
+                              title={withdrawn ? "Withdrawn — not counted" : undefined}
+                            >
                               {money(inq.monthlyFeeCents)}
                               <span className="text-text-light font-normal text-xs">
                                 {" "}
@@ -202,11 +239,28 @@ export default async function AdminEnrolledPage() {
                           >
                             Open file
                           </Link>
+                          {withdrawn ? (
+                            <form action={reinstateAction}>
+                              <input type="hidden" name="id" value={inq.id} />
+                              <button
+                                type="submit"
+                                className="text-sm text-green font-medium hover:underline whitespace-nowrap"
+                              >
+                                Reinstate
+                              </button>
+                            </form>
+                          ) : (
+                            <WithdrawButton
+                              id={inq.id}
+                              childName={`${inq.childFirstName} ${inq.childLastName}`}
+                              today={today}
+                            />
+                          )}
                           <form action={unenrolAction}>
                             <input type="hidden" name="id" value={inq.id} />
                             <button
                               type="submit"
-                              className="text-sm text-red hover:underline"
+                              className="text-sm text-text-light hover:text-red hover:underline"
                             >
                               Unenrol
                             </button>
@@ -221,6 +275,57 @@ export default async function AdminEnrolledPage() {
           </div>
         </div>
       )}
+
+      {enrolled.length > 0 ? (
+        <section className="mt-6 bg-white border border-border rounded-xl shadow-sm p-5 flex flex-wrap items-center justify-between gap-6">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-text-light">
+              Expected monthly payments
+            </div>
+            <div className="font-heading text-3xl font-bold text-text mt-1">
+              {money(monthlyTotal)}
+              <span className="text-base font-normal text-text-light">
+                {" "}
+                / month
+              </span>
+            </div>
+            <p className="text-xs text-text-light mt-1">
+              Sum of {active.length} active{" "}
+              {active.length === 1 ? "child" : "children"}
+              {withdrawnCount > 0
+                ? `. ${withdrawnCount} withdrawn not counted`
+                : ""}
+              .
+            </p>
+          </div>
+          <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-2 text-sm">
+            <div>
+              <dt className="text-text-light text-xs">
+                Full-time ({fullTime.length})
+              </dt>
+              <dd className="font-semibold text-text">
+                {money(sumFees(fullTime))}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-text-light text-xs">
+                Part-time ({partTime.length})
+              </dt>
+              <dd className="font-semibold text-text">
+                {money(sumFees(partTime))}
+              </dd>
+            </div>
+            {missingFee > 0 ? (
+              <div>
+                <dt className="text-text-light text-xs">Fee not set</dt>
+                <dd className="font-semibold text-red">
+                  {missingFee} {missingFee === 1 ? "child" : "children"}
+                </dd>
+              </div>
+            ) : null}
+          </dl>
+        </section>
+      ) : null}
     </div>
   );
 }

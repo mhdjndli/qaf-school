@@ -30,6 +30,8 @@ export type Inquiry = {
   paidSupplyAt: string | null;
   enrolmentType: EnrolmentType | null;
   monthlyFeeCents: number | null;
+  /** YYYY-MM-DD the child withdrew from enrolment; null while active. */
+  withdrawnOn: string | null;
 };
 
 export type NewInquiryInput = Omit<
@@ -41,6 +43,7 @@ export type NewInquiryInput = Omit<
   | "paidSupplyAt"
   | "enrolmentType"
   | "monthlyFeeCents"
+  | "withdrawnOn"
 > &
   Partial<Pick<Inquiry, "enrolmentType" | "monthlyFeeCents">>;
 
@@ -200,6 +203,9 @@ function ensurePg(): Promise<void> {
       await pool.query(
         `ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS monthly_fee_cents INTEGER`,
       );
+      await pool.query(
+        `ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS withdrawn_on TEXT`,
+      );
       await pool.query(`
         CREATE TABLE IF NOT EXISTS student_documents (
           id UUID PRIMARY KEY,
@@ -281,6 +287,7 @@ type InquiryRow = {
   paid_supply_at: Date | null;
   enrolment_type: string | null;
   monthly_fee_cents: number | null;
+  withdrawn_on: string | null;
 };
 
 function rowToInquiry(r: InquiryRow): Inquiry {
@@ -306,6 +313,7 @@ function rowToInquiry(r: InquiryRow): Inquiry {
         ? r.enrolment_type
         : null,
     monthlyFeeCents: r.monthly_fee_cents ?? null,
+    withdrawnOn: r.withdrawn_on ?? null,
   };
 }
 
@@ -436,6 +444,7 @@ async function readInquiriesFile(): Promise<Inquiry[]> {
           ...i,
           enrolmentType: i.enrolmentType ?? null,
           monthlyFeeCents: i.monthlyFeeCents ?? null,
+          withdrawnOn: i.withdrawnOn ?? null,
         }) as Inquiry,
     );
   } catch {
@@ -592,6 +601,7 @@ export async function addInquiry(input: NewInquiryInput): Promise<Inquiry> {
     paidSupplyAt: null,
     enrolmentType: input.enrolmentType ?? null,
     monthlyFeeCents: input.monthlyFeeCents ?? null,
+    withdrawnOn: null,
   };
   const all = await readInquiriesFile();
   all.unshift(inquiry);
@@ -629,11 +639,13 @@ export async function setEnrolled(
     const sql = enrolled
       ? `UPDATE inquiries
            SET enrolled_at = NOW(),
-               waitlisted_at = NULL
+               waitlisted_at = NULL,
+               withdrawn_on = NULL
          WHERE id = $1 RETURNING *`
       : `UPDATE inquiries
            SET enrolled_at = NULL,
-               paid_supply_at = NULL
+               paid_supply_at = NULL,
+               withdrawn_on = NULL
          WHERE id = $1 RETURNING *`;
     const { rows } = await pgQuery<InquiryRow>(sql, [id]);
     return rows[0] ? rowToInquiry(rows[0]) : null;
@@ -646,7 +658,28 @@ export async function setEnrolled(
     enrolledAt: enrolled ? new Date().toISOString() : null,
     waitlistedAt: enrolled ? null : all[idx].waitlistedAt,
     paidSupplyAt: enrolled ? all[idx].paidSupplyAt : null,
+    withdrawnOn: null,
   };
+  await writeInquiriesFile(all);
+  return all[idx];
+}
+
+/** Mark a child as withdrawn on a given date (YYYY-MM-DD), or null to reinstate. */
+export async function setWithdrawn(
+  id: string,
+  withdrawnOn: string | null,
+): Promise<Inquiry | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<InquiryRow>(
+      `UPDATE inquiries SET withdrawn_on = $2 WHERE id = $1 RETURNING *`,
+      [id, withdrawnOn],
+    );
+    return rows[0] ? rowToInquiry(rows[0]) : null;
+  }
+  const all = await readInquiriesFile();
+  const idx = all.findIndex((i) => i.id === id);
+  if (idx === -1) return null;
+  all[idx] = { ...all[idx], withdrawnOn };
   await writeInquiriesFile(all);
   return all[idx];
 }

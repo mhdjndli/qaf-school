@@ -9,15 +9,18 @@ import {
   money,
   plainDate,
   shortDate,
+  todayISO,
 } from "@/lib/format";
 import {
   enrolAction,
+  reinstateAction,
   togglePaidSupplyAction,
   unenrolAction,
   updateEnrolmentDetailsAction,
 } from "../../actions";
 import UploadDocumentForm from "./UploadDocumentForm";
 import DeleteDocumentButton from "./DeleteDocumentButton";
+import WithdrawButton from "../../WithdrawButton";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +61,12 @@ export default async function EnrolledStudentPage({
             {childName}
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-            {inq.enrolledAt ? (
+            {inq.enrolledAt && inq.withdrawnOn ? (
+              <>
+                <Badge tone="muted">Enrolled {shortDate(inq.enrolledAt)}</Badge>
+                <Badge tone="red">Withdrawn {plainDate(inq.withdrawnOn)}</Badge>
+              </>
+            ) : inq.enrolledAt ? (
               <Badge tone="green">Enrolled {shortDate(inq.enrolledAt)}</Badge>
             ) : (
               <Badge tone="red">Not currently enrolled</Badge>
@@ -71,7 +79,10 @@ export default async function EnrolledStudentPage({
               <Badge tone="muted">Type not set</Badge>
             )}
             {inq.monthlyFeeCents !== null ? (
-              <Badge tone="orange">{money(inq.monthlyFeeCents)} / month</Badge>
+              <Badge tone={inq.withdrawnOn ? "muted" : "orange"}>
+                {money(inq.monthlyFeeCents)} / month
+                {inq.withdrawnOn ? " (not counted)" : ""}
+              </Badge>
             ) : (
               <Badge tone="muted">Monthly fee not set</Badge>
             )}
@@ -88,6 +99,24 @@ export default async function EnrolledStudentPage({
           </div>
         </div>
         <div className="flex items-center gap-3">
+          {inq.enrolledAt && inq.withdrawnOn ? (
+            <form action={reinstateAction}>
+              <input type="hidden" name="id" value={inq.id} />
+              <button
+                type="submit"
+                className="text-sm bg-green text-white px-3 py-1.5 rounded-md font-semibold hover:brightness-95 transition-colors"
+              >
+                Reinstate
+              </button>
+            </form>
+          ) : inq.enrolledAt ? (
+            <WithdrawButton
+              id={inq.id}
+              childName={childName}
+              today={todayISO()}
+              variant="button"
+            />
+          ) : null}
           {inq.enrolledAt ? (
             <form action={unenrolAction}>
               <input type="hidden" name="id" value={inq.id} />

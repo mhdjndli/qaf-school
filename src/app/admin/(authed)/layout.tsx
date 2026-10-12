@@ -39,7 +39,7 @@ export default async function AuthedAdminLayout({
           </button>
         </form>
       </aside>
-      <main className="flex-1 p-6 md:p-10 bg-cream">{children}</main>
+      <main className="flex-1 min-w-0 p-6 md:p-10 bg-cream">{children}</main>
     </div>
   );
 }

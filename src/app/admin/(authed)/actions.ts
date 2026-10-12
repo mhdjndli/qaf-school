@@ -13,6 +13,7 @@ import {
   setEnrolmentDetails,
   setPaidSupply,
   setWaitlisted,
+  setWithdrawn,
   updateTemplate,
   type EnrolmentType,
   type InquirySource,
@@ -134,6 +135,27 @@ export async function updateEnrolmentDetailsAction(formData: FormData) {
     enrolmentType: parseEnrolmentType(formData.get("enrolmentType")),
     monthlyFeeCents: parseDollarsToCents(formData.get("monthlyFee")),
   });
+  revalidateAll();
+}
+
+/** Today's date in Ottawa as YYYY-MM-DD (server runs in UTC). */
+function todayInOttawa(): string {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+}
+
+export async function withdrawAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const raw = String(formData.get("withdrawnOn") ?? "").trim();
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : todayInOttawa();
+  if (id) await setWithdrawn(id, date);
+  revalidateAll();
+}
+
+export async function reinstateAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (id) await setWithdrawn(id, null);
   revalidateAll();
 }
 
