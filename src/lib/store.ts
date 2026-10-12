@@ -72,6 +72,30 @@ export type EmailTemplate = {
   updatedAt: string;
 };
 
+export type ExpenseCategory =
+  | "salary"
+  | "rent"
+  | "utilities"
+  | "supplies"
+  | "food"
+  | "insurance"
+  | "other";
+
+export type Expense = {
+  id: string;
+  name: string;
+  category: ExpenseCategory;
+  monthlyAmountCents: number;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ExpenseInput = Pick<
+  Expense,
+  "name" | "category" | "monthlyAmountCents" | "notes"
+>;
+
 export type CampPlan = "monthly" | "annual";
 
 export type CampEnrolment = {
@@ -249,6 +273,17 @@ function ensurePg(): Promise<void> {
           stripe_subscription_id TEXT
         );
       `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS expenses (
+          id UUID PRIMARY KEY,
+          name TEXT NOT NULL,
+          category TEXT NOT NULL,
+          monthly_amount_cents INTEGER NOT NULL,
+          notes TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
       const { rows } = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM templates`,
       );
@@ -358,6 +393,28 @@ function rowToTemplate(r: TemplateRow): EmailTemplate {
     id: r.id,
     title: r.title,
     body: r.body,
+    createdAt: r.created_at.toISOString(),
+    updatedAt: r.updated_at.toISOString(),
+  };
+}
+
+type ExpenseRow = {
+  id: string;
+  name: string;
+  category: string;
+  monthly_amount_cents: number;
+  notes: string | null;
+  created_at: Date;
+  updated_at: Date;
+};
+
+function rowToExpense(r: ExpenseRow): Expense {
+  return {
+    id: r.id,
+    name: r.name,
+    category: r.category as ExpenseCategory,
+    monthlyAmountCents: r.monthly_amount_cents,
+    notes: r.notes,
     createdAt: r.created_at.toISOString(),
     updatedAt: r.updated_at.toISOString(),
   };
@@ -489,6 +546,24 @@ async function readCampFile(): Promise<CampEnrolment[]> {
 async function writeCampFile(list: CampEnrolment[]): Promise<void> {
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.writeFile(CAMP_FILE, JSON.stringify(list, null, 2), "utf8");
+}
+
+const EXPENSES_FILE = path.join(DATA_DIR, "expenses.json");
+
+async function readExpensesFile(): Promise<Expense[]> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  try {
+    const text = await fs.readFile(EXPENSES_FILE, "utf8");
+    const parsed = JSON.parse(text);
+    return Array.isArray(parsed) ? (parsed as Expense[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeExpensesFile(list: Expense[]): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  await fs.writeFile(EXPENSES_FILE, JSON.stringify(list, null, 2), "utf8");
 }
 
 const DOCUMENTS_FILE = path.join(DATA_DIR, "student-documents.json");
@@ -795,6 +870,87 @@ export async function deleteTemplate(id: string): Promise<boolean> {
   const next = all.filter((t) => t.id !== id);
   if (next.length === all.length) return false;
   await writeTemplatesFile(next);
+  return true;
+}
+
+// -------------------- Expenses --------------------
+// Recurring monthly costs (salaries, rent, utilities…) shown on the admin
+// Expenses page and compared against expected tuition income.
+
+export async function listExpenses(): Promise<Expense[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<ExpenseRow>(
+      `SELECT * FROM expenses ORDER BY monthly_amount_cents DESC, name`,
+    );
+    return rows.map(rowToExpense);
+  }
+  const list = await readExpensesFile();
+  return [...list].sort(
+    (a, b) =>
+      b.monthlyAmountCents - a.monthlyAmountCents ||
+      a.name.localeCompare(b.name),
+  );
+}
+
+export async function addExpense(input: ExpenseInput): Promise<Expense> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<ExpenseRow>(
+      `INSERT INTO expenses (id, name, category, monthly_amount_cents, notes)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [
+        randomUUID(),
+        input.name,
+        input.category,
+        input.monthlyAmountCents,
+        input.notes,
+      ],
+    );
+    return rowToExpense(rows[0]);
+  }
+  const now = new Date().toISOString();
+  const expense: Expense = {
+    ...input,
+    id: randomUUID(),
+    createdAt: now,
+    updatedAt: now,
+  };
+  const all = await readExpensesFile();
+  all.push(expense);
+  await writeExpensesFile(all);
+  return expense;
+}
+
+export async function updateExpense(
+  id: string,
+  input: ExpenseInput,
+): Promise<Expense | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<ExpenseRow>(
+      `UPDATE expenses
+         SET name = $2, category = $3, monthly_amount_cents = $4, notes = $5,
+             updated_at = NOW()
+       WHERE id = $1 RETURNING *`,
+      [id, input.name, input.category, input.monthlyAmountCents, input.notes],
+    );
+    return rows[0] ? rowToExpense(rows[0]) : null;
+  }
+  const all = await readExpensesFile();
+  const idx = all.findIndex((e) => e.id === id);
+  if (idx === -1) return null;
+  all[idx] = { ...all[idx], ...input, updatedAt: new Date().toISOString() };
+  await writeExpensesFile(all);
+  return all[idx];
+}
+
+export async function deleteExpense(id: string): Promise<boolean> {
+  if (USE_PG) {
+    const res = await pgQuery(`DELETE FROM expenses WHERE id = $1`, [id]);
+    return (res.rowCount ?? 0) > 0;
+  }
+  const all = await readExpensesFile();
+  const next = all.filter((e) => e.id !== id);
+  if (next.length === all.length) return false;
+  await writeExpensesFile(next);
   return true;
 }
 

@@ -5,7 +5,9 @@ import { requireAdmin } from "@/lib/auth";
 import {
   addInquiry,
   addStudentDocument,
+  addExpense,
   addTemplate,
+  deleteExpense,
   deleteInquiry,
   deleteStudentDocument,
   deleteTemplate,
@@ -14,8 +16,11 @@ import {
   setPaidSupply,
   setWaitlisted,
   setWithdrawn,
+  updateExpense,
   updateTemplate,
   type EnrolmentType,
+  type ExpenseCategory,
+  type ExpenseInput,
   type InquirySource,
   type StudentDocumentKind,
 } from "@/lib/store";
@@ -34,6 +39,7 @@ function revalidateAll() {
   revalidatePath("/admin/waitlist");
   revalidatePath("/admin/enrolled");
   revalidatePath("/admin/enrolled/[id]", "page");
+  revalidatePath("/admin/expenses");
 }
 
 function parseEnrolmentType(raw: FormDataEntryValue | null): EnrolmentType | null {
@@ -241,4 +247,50 @@ export async function deleteTemplateAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (id) await deleteTemplate(id);
   revalidatePath("/admin/templates");
+}
+
+const VALID_EXPENSE_CATEGORIES: readonly ExpenseCategory[] = [
+  "salary",
+  "rent",
+  "utilities",
+  "supplies",
+  "food",
+  "insurance",
+  "other",
+];
+
+function parseExpenseInput(formData: FormData): ExpenseInput | null {
+  const name = String(formData.get("name") ?? "").trim();
+  const amount = parseDollarsToCents(formData.get("monthlyAmount"));
+  if (!name || amount === null) return null;
+  const categoryRaw = String(formData.get("category") ?? "other");
+  const category = VALID_EXPENSE_CATEGORIES.includes(
+    categoryRaw as ExpenseCategory,
+  )
+    ? (categoryRaw as ExpenseCategory)
+    : "other";
+  const notes = String(formData.get("notes") ?? "").trim();
+  return { name, category, monthlyAmountCents: amount, notes: notes || null };
+}
+
+export async function createExpenseAction(formData: FormData) {
+  await requireAdmin();
+  const input = parseExpenseInput(formData);
+  if (input) await addExpense(input);
+  revalidatePath("/admin/expenses");
+}
+
+export async function updateExpenseAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const input = parseExpenseInput(formData);
+  if (id && input) await updateExpense(id, input);
+  revalidatePath("/admin/expenses");
+}
+
+export async function deleteExpenseAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (id) await deleteExpense(id);
+  revalidatePath("/admin/expenses");
 }

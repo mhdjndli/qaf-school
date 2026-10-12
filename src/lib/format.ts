@@ -1,4 +1,8 @@
-import type { EnrolmentType, StudentDocumentKind } from "./store";
+import type {
+  EnrolmentType,
+  ExpenseCategory,
+  StudentDocumentKind,
+} from "./store";
 
 export function shortDate(iso: string | null | undefined): string {
   if (!iso) return "—";
@@ -50,6 +54,16 @@ export const DOC_KIND_LABEL: Record<StudentDocumentKind, string> = {
   handbook: "Signed handbook",
   invoice: "Invoice",
   payment: "Payment",
+};
+
+export const EXPENSE_CATEGORY_LABEL: Record<ExpenseCategory, string> = {
+  salary: "Salary",
+  rent: "Rent",
+  utilities: "Utilities",
+  supplies: "Supplies",
+  food: "Food",
+  insurance: "Insurance",
+  other: "Other",
 };
 
 export function fileSize(bytes: number): string {
