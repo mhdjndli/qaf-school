@@ -763,7 +763,307 @@ function IslamicMontessoriContent() {
   );
 }
 
+// ---- Shared building blocks for newer posts ----
+function BP({ children }: { children: React.ReactNode }) {
+  return <p className="text-text-light leading-relaxed">{children}</p>;
+}
+function BH2({ children }: { children: React.ReactNode }) {
+  return <h2 className="font-heading text-2xl font-bold text-text pt-4">{children}</h2>;
+}
+function BL({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className="text-orange-dark font-medium hover:underline">
+      {children}
+    </Link>
+  );
+}
+function BList({ items }: { items: React.ReactNode[] }) {
+  return (
+    <ul className="space-y-3 ml-1">
+      {items.map((item, i) => (
+        <li key={i} className="pl-6 relative text-text-light leading-relaxed before:content-['\25B8'] before:absolute before:left-0 before:text-orange">
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+function BCallout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="bg-cream rounded-lg p-6 mt-8 border border-card-line">
+      <p className="text-text font-medium">{children}</p>
+    </div>
+  );
+}
+
+function JKOttawaGuideContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        Somewhere around your child&rsquo;s third birthday, the question starts coming from every direction: grandparents, neighbours, other parents at the park. <em>Where is she going for JK?</em> If you are not sure how kindergarten works in Ontario, when to register, or how to compare a public school with a private one, you are not alone. This guide walks through the whole picture for Ottawa families, in plain language.
+      </BP>
+
+      <BH2>How Kindergarten Works in Ontario</BH2>
+      <BP>
+        Ontario kindergarten is a two-year program. <strong className="text-text">Junior Kindergarten (JK)</strong> starts in September of the year your child turns four, and <strong className="text-text">Senior Kindergarten (SK)</strong> follows the next year, the year they turn five. The cutoff is December 31: a child born anytime in 2023 starts JK in September 2027, whether their birthday is in January or December. That means some children start JK at three and a half while others are nearly five, which is completely normal.
+      </BP>
+      <BP>
+        Kindergarten is not mandatory in Ontario. Compulsory school attendance begins at age six, so families can choose whether, and where, their child attends JK and SK. In practice, most Ottawa children do attend, and the two kindergarten years are where many of the habits that carry a child through school are formed.
+      </BP>
+
+      <BH2>Your Options in Ottawa</BH2>
+      <BP>
+        <strong className="text-text">Public and Catholic boards.</strong> Ottawa has four publicly funded school boards: the Ottawa-Carleton District School Board (English public), the Ottawa Catholic School Board (English Catholic), and two French-language boards, CEPEO (public) and CECCE (Catholic). English boards offer full-day kindergarten at your designated neighbourhood school, based on your home address. French-language boards have their own admission criteria, so check eligibility directly with them.
+      </BP>
+      <BP>
+        <strong className="text-text">Private schools.</strong> Private options include Montessori schools, independent schools, and faith-based schools, including Islamic schools. They charge tuition, set their own admissions timelines, and can offer things a large public classroom often cannot: smaller groups, a specific teaching approach, or a curriculum built around a family&rsquo;s faith and language. If you are weighing Islamic options specifically, our{" "}
+        <BL href="/blog/islamic-schools-in-ottawa-guide">guide to Islamic schools in Ottawa</BL> maps the full landscape.
+      </BP>
+
+      <BH2>When to Register</BH2>
+      <BP>
+        Ottawa&rsquo;s public and Catholic boards usually open kindergarten registration in the winter for the following September. Exact dates change each year, so check your board&rsquo;s website in the fall and have your child&rsquo;s birth certificate or passport, proof of address, and immunization record ready. Private schools set their own timelines and many have limited spaces, so families considering a private kindergarten should start touring in the fall. A simple timeline that works for most families:
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">Fall:</strong> research options, read reviews, and book tours.</>,
+          <><strong className="text-text">Winter:</strong> register with your public board and submit private school applications.</>,
+          <><strong className="text-text">Spring:</strong> confirm your choice and complete any enrolment paperwork or deposits.</>,
+          <><strong className="text-text">Summer:</strong> practise routines at home: packing a lunch, using the washroom independently, and short separations.</>,
+        ]}
+      />
+
+      <BH2>What Actually Matters at Age Four</BH2>
+      <BP>
+        It is easy to compare schools on reputation or proximity alone. At four, a few things matter more than anything on a brochure: how many children each adult is responsible for, whether learning is hands-on and play-based rather than worksheet-driven, how the school handles the first weeks of separation, how teachers guide behaviour, and whether the environment reflects your family&rsquo;s values and language. Ask every school the same questions on your tour: What are the real class sizes this year? What does a typical morning look like? How will I hear about my child&rsquo;s day? What happens when a child is upset at drop-off?
+      </BP>
+      <BP>
+        It also helps to know what a school day looks like hour by hour. Ours is laid out in{" "}
+        <BL href="/blog/what-a-day-looks-like-at-qaf">a day at QAF, from drop-off to pick-up</BL>.
+      </BP>
+
+      <BH2>Signs Your Child Is Ready</BH2>
+      <BP>
+        Readiness for JK is less about academics and more about independence. Most children are ready when they can use the washroom with minimal help, follow a simple two-step instruction, separate from a parent for a few hours, and tolerate a predictable daily routine. If your child is still working on some of these in the spring, that is normal; a good kindergarten is designed to grow these skills, not to demand them on day one.
+      </BP>
+
+      <BH2>Where QAF Fits</BH2>
+      <BP>
+        QAF School is an Islamic Junior and Senior Kindergarten for ages 4 and 5 at 900 Dynes Rd in Ottawa. Our{" "}
+        <BL href="/program">JK/SK program</BL> is aligned with Ontario&rsquo;s Kindergarten Program and combines Montessori-inspired, hands-on learning with daily Arabic immersion, Quran, and Islamic Studies. The school day runs 9:00 AM to 3:00 PM, Monday to Friday. Tuition is $690 per month over ten months plus a $190 annual resource fee, with a sibling discount; every fee is broken down in our{" "}
+        <BL href="/blog/ottawa-islamic-school-fees-explained">fees guide</BL>. We accept applications year-round, and because our program is small, families who apply early get priority. Children leave QAF ready for Grade 1 at any Ontario school, as we explain in{" "}
+        <BL href="/blog/preparing-your-child-for-grade-1">how QAF prepares children for Grade 1</BL>.
+      </BP>
+
+      <BCallout>
+        Choosing a kindergarten for September 2027?{" "}
+        <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+        and we&rsquo;ll invite you to see a QAF classroom in session.
+      </BCallout>
+    </div>
+  );
+}
+
+function ArabicClassesKidsContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        When parents search for &ldquo;Arabic classes for kids,&rdquo; they usually mean one of three very different things: a school where Arabic is spoken all day, a weekend class where children learn to read and write, or a private tutor. Each can work. Each works best at a different age and for a different goal. This guide helps Ottawa families match the option to the child.
+      </BP>
+
+      <BH2>Option 1: Daily Immersion (Best for Ages 4 to 6)</BH2>
+      <BP>
+        Young children do not learn languages the way adults do. Between roughly ages 3 and 6, they absorb sounds, vocabulary, and sentence patterns simply by living inside a language. That is why daily immersion is so powerful in the early years: Arabic is not a subject, it is the language of greetings, songs, routines, and play. We explain the research behind this in{" "}
+        <BL href="/blog/why-early-arabic-immersion-matters">why early Arabic immersion matters</BL>.
+      </BP>
+      <BP>
+        At QAF, children aged 4 and 5 hear and use Arabic every day in our{" "}
+        <BL href="/program">Islamic JK/SK program</BL>. By the end of Senior Kindergarten, children typically recognize Arabic letters in all their positions, follow classroom instructions in Arabic, hold a simple conversation, and recite short surahs with confidence, all without any Arabic required at home.
+      </BP>
+
+      <BH2>Option 2: Weekend Arabic School (Best for School-Age Children)</BH2>
+      <BP>
+        For children who attend public school during the week, a weekend program is the most practical way to build real Arabic literacy. The best ones group children by level, focus on reading and writing with steady practice, and pair Arabic with Quran so the two reinforce each other. Many masajid and community centres in Ottawa run Saturday or Sunday programs.
+      </BP>
+      <BP>
+        QAF&rsquo;s own <BL href="/sunday-camp">Sunday Camp</BL> is built for ages 8 to 15. Every Sunday from 11 AM to 3 PM, children have a Quran class in small groups by level, an Arabic reading and writing class, math and STEM, and an hour of soccer or indoor play. Juniors work on letters and reading fluency; seniors move into writing and everyday vocabulary. It runs September to June for $190 a month, month to month.
+      </BP>
+
+      <BH2>Option 3: Tutoring and Online Classes</BH2>
+      <BP>
+        One-on-one tutoring is flexible and can target exactly where a child is stuck. Online classes widen the choice of teachers. The trade-offs: young children often struggle to stay engaged on a screen, and learning alone means missing the peer motivation that makes language feel alive. Tutoring works best as a supplement for older children who already have a foundation, or for a specific goal like preparing for a reading level.
+      </BP>
+
+      <BH2>Questions to Ask Any Arabic Program</BH2>
+      <BList
+        items={[
+          "Are children grouped by level, or by age only?",
+          "Which variety of Arabic is taught: Modern Standard Arabic, a spoken dialect, or both?",
+          "What does progress look like after one term, and how is it reported to parents?",
+          "How large are the classes, and who teaches them?",
+          "Is the program designed for families who don't speak Arabic at home?",
+          "What practice, if any, is expected at home each week?",
+        ]}
+      />
+
+      <BH2>Helping at Home When You Don&rsquo;t Speak Arabic</BH2>
+      <BP>
+        Many QAF families do not speak Arabic, and their children thrive. You do not need to teach the language yourself. What helps most is consistency and warmth: play Arabic songs and stories in the car, ask your child to teach you one word a day, label a few things around the house, listen to Quran recitation together, and set aside ten minutes for reading practice on most days. Children love being the expert, and their confidence grows every time they teach a parent something new.
+      </BP>
+
+      <BH2>Choosing by Age</BH2>
+      <BP>
+        If your child is 4 or 5, daily immersion in kindergarten gives the strongest foundation you will ever be able to give. If your child is in elementary or middle school, a structured weekend program with Quran and Arabic together, plus a little practice at home, builds lasting literacy. Either way, the best Arabic class is one your child looks forward to.
+      </BP>
+
+      <BCallout>
+        Questions about Arabic at QAF?{" "}
+        <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+        for our JK/SK program, or{" "}
+        <Link href="/sunday-camp" className="text-orange-dark font-semibold hover:underline">reserve a Sunday Camp spot</Link>{" "}
+        for ages 8 to 15.
+      </BCallout>
+    </div>
+  );
+}
+
+function QuranClassesKidsContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        For many Muslim families in Ottawa, the weekday is public school and the weekend is where Islamic learning happens. A good weekend program can become the anchor of a child&rsquo;s relationship with the Quran, with Arabic, and with other Muslim kids. A poor one becomes the thing they beg to skip. Here is how to tell the difference, and how to choose the right Quran classes for your child.
+      </BP>
+
+      <BH2>What a Great Weekend Islamic Program Includes</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Quran by level, not just by age.</strong> A ten-year-old who is still learning letters and a ten-year-old who reads fluently need different classes.</>,
+          <><strong className="text-text">Arabic reading and writing.</strong> Quran recitation improves fastest when children can actually read the script with confidence.</>,
+          <><strong className="text-text">Adab and identity.</strong> Children should leave knowing more about how to be Muslim, not just more verses.</>,
+          <><strong className="text-text">Friends and movement.</strong> Kids return happily to places where they have friends and where they get to run around.</>,
+          <><strong className="text-text">Clear communication with parents.</strong> You should know what your child is working on and how to help at home.</>,
+        ]}
+      />
+
+      <BH2>Recitation, Tajweed, and Hifz: Know Your Goal</BH2>
+      <BP>
+        &ldquo;Quran classes&rdquo; covers a range of goals. <strong className="text-text">Recitation</strong> classes teach children to read the Quran correctly and fluently, usually with steady memorization of shorter surahs. <strong className="text-text">Tajweed</strong> focuses on the rules of beautiful, correct pronunciation. <strong className="text-text">Hifz</strong> programs aim to memorize the whole Quran and require intensive daily review, often in a full-time or daily after-school setting. For most children in a weekend program, strong recitation and consistent memorization is the right goal, and it is the foundation for hifz later if your family chooses it.
+      </BP>
+
+      <BH2>Questions to Ask Before You Enrol</BH2>
+      <BList
+        items={[
+          "How are Quran groups divided, and how many children are in each?",
+          "How will I know what my child is memorizing and how they are progressing?",
+          "What happens in the rest of the day besides Quran?",
+          "What does the program cost for the full year, and is there a long-term commitment?",
+          "What is the food policy, and is the facility nut-free?",
+          "May my child try a class before we commit?",
+        ]}
+      />
+
+      <BH2>How QAF Sunday Camp Works</BH2>
+      <BP>
+        <BL href="/sunday-camp">QAF Sunday Camp</BL> is our weekend program for ages 8 to 15, every Sunday from 11 AM to 3 PM at 900 Dynes Rd. Instead of scattering Quran, Arabic, and tutoring across separate weeknights, it brings them together in one afternoon:
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">11:00 to 12:00, Quran:</strong> recitation and memorization in small groups by level. Children review what they hold and add new verses at their own pace.</>,
+          <><strong className="text-text">12:00 to 12:45, Arabic:</strong> reading and writing. Juniors build reading fluency; seniors move into writing and vocabulary.</>,
+          <><strong className="text-text">12:45 to 1:15, break and snack</strong> with friends.</>,
+          <><strong className="text-text">1:15 to 2:00, math and STEM:</strong> puzzles, building challenges, and experiments.</>,
+          <><strong className="text-text">2:00 to 3:00, soccer</strong> on the field beside the school in warm months, and indoor games through the Ottawa winter.</>,
+        ]}
+      />
+      <BP>
+        There are two classes, juniors and seniors, each with their own room and teacher. Tuition is $190 a month from September to June, month to month, with no long-term commitment. Your family does not need to speak Arabic at home.
+      </BP>
+
+      <BH2>For Younger Children</BH2>
+      <BP>
+        If your child is 4 or 5, Quran is part of every day in our{" "}
+        <BL href="/program">Islamic JK/SK program</BL>. By the end of Senior Kindergarten, children typically memorize 7 to 10 short surahs from Juz Amma along with core daily duas, learned with understanding and love rather than pressure. Read more about{" "}
+        <BL href="/blog/building-islamic-identity-in-early-years">building Islamic identity in the early years</BL>.
+      </BP>
+
+      <BH2>Making It Stick at Home</BH2>
+      <BP>
+        Weekend learning sticks when it shows up during the week. Ten minutes of review after Fajr or before bed, listening to the surah your child is memorizing in the car, and asking them to lead a short recitation at home all turn one afternoon a week into a daily habit. Above all, keep the Quran joyful. A child who loves coming back each week will go further than one who is pushed.
+      </BP>
+
+      <BCallout>
+        Looking for a weekend Islamic program in Ottawa?{" "}
+        <Link href="/sunday-camp" className="text-orange-dark font-semibold hover:underline">See Sunday Camp and reserve a spot</Link>, or browse our{" "}
+        <Link href="/blog/islamic-schools-in-ottawa-guide" className="text-orange-dark font-semibold hover:underline">guide to Islamic schools in Ottawa</Link>.
+      </BCallout>
+    </div>
+  );
+}
+
+function EcoleIslamiqueOttawaContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        Beaucoup de familles musulmanes d&rsquo;Ottawa, notamment francophones, cherchent une école où leur jeune enfant pourra apprendre l&rsquo;arabe, le Coran et les valeurs islamiques dès les premières années. QAF School est une école islamique spécialisée dans la petite enfance : la maternelle (JK) et le jardin d&rsquo;enfants (SK) pour les enfants de 4 et 5 ans, au 900, chemin Dynes, à Ottawa.
+      </BP>
+
+      <BH2>Un programme pensé pour les 4 et 5 ans</BH2>
+      <BP>
+        Notre <BL href="/program">programme JK/SK</BL> est aligné sur le programme de maternelle et de jardin d&rsquo;enfants de l&rsquo;Ontario. Il combine trois éléments : une approche inspirée de Montessori (environnement préparé, matériel concret, longues périodes de travail autonome), une immersion quotidienne en arabe, et l&rsquo;enseignement du Coran et des études islamiques. Les enfants terminent le jardin d&rsquo;enfants prêts pour la 1re année dans n&rsquo;importe quelle école de l&rsquo;Ontario, publique, catholique, privée ou islamique.
+      </BP>
+
+      <BH2>Les langues : soyons clairs</BH2>
+      <BP>
+        L&rsquo;enseignement à QAF se fait en <strong className="text-text">arabe et en anglais</strong>, et non en français. L&rsquo;arabe est la langue du cercle du matin, des routines, des chansons et des histoires; l&rsquo;anglais sert à la littératie et à la numératie, selon le programme ontarien. Beaucoup de familles francophones font ce choix volontairement : l&rsquo;enfant garde le français à la maison et ajoute l&rsquo;arabe et l&rsquo;anglais pendant la période où il apprend les langues le plus facilement. Si l&rsquo;instruction en français est essentielle pour vous, les conseils scolaires de langue française d&rsquo;Ottawa (CEPEO et CECCE) restent une bonne option.
+      </BP>
+
+      <BH2>Une journée à QAF</BH2>
+      <BP>
+        La journée se déroule du lundi au vendredi, de 9 h à 15 h. L&rsquo;arrivée se fait entre 8 h 45 et 9 h, avec un accueil en arabe. Le cercle du matin (9 h à 9 h 20) comprend salutations, comptage et une courte sourate. Vient ensuite une longue période de travail inspirée de Montessori (9 h 20 à 11 h), puis le jeu à l&rsquo;extérieur et le dîner. Après un temps calme, l&rsquo;après-midi est consacré à l&rsquo;arabe, aux études islamiques, à l&rsquo;art, à la musique et aux sciences. Le départ se fait entre 15 h et 15 h 15. Les familles apportent un dîner et deux collations; l&rsquo;école est sans noix et toute nourriture doit être halal.
+      </BP>
+
+      <BH2>L&rsquo;arabe et le Coran, même sans arabe à la maison</BH2>
+      <BP>
+        Une grande partie de nos familles ne parlent pas arabe à la maison. Les jeunes enfants apprennent naturellement grâce à l&rsquo;immersion quotidienne. À la fin du jardin d&rsquo;enfants, ils reconnaissent généralement les lettres arabes dans toutes leurs positions, comprennent les consignes en arabe et mémorisent de 7 à 10 courtes sourates de Juz Amma, avec compréhension et amour plutôt que sous la pression.
+      </BP>
+
+      <BH2>Frais de scolarité 2026-2027</BH2>
+      <BList
+        items={[
+          "Droits de scolarité : 690 $ par mois, sur 10 mois (de septembre à juin).",
+          "Frais annuels de ressources et de fournitures : 190 $ (non remboursables).",
+          "Réduction pour les familles qui inscrivent plus d'un enfant.",
+        ]}
+      />
+      <BP>
+        Tous les détails, en anglais, se trouvent sur notre page <BL href="/admissions">Admissions</BL> et dans notre{" "}
+        <BL href="/blog/ottawa-islamic-school-fees-explained">guide des frais</BL>.
+      </BP>
+
+      <BH2>Pour les enfants de 8 à 15 ans</BH2>
+      <BP>
+        Le <BL href="/sunday-camp">Sunday Camp</BL> de QAF accueille les enfants de 8 à 15 ans tous les dimanches, de 11 h à 15 h : Coran en petits groupes selon le niveau, lecture et écriture de l&rsquo;arabe, mathématiques et STIM, puis soccer ou activités intérieures. Le coût est de 190 $ par mois, de septembre à juin, sans engagement à long terme.
+      </BP>
+
+      <BH2>Venez nous visiter</BH2>
+      <BP>
+        La meilleure façon de connaître QAF est de visiter une classe. Nous acceptons les demandes toute l&rsquo;année, mais les places sont limitées et la priorité est donnée aux familles qui s&rsquo;inscrivent tôt. Vous pouvez aussi nous écrire à admin@qafschool.ca.
+      </BP>
+
+      <BCallout>
+        Votre enfant aura 4 ou 5 ans?{" "}
+        <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Faites une demande de renseignements</Link>{" "}
+        et nous vous inviterons à visiter notre classe.
+      </BCallout>
+    </div>
+  );
+}
+
 const contentMap: Record<string, () => React.ReactNode> = {
+  "junior-kindergarten-ottawa-guide": JKOttawaGuideContent,
+  "arabic-classes-for-kids-ottawa": ArabicClassesKidsContent,
+  "quran-classes-for-kids-ottawa": QuranClassesKidsContent,
+  "ecole-islamique-ottawa": EcoleIslamiqueOttawaContent,
   "islamic-schools-in-ottawa-guide": IslamicSchoolsGuideContent,
   "ottawa-islamic-school-fees-explained": FeesGuideContent,
   "muslim-daycare-ottawa-guide": MuslimDaycareContent,
@@ -787,7 +1087,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
   return (
     <>
       {/* HERO */}
-      <section className="relative">
+      <section className="relative" lang={post.lang ?? "en"}>
         <div className="relative aspect-[21/9] md:aspect-[3/1] max-h-[400px] w-full">
           <Image
             src={post.image}
@@ -814,16 +1114,16 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
 
       {/* ARTICLE BODY */}
       <section className="py-16">
-        <article className="max-w-3xl mx-auto px-6">
+        <article className="max-w-3xl mx-auto px-6" lang={post.lang ?? "en"}>
           {ContentComponent && <ContentComponent />}
         </article>
       </section>
 
       {/* FAQ SECTION */}
-      <section className="py-16 bg-cream">
+      <section className="py-16 bg-cream" lang={post.lang ?? "en"}>
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-8 text-center">
-            Frequently Asked Questions
+            {post.lang === "fr" ? "Questions fréquentes" : "Frequently Asked Questions"}
           </h2>
           <div className="space-y-3">
             {post.faqs.map((faq, i) => (

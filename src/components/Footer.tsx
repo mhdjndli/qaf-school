@@ -42,6 +42,7 @@ export default function Footer() {
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About" },
                 { href: "/program", label: "JK/SK Program" },
+                { href: "/sunday-camp", label: "Sunday Camp" },
                 { href: "/admissions", label: "Admissions" },
                 { href: "/faq", label: "FAQ" },
                 { href: "/blog", label: "Blog" },

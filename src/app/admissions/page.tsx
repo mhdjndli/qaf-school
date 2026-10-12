@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Admissions & Tuition · Islamic School Ottawa",
+  title: "Admissions & Tuition 2026/27 · Islamic JK/SK",
   alternates: { canonical: "/admissions" },
   description:
-    "Apply to QAF for 2026/2027. Tuition $690/month plus $190 annual resource fee. Four-step admissions process. Submit your inquiry today.",
+    "Enrol your 4- or 5-year-old at QAF, Ottawa's Islamic kindergarten: $690/month, $190 resource fee, sibling discount. Book a tour; spaces are limited.",
 };
 
 export default function Admissions() {

@@ -13,9 +13,138 @@ export interface BlogPost {
   category: string;
   relatedSlugs: string[];
   faqs: BlogFAQ[];
+  /** Shorter <title> for search results (~50 chars); falls back to title. */
+  seoTitle?: string;
+  /** Content language; defaults to English. */
+  lang?: "en" | "fr";
 }
 
 export const posts: BlogPost[] = [
+  {
+    slug: "junior-kindergarten-ottawa-guide",
+    seoTitle: "Junior Kindergarten in Ottawa: 2027 Parent Guide",
+    title: "Junior Kindergarten in Ottawa: Age Cutoffs, Registration & Choosing a School",
+    excerpt:
+      "Your child turns four next year and suddenly everyone is asking where they will go for JK. Here is how kindergarten works in Ontario, when Ottawa boards open registration, what private options exist, and how to choose with confidence.",
+    metaDescription:
+      "Starting JK in Ottawa in 2027? Ontario age cutoffs, when Ottawa boards open registration, public vs. private options, and what to ask on every tour.",
+    image: "/gallery/IMG_1812.jpg",
+    date: "October 12, 2026",
+    category: "Choosing a School",
+    relatedSlugs: ["islamic-schools-in-ottawa-guide", "ottawa-islamic-school-fees-explained", "preparing-your-child-for-grade-1", "what-a-day-looks-like-at-qaf"],
+    faqs: [
+      {
+        q: "What age does a child start Junior Kindergarten in Ottawa?",
+        a: "In Ontario, a child starts Junior Kindergarten (JK) in September of the year they turn four, as long as they turn four by December 31 of that year. Senior Kindergarten (SK) follows the next year, the year they turn five. A child born anytime in 2023 starts JK in September 2027.",
+      },
+      {
+        q: "Is kindergarten mandatory in Ontario?",
+        a: "No. Compulsory school attendance in Ontario begins at age six, so JK and SK are optional. In practice, the vast majority of Ottawa families enrol their children in kindergarten, either at a public or Catholic board school or at a private school.",
+      },
+      {
+        q: "When does kindergarten registration open in Ottawa?",
+        a: "Ottawa's public and Catholic school boards usually open kindergarten registration in the winter for the following September, and you register at the school designated for your home address. Check each board's website for the exact dates each year. Private schools set their own timelines; QAF accepts applications year-round, with priority to families who apply early.",
+      },
+      {
+        q: "Can my child do JK at a private school and then move to a public school?",
+        a: "Yes, and many families do. Because QAF's program is aligned with Ontario's Kindergarten Program, children can move to a public, Catholic, private, or Islamic school for SK or Grade 1 without falling behind.",
+      },
+    ],
+  },
+  {
+    slug: "arabic-classes-for-kids-ottawa",
+    seoTitle: "Arabic Classes for Kids in Ottawa (2026 Guide)",
+    title: "Arabic Classes for Kids in Ottawa: A Parent’s Guide to the Options",
+    excerpt:
+      "Immersion kindergarten, weekend school, or a tutor? “Arabic classes for kids” can mean very different things. Here is what actually works at each age, what to ask any program, and how families who do not speak Arabic at home can still raise confident Arabic readers.",
+    metaDescription:
+      "Arabic classes for kids in Ottawa: immersion kindergarten, weekend school, or tutoring? What works at each age, plus QAF options for ages 4–5 and 8–15.",
+    image: "/gallery/IMG_1811.jpg",
+    date: "October 12, 2026",
+    category: "Arabic Language",
+    relatedSlugs: ["why-early-arabic-immersion-matters", "quran-classes-for-kids-ottawa", "islamic-schools-in-ottawa-guide", "what-a-day-looks-like-at-qaf"],
+    faqs: [
+      {
+        q: "Does QAF offer Arabic classes for kids in Ottawa?",
+        a: "Yes, in two ways. Children aged 4 and 5 learn Arabic through daily immersion in our Junior and Senior Kindergarten, Monday to Friday. Children aged 8 to 15 can join QAF Sunday Camp, which includes a weekly Arabic reading and writing class alongside Quran, math and STEM, and soccer, every Sunday from 11 AM to 3 PM at 900 Dynes Rd.",
+      },
+      {
+        q: "What is the best age for a child to start learning Arabic?",
+        a: "The earlier the better for pronunciation and natural fluency: ages 3 to 6 are a sensitive window for language acquisition, which is why immersion works so well in kindergarten. But it is never too late. School-age children are excellent at learning to read and write, and steady weekly classes build real skills over a school year.",
+      },
+      {
+        q: "We don’t speak Arabic at home. Can my child still learn?",
+        a: "Yes. Many QAF families do not speak Arabic at home. Programs are designed for this: kindergarten children absorb Arabic through routines, songs, and stories, and Sunday Camp juniors start from letters and reading fluency. You do not need to teach Arabic yourself; a few minutes of encouragement and practice at home makes a big difference.",
+      },
+      {
+        q: "How much does a child learn from one Arabic class per week?",
+        a: "Honestly: a weekly class builds reading and writing skills steadily over a school year, but conversational fluency needs more exposure than one class can give. Pair a weekly class with ten minutes of reading at home, Arabic songs or stories in the car, and regular Quran listening, and progress speeds up noticeably.",
+      },
+    ],
+  },
+  {
+    slug: "quran-classes-for-kids-ottawa",
+    seoTitle: "Quran Classes for Kids in Ottawa: Weekend Guide",
+    title: "Quran Classes & Weekend Islamic School for Kids in Ottawa",
+    excerpt:
+      "For children in public school during the week, a good weekend program can be the anchor of their Islamic education. Here is what separates a great Sunday or Saturday school from an exhausting one, and how QAF Sunday Camp approaches Quran, Arabic, and community for ages 8 to 15.",
+    metaDescription:
+      "Quran classes and weekend Islamic school for kids in Ottawa: what to look for, recitation vs. hifz, and QAF Sunday Camp for ages 8–15 at $190/month.",
+    image: "/gallery/IMG_3077.jpg",
+    date: "October 12, 2026",
+    category: "Weekend Programs",
+    relatedSlugs: ["arabic-classes-for-kids-ottawa", "islamic-schools-in-ottawa-guide", "building-islamic-identity-in-early-years", "ottawa-islamic-school-fees-explained"],
+    faqs: [
+      {
+        q: "Are there weekend Quran classes for kids in Ottawa?",
+        a: "Yes. Many masajid and community centres across Ottawa run Saturday or Sunday programs, and QAF runs Sunday Camp for ages 8 to 15: Quran in small groups by level, Arabic reading and writing, math and STEM, and soccer or indoor play, every Sunday from 11 AM to 3 PM at 900 Dynes Rd.",
+      },
+      {
+        q: "How much does QAF Sunday Camp cost?",
+        a: "Sunday Camp is $190 per month for the camp year, September 2026 to June 2027. It is a simple month-to-month subscription with no long-term commitment, and it covers all four hours every Sunday.",
+      },
+      {
+        q: "Does my child need to read Arabic already to join Quran classes?",
+        a: "No. At Sunday Camp, Quran groups are split by level, so a child who is still learning letters and a child who reads fluently each work at the right pace. Juniors also have an Arabic class focused on letters and reading fluency.",
+      },
+      {
+        q: "What is the difference between Quran recitation classes and hifz?",
+        a: "Recitation classes focus on reading the Quran correctly and fluently, often with tajweed, and usually include memorizing shorter surahs. Hifz programs aim to memorize the whole Quran and demand daily, intensive review. Most children in a weekend program are building recitation and steady memorization, which is the right foundation for hifz later if the family chooses it.",
+      },
+    ],
+  },
+  {
+    slug: "ecole-islamique-ottawa",
+    seoTitle: "École islamique à Ottawa : maternelle et arabe",
+    lang: "fr",
+    title: "École islamique à Ottawa : maternelle et jardin d’enfants avec arabe et Coran",
+    excerpt:
+      "Vous cherchez une école islamique à Ottawa pour votre enfant de 4 ou 5 ans? Voici comment fonctionne QAF School : immersion quotidienne en arabe, Coran, approche inspirée de Montessori et programme aligné sur celui de l’Ontario.",
+    metaDescription:
+      "École islamique à Ottawa pour les 4 et 5 ans : maternelle et jardin d’enfants avec arabe quotidien, Coran et approche inspirée de Montessori.",
+    image: "/gallery/IMG_1813.jpg",
+    date: "October 12, 2026",
+    category: "En français",
+    relatedSlugs: ["islamic-schools-in-ottawa-guide", "why-early-arabic-immersion-matters", "ottawa-islamic-school-fees-explained", "junior-kindergarten-ottawa-guide"],
+    faqs: [
+      {
+        q: "Y a-t-il une école islamique pour les enfants de 4 et 5 ans à Ottawa?",
+        a: "Oui. QAF School offre la maternelle (JK, 4 ans) et le jardin d’enfants (SK, 5 ans) au 900, chemin Dynes, à Ottawa. Le programme combine l’immersion quotidienne en arabe, le Coran, les études islamiques et une approche inspirée de Montessori, en accord avec le programme de maternelle et de jardin d’enfants de l’Ontario.",
+      },
+      {
+        q: "Dans quelle langue l’enseignement est-il donné?",
+        a: "En arabe et en anglais. L’arabe est utilisé chaque jour pour le cercle du matin, les routines, les chansons et les histoires; l’anglais sert à la littératie et à la numératie. L’enseignement n’est pas offert en français. Beaucoup de familles francophones choisissent QAF pour que leur enfant apprenne l’arabe tout en gardant le français à la maison.",
+      },
+      {
+        q: "Combien coûte QAF School?",
+        a: "Les droits de scolarité sont de 690 $ par mois, facturés sur 10 mois (de septembre à juin), plus des frais annuels de ressources et de fournitures de 190 $. Une réduction est offerte aux familles qui inscrivent plus d’un enfant.",
+      },
+      {
+        q: "Mon enfant doit-il déjà parler arabe?",
+        a: "Non. Une grande partie de nos familles ne parlent pas arabe à la maison. Les jeunes enfants apprennent la langue naturellement grâce à l’immersion quotidienne, aux chansons et aux activités pratiques. Vous n’avez pas besoin d’enseigner l’arabe vous-même.",
+      },
+    ],
+  },
   {
     slug: "why-choose-qaf-islamic-school-ottawa",
     title: "Why Choose QAF Islamic School in Ottawa?",
@@ -26,7 +155,7 @@ export const posts: BlogPost[] = [
     image: "/gallery/IMG_3075.jpg",
     date: "August 31, 2026",
     category: "Choosing a School",
-    relatedSlugs: ["islamic-schools-in-ottawa-guide", "ottawa-islamic-school-fees-explained", "why-early-arabic-immersion-matters", "montessori-meets-islamic-values"],
+    relatedSlugs: ["islamic-schools-in-ottawa-guide", "ottawa-islamic-school-fees-explained", "junior-kindergarten-ottawa-guide", "arabic-classes-for-kids-ottawa"],
     faqs: [
       {
         q: "What ages does QAF Islamic School accept?",
@@ -56,7 +185,7 @@ export const posts: BlogPost[] = [
     image: "/gallery/IMG_1809.jpg",
     date: "March 15, 2026",
     category: "Arabic Language",
-    relatedSlugs: ["montessori-meets-islamic-values", "what-a-day-looks-like-at-qaf"],
+    relatedSlugs: ["arabic-classes-for-kids-ottawa", "montessori-meets-islamic-values", "what-a-day-looks-like-at-qaf"],
     faqs: [
       {
         q: "Does my child need to speak Arabic at home to succeed at QAF?",
@@ -198,15 +327,16 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "islamic-schools-in-ottawa-guide",
-    title: "Islamic Schools in Ottawa: A Parent\u2019s Guide for 2026/2027",
+    seoTitle: "Islamic Schools in Ottawa: 2026/27 Parent Guide",
+    title: "Islamic Schools in Ottawa (2026/27): Full-Time, Kindergarten & Weekend Options",
     excerpt:
       "Ottawa has more Islamic education options than most parents realize \u2014 full-time elementary schools, specialized kindergartens, weekend programs, and Quran academies. Here is an honest map of the landscape and how to choose well.",
     metaDescription:
-      "Compare Islamic schools in Ottawa: full-time K\u20138 schools, Islamic kindergartens, and weekend programs. What to look for, questions to ask on tours, and how QAF fits in.",
+      "Compare Islamic schools in Ottawa for 2026/27: full-time K\u20138 schools, Islamic kindergartens, and weekend Quran programs, plus questions to ask on tours.",
     image: "/gallery/IMG_1795.jpg",
     date: "September 2, 2026",
     category: "Choosing a School",
-    relatedSlugs: ["why-choose-qaf-islamic-school-ottawa", "ottawa-islamic-school-fees-explained", "islamic-montessori-school-ottawa", "muslim-daycare-ottawa-guide"],
+    relatedSlugs: ["quran-classes-for-kids-ottawa", "junior-kindergarten-ottawa-guide", "ottawa-islamic-school-fees-explained", "arabic-classes-for-kids-ottawa"],
     faqs: [
       {
         q: "How many Islamic schools are there in Ottawa?",
@@ -228,7 +358,8 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "ottawa-islamic-school-fees-explained",
-    title: "Ottawa Islamic School Fees Explained: What Tuition Really Costs",
+    seoTitle: "Ottawa Islamic School Fees 2026/27: Real Costs",
+    title: "Ottawa Islamic School Fees 2026/27: What Tuition Really Costs",
     excerpt:
       "Islamic school fees in Ottawa can feel opaque \u2014 tuition, registration fees, resource fees, and extras that only appear after you apply. Here is a transparent breakdown of how fees work, including exactly what QAF charges.",
     metaDescription:
@@ -236,7 +367,7 @@ export const posts: BlogPost[] = [
     image: "/gallery/IMG_1803.jpg",
     date: "September 3, 2026",
     category: "Admissions",
-    relatedSlugs: ["islamic-schools-in-ottawa-guide", "why-choose-qaf-islamic-school-ottawa"],
+    relatedSlugs: ["islamic-schools-in-ottawa-guide", "junior-kindergarten-ottawa-guide", "why-choose-qaf-islamic-school-ottawa", "quran-classes-for-kids-ottawa"],
     faqs: [
       {
         q: "How much does Islamic school cost in Ottawa?",
@@ -258,15 +389,16 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "muslim-daycare-ottawa-guide",
-    title: "Muslim Daycare in Ottawa: A Parent\u2019s Guide to Islamic Child Care",
+    seoTitle: "Islamic Daycare in Ottawa: A Parent\u2019s Guide",
+    title: "Islamic Daycare in Ottawa: A Parent\u2019s Guide to Muslim Child Care",
     excerpt:
       "When parents search for a \u201cMuslim daycare near me,\u201d they are really looking for four things: halal food, Islamic values, Arabic exposure, and people they trust. Here is how to evaluate your options in Ottawa \u2014 and when a kindergarten is the better fit.",
     metaDescription:
-      "Searching for a Muslim daycare in Ottawa? Learn what to look for in Islamic child care \u2014 halal food, duas, Arabic \u2014 and when an Islamic JK/SK program fits better.",
+      "Looking for an Islamic daycare in Ottawa? What to check \u2014 halal food, duas, Arabic, licensing \u2014 and when an Islamic JK/SK program for ages 4\u20135 fits better.",
     image: "/gallery/IMG_1799.jpg",
     date: "September 4, 2026",
     category: "Choosing a School",
-    relatedSlugs: ["islamic-schools-in-ottawa-guide", "what-a-day-looks-like-at-qaf"],
+    relatedSlugs: ["junior-kindergarten-ottawa-guide", "islamic-schools-in-ottawa-guide", "arabic-classes-for-kids-ottawa", "what-a-day-looks-like-at-qaf"],
     faqs: [
       {
         q: "Is there a Muslim daycare near me in Ottawa?",
@@ -288,6 +420,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "islamic-montessori-school-ottawa",
+    seoTitle: "Islamic Montessori School in Ottawa: What to Look For",
     title: "Islamic Montessori School in Ottawa: What to Look For",
     excerpt:
       "\u201cIslamic Montessori\u201d is one of the fastest-growing searches among Muslim parents \u2014 and one of the least understood labels. Here is what it actually means, how to tell substance from marketing, and what to look for in a classroom.",

@@ -13,11 +13,12 @@ export async function generateMetadata({
   if (!post) return {};
 
   return {
-    title: post.title,
+    title: post.seoTitle ?? post.title,
     description: post.metaDescription,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
+      locale: post.lang === "fr" ? "fr_CA" : "en_CA",
       url: `${SITE_URL}/blog/${post.slug}`,
       title: post.title,
       description: post.metaDescription,
@@ -48,6 +49,7 @@ export default async function BlogPostLayout({
           "@context": "https://schema.org",
           "@type": "BlogPosting",
           headline: post.title,
+          inLanguage: post.lang === "fr" ? "fr-CA" : "en-CA",
           description: post.metaDescription,
           image: `${SITE_URL}${post.image}`,
           datePublished: new Date(post.date).toISOString(),
