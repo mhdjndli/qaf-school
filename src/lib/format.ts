@@ -76,3 +76,38 @@ export function fileSize(bytes: number): string {
 export function todayISO(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
 }
+
+/** "4 yrs 7 mo" from a YYYY-MM-DD birth date (as of today in Ottawa). */
+export function ageFrom(dob: string | null | undefined): string {
+  const m = dob ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(dob) : null;
+  if (!m) return "—";
+  const [ty, tm, td] = todayISO().split("-").map(Number);
+  let months = (ty - Number(m[1])) * 12 + (tm - Number(m[2]));
+  if (td < Number(m[3])) months -= 1;
+  if (months < 0) return "—";
+  const years = Math.floor(months / 12);
+  const rem = months % 12;
+  if (years === 0) return `${rem} mo`;
+  const y = `${years} yr${years === 1 ? "" : "s"}`;
+  return rem ? `${y} ${rem} mo` : y;
+}
+
+/** "Monday, Oct 20, 2026" for a YYYY-MM-DD day. */
+export function longDay(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!m) return value;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return d.toLocaleDateString("en-CA", {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+/** Shifts a YYYY-MM-DD day by n days. */
+export function addDays(value: string, n: number): string {
+  const [y, mo, d] = value.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, mo - 1, d + n));
+  return dt.toISOString().slice(0, 10);
+}

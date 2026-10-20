@@ -175,7 +175,7 @@ QAF School Admissions`,
 // development without a database still works.
 
 const DATABASE_URL = process.env.DATABASE_URL;
-const USE_PG = Boolean(DATABASE_URL);
+export const USE_PG = Boolean(DATABASE_URL);
 
 // -------------------- Postgres backend --------------------
 
@@ -284,6 +284,58 @@ function ensurePg(): Promise<void> {
           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
       `);
+      // Dawrat (short courses): students get a parent access code, and
+      // each day has an attendance/report row plus photos. A photo with a
+      // NULL student_id is shared with every non-absent student that day.
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dawrat (
+          id UUID PRIMARY KEY,
+          name TEXT NOT NULL,
+          start_date TEXT,
+          end_date TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dawra_students (
+          id UUID PRIMARY KEY,
+          dawra_id UUID NOT NULL REFERENCES dawrat(id) ON DELETE CASCADE,
+          first_name TEXT NOT NULL,
+          last_name TEXT NOT NULL,
+          dob TEXT,
+          access_code TEXT NOT NULL UNIQUE,
+          photo_mime TEXT,
+          photo BYTEA,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dawra_reports (
+          id UUID PRIMARY KEY,
+          student_id UUID NOT NULL REFERENCES dawra_students(id) ON DELETE CASCADE,
+          day TEXT NOT NULL,
+          absent BOOLEAN NOT NULL DEFAULT FALSE,
+          report TEXT,
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          UNIQUE (student_id, day)
+        );
+      `);
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dawra_photos (
+          id UUID PRIMARY KEY,
+          dawra_id UUID NOT NULL REFERENCES dawrat(id) ON DELETE CASCADE,
+          student_id UUID REFERENCES dawra_students(id) ON DELETE CASCADE,
+          day TEXT NOT NULL,
+          mime_type TEXT NOT NULL,
+          size_bytes INTEGER NOT NULL,
+          data BYTEA NOT NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      await pool.query(
+        `CREATE INDEX IF NOT EXISTS dawra_photos_day_idx
+           ON dawra_photos (dawra_id, day)`,
+      );
       const { rows } = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM templates`,
       );
@@ -450,7 +502,7 @@ function rowToCamp(r: CampRow): CampEnrolment {
   };
 }
 
-async function pgQuery<R extends QueryResultRow>(
+export async function pgQuery<R extends QueryResultRow>(
   sql: string,
   params: unknown[] = [],
 ) {
@@ -460,7 +512,7 @@ async function pgQuery<R extends QueryResultRow>(
 
 // -------------------- File backend (local dev fallback) --------------------
 
-const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
+export const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 const INQUIRIES_FILE = path.join(DATA_DIR, "inquiries.json");
 const TEMPLATES_FILE = path.join(DATA_DIR, "templates.json");
 
