@@ -1,8 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
+import {
+  addHifzRecord,
+  deleteHifzRecord,
+  deleteHifzTeacher,
+  setHifzTeacherApproved,
+} from "@/lib/hifz";
+import { connectHifzWebhook } from "@/lib/hifz-bot";
 import {
   addDawra,
   addDawraPhoto,
@@ -178,4 +186,56 @@ export async function deleteDawraPhotoAction(formData: FormData) {
   const id = str(formData, "id");
   if (id) await deleteDawraPhoto(id);
   revalidateDawrat();
+}
+
+// -------------------- Hifz --------------------
+
+/** Manual entry/correction from the admin panel (the bot is the usual path). */
+export async function addHifzRecordAction(formData: FormData) {
+  await requireAdmin();
+  const studentId = str(formData, "studentId");
+  const day = optionalDay(formData, "day");
+  const text = str(formData, "text").slice(0, 200);
+  if (!studentId || !day || !text) return;
+  const student = await getDawraStudent(studentId);
+  if (!student) return;
+  await addHifzRecord({ studentId, day, text, recordedBy: "Admin" });
+  revalidateDawrat();
+}
+
+export async function deleteHifzRecordAction(formData: FormData) {
+  await requireAdmin();
+  const id = str(formData, "id");
+  if (id) await deleteHifzRecord(id);
+  revalidateDawrat();
+}
+
+export async function setHifzTeacherAction(formData: FormData) {
+  await requireAdmin();
+  const telegramId = str(formData, "telegramId");
+  const op = str(formData, "op");
+  if (!telegramId) return;
+  if (op === "approve") await setHifzTeacherApproved(telegramId, true);
+  else if (op === "revoke") await setHifzTeacherApproved(telegramId, false);
+  else if (op === "delete") await deleteHifzTeacher(telegramId);
+  revalidateDawrat();
+}
+
+/** Registers this site's URL as the bot's webhook (needs a public https host). */
+export async function connectHifzBotAction(): Promise<{ error?: string }> {
+  await requireAdmin();
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host") || "";
+  if (!host || /^(localhost|127\.|\[::1\])/.test(host)) {
+    return {
+      error: "Connect the bot from the live site (qafschool.com/admin), not from localhost.",
+    };
+  }
+  try {
+    await connectHifzWebhook(`https://${host}`);
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : String(err) };
+  }
+  revalidateDawrat();
+  return {};
 }

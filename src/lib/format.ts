@@ -111,3 +111,15 @@ export function addDays(value: string, n: number): string {
   const dt = new Date(Date.UTC(y, mo - 1, d + n));
   return dt.toISOString().slice(0, 10);
 }
+
+/** "Thu, Oct 22" for a YYYY-MM-DD day. */
+export function shortDay(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!m) return value;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return d.toLocaleDateString("en-CA", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}

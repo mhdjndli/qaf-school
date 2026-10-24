@@ -7,7 +7,8 @@ import {
   listReportsForStudent,
   type DawraStudent,
 } from "@/lib/dawrat";
-import { longDay } from "@/lib/format";
+import { longDay, shortDay } from "@/lib/format";
+import { listHifzForStudent } from "@/lib/hifz";
 import { parentLoginAction, parentLogoutAction } from "./actions";
 import PhotoGallery from "./PhotoGallery";
 
@@ -104,10 +105,11 @@ function LoginForm({ error }: { error?: string }) {
 }
 
 async function Updates({ student }: { student: DawraStudent }) {
-  const [dawra, reports, photos] = await Promise.all([
+  const [dawra, reports, photos, hifz] = await Promise.all([
     getDawra(student.dawraId),
     listReportsForStudent(student.id),
     listPhotosVisibleToStudent(student),
+    listHifzForStudent(student.id),
   ]);
 
   const reportBy = new Map(reports.map((r) => [r.day, r]));
@@ -115,9 +117,15 @@ async function Updates({ student }: { student: DawraStudent }) {
   for (const p of photos) {
     photosBy.set(p.day, [...(photosBy.get(p.day) ?? []), p.id]);
   }
-  const days = [...new Set([...reportBy.keys(), ...photosBy.keys()])].sort(
-    (a, b) => b.localeCompare(a),
-  );
+  // Oldest first within a day, so several entries read in recitation order.
+  const hifzBy = new Map<string, string[]>();
+  for (const h of [...hifz].reverse()) {
+    hifzBy.set(h.day, [...(hifzBy.get(h.day) ?? []), h.text]);
+  }
+  const latestHifz = hifz[0];
+  const days = [
+    ...new Set([...reportBy.keys(), ...photosBy.keys(), ...hifzBy.keys()]),
+  ].sort((a, b) => b.localeCompare(a));
 
   return (
     <section className="bg-cream min-h-[70vh] px-4 sm:px-6 py-10 md:py-14">
@@ -152,6 +160,26 @@ async function Updates({ student }: { student: DawraStudent }) {
           </form>
         </header>
 
+        {latestHifz ? (
+          <div className="bg-white border border-border rounded-xl px-5 py-4 mb-5 flex items-center gap-4">
+            <span className="text-2xl" aria-hidden>
+              📖
+            </span>
+            <div className="min-w-0">
+              <div className="text-xs font-semibold uppercase tracking-wide text-text-light">
+                Latest Quran memorization
+              </div>
+              <div className="font-semibold text-text text-lg">
+                {latestHifz.text}
+              </div>
+              <div className="text-xs text-text-light">
+                {shortDay(latestHifz.day)} · {hifz.length} session
+                {hifz.length === 1 ? "" : "s"} recorded
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         {days.length === 0 ? (
           <div className="bg-white border border-border rounded-xl p-8 text-center text-text-light">
             No updates yet. Check back after the first day of the Dawra,
@@ -162,6 +190,13 @@ async function Updates({ student }: { student: DawraStudent }) {
             {days.map((day) => {
               const report = reportBy.get(day);
               const dayPhotos = photosBy.get(day) ?? [];
+              const dayHifz = hifzBy.get(day) ?? [];
+              const hifzLine = dayHifz.length ? (
+                <p className="text-text">
+                  <span className="font-semibold">Hifz:</span>{" "}
+                  {dayHifz.join(", ")}
+                </p>
+              ) : null;
               return (
                 <li
                   key={day}
@@ -181,11 +216,15 @@ async function Updates({ student }: { student: DawraStudent }) {
                   </div>
                   <div className="px-5 py-4">
                     {report?.absent ? (
-                      <p className="text-text-light">
-                        Your child was absent today.
-                      </p>
+                      <div className="space-y-2">
+                        <p className="text-text-light">
+                          Your child was absent today.
+                        </p>
+                        {hifzLine}
+                      </div>
                     ) : (
                       <div className="space-y-4">
+                        {hifzLine}
                         {report?.report ? (
                           <p className="text-text whitespace-pre-wrap leading-relaxed">
                             {report.report}
@@ -194,7 +233,7 @@ async function Updates({ student }: { student: DawraStudent }) {
                         {dayPhotos.length ? (
                           <PhotoGallery ids={dayPhotos} />
                         ) : null}
-                        {!report?.report && !dayPhotos.length ? (
+                        {!report?.report && !dayPhotos.length && !dayHifz.length ? (
                           <p className="text-text-light italic">
                             No written report for this day.
                           </p>

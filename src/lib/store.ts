@@ -336,6 +336,33 @@ function ensurePg(): Promise<void> {
         `CREATE INDEX IF NOT EXISTS dawra_photos_day_idx
            ON dawra_photos (dawra_id, day)`,
       );
+      // Hifz: daily Quran memorization (tasmee3) per Dawra student, recorded
+      // mostly through the Hifz Telegram bot by approved teachers.
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS hifz_records (
+          id UUID PRIMARY KEY,
+          student_id UUID NOT NULL REFERENCES dawra_students(id) ON DELETE CASCADE,
+          day TEXT NOT NULL,
+          text TEXT NOT NULL,
+          recorded_by TEXT,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
+      await pool.query(
+        `CREATE INDEX IF NOT EXISTS hifz_records_student_idx
+           ON hifz_records (student_id, created_at DESC)`,
+      );
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS hifz_teachers (
+          telegram_id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          username TEXT,
+          approved BOOLEAN NOT NULL DEFAULT FALSE,
+          pending_student_id UUID
+            REFERENCES dawra_students(id) ON DELETE SET NULL,
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        );
+      `);
       const { rows } = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM templates`,
       );

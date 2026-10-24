@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listDawrat } from "@/lib/dawrat";
 import { plainDate } from "@/lib/format";
 import { createDawraAction } from "./actions";
+import HifzBotPanel from "./HifzBotPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,10 @@ export default async function DawratPage() {
           ))}
         </ul>
       )}
+
+      <div className="mt-8">
+        <HifzBotPanel />
+      </div>
     </div>
   );
 }

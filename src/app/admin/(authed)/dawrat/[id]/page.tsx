@@ -7,10 +7,12 @@ import {
   listPhotosForDay,
   listReportsForDay,
 } from "@/lib/dawrat";
+import { listHifzForDawra } from "@/lib/hifz";
 import { addDays, ageFrom, longDay, plainDate, todayISO } from "@/lib/format";
 import { deleteDawraAction, updateDawraAction } from "../actions";
 import ConfirmButton from "./ConfirmButton";
 import DayReportCard from "./DayReportCard";
+import HifzCard from "./HifzCard";
 import PhotoThumbs from "./PhotoThumbs";
 import SharedPhotoUploader from "./SharedPhotoUploader";
 import StudentForm from "./StudentForm";
@@ -35,11 +37,12 @@ export default async function DawraPage({
 
   const dawra = await getDawra(id);
   if (!dawra) notFound();
-  const [students, reports, photos, days] = await Promise.all([
+  const [students, reports, photos, days, hifz] = await Promise.all([
     listDawraStudents(id),
     listReportsForDay(id, day),
     listPhotosForDay(id, day),
     listDawraDays(id),
+    listHifzForDawra(id),
   ]);
 
   const reportBy = new Map(reports.map((r) => [r.studentId, r]));
@@ -134,6 +137,10 @@ export default async function DawraPage({
         <h3 className="text-sm font-semibold text-text mb-2">Add a student</h3>
         <StudentForm dawraId={dawra.id} />
       </Card>
+
+      {students.length > 0 ? (
+        <HifzCard students={students} records={hifz} />
+      ) : null}
 
       {/* Daily reports */}
       <section id="day" className="scroll-mt-6">
