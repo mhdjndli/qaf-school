@@ -296,6 +296,12 @@ function ensurePg(): Promise<void> {
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
       `);
+      // Which days of the week a Dawra meets (0 = Sunday). start_date and
+      // end_date are no longer used but kept so old data isn't lost.
+      await pool.query(
+        `ALTER TABLE dawrat ADD COLUMN IF NOT EXISTS weekdays SMALLINT[]
+           NOT NULL DEFAULT '{}'`,
+      );
       await pool.query(`
         CREATE TABLE IF NOT EXISTS dawra_students (
           id UUID PRIMARY KEY,

@@ -59,15 +59,16 @@ async function readImage(
 
 // -------------------- Dawrat --------------------
 
+function weekdays(formData: FormData): number[] {
+  const days = formData.getAll("weekdays").map(Number);
+  return [...new Set(days)].filter((d) => Number.isInteger(d) && d >= 0 && d <= 6);
+}
+
 export async function createDawraAction(formData: FormData) {
   await requireAdmin();
   const name = str(formData, "name");
   if (!name) return;
-  const dawra = await addDawra({
-    name,
-    startDate: optionalDay(formData, "startDate"),
-    endDate: optionalDay(formData, "endDate"),
-  });
+  const dawra = await addDawra({ name, weekdays: weekdays(formData) });
   revalidateDawrat();
   redirect(`/admin/dawrat/${dawra.id}`);
 }
@@ -77,11 +78,7 @@ export async function updateDawraAction(formData: FormData) {
   const id = str(formData, "id");
   const name = str(formData, "name");
   if (!id || !name) return;
-  await updateDawra(id, {
-    name,
-    startDate: optionalDay(formData, "startDate"),
-    endDate: optionalDay(formData, "endDate"),
-  });
+  await updateDawra(id, { name, weekdays: weekdays(formData) });
   revalidateDawrat();
 }
 

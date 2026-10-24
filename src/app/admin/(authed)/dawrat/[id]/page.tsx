@@ -8,7 +8,14 @@ import {
   listReportsForDay,
 } from "@/lib/dawrat";
 import { listHifzForDawra } from "@/lib/hifz";
-import { addDays, ageFrom, longDay, plainDate, todayISO } from "@/lib/format";
+import {
+  addDays,
+  ageFrom,
+  longDay,
+  plainDate,
+  todayISO,
+  weekdaysLabel,
+} from "@/lib/format";
 import { deleteDawraAction, updateDawraAction } from "../actions";
 import ConfirmButton from "./ConfirmButton";
 import DayReportCard from "./DayReportCard";
@@ -17,6 +24,7 @@ import PhotoThumbs from "./PhotoThumbs";
 import SharedPhotoUploader from "./SharedPhotoUploader";
 import StudentForm from "./StudentForm";
 import StudentRow from "./StudentRow";
+import WeekdayPicker from "../WeekdayPicker";
 
 export const dynamic = "force-dynamic";
 
@@ -66,9 +74,7 @@ export default async function DawraPage({
             {dawra.name}
           </h1>
           <p className="text-sm text-text-light mt-1">
-            {dawra.startDate || dawra.endDate
-              ? `${plainDate(dawra.startDate)} – ${plainDate(dawra.endDate)} · `
-              : ""}
+            {dawra.weekdays.length ? `${weekdaysLabel(dawra.weekdays)} · ` : ""}
             {students.length} student{students.length === 1 ? "" : "s"}
           </p>
         </div>
@@ -83,16 +89,10 @@ export default async function DawraPage({
                 <span className="block text-xs font-semibold text-text mb-1">Name</span>
                 <input name="name" required defaultValue={dawra.name} className={inputCls} />
               </label>
-              <div className="grid grid-cols-2 gap-3">
-                <label className="block">
-                  <span className="block text-xs font-semibold text-text mb-1">Starts</span>
-                  <input name="startDate" type="date" defaultValue={dawra.startDate ?? ""} className={inputCls} />
-                </label>
-                <label className="block">
-                  <span className="block text-xs font-semibold text-text mb-1">Ends</span>
-                  <input name="endDate" type="date" defaultValue={dawra.endDate ?? ""} className={inputCls} />
-                </label>
-              </div>
+              <fieldset>
+                <legend className="block text-xs font-semibold text-text mb-1">Meets on</legend>
+                <WeekdayPicker selected={dawra.weekdays} />
+              </fieldset>
               <div className="flex justify-between items-center">
                 <ConfirmButton
                   action={deleteDawraAction}

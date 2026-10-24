@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { getDawraStudent, listDawrat, listDawraStudents } from "./dawrat";
-import { shortDay, todayISO } from "./format";
+import { shortDay, todayISO, weekdayOf, weekdaysLabel } from "./format";
 import {
   addHifzRecord,
   deleteHifzRecord,
@@ -137,9 +137,11 @@ type Screen = { text: string; keyboard: Keyboard };
 
 async function dawraMenu(): Promise<Screen> {
   const today = todayISO();
-  // Hide Dawrat that have already ended.
-  const dawrat = (await listDawrat()).filter(
-    (d) => !d.endDate || d.endDate >= today,
+  const weekday = weekdayOf(today);
+  // Dawrat that meet today come first.
+  const dawrat = (await listDawrat()).sort(
+    (a, b) =>
+      Number(b.weekdays.includes(weekday)) - Number(a.weekdays.includes(weekday)),
   );
   if (dawrat.length === 0) {
     return {
@@ -150,7 +152,12 @@ async function dawraMenu(): Promise<Screen> {
   return {
     text: `📖 <b>Hifz</b> · ${shortDay(today)}\n\nWhich dawra / halaqa?`,
     keyboard: dawrat.map((d) => [
-      { text: `${d.name} (${d.studentCount})`, callback_data: `d:${d.id}` },
+      {
+        text: `${d.weekdays.includes(weekday) ? "📅 " : ""}${d.name}${
+          d.weekdays.length ? ` · ${weekdaysLabel(d.weekdays)}` : ""
+        } (${d.studentCount})`,
+        callback_data: `d:${d.id}`,
+      },
     ]),
   };
 }

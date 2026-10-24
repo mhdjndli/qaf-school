@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { listDawrat } from "@/lib/dawrat";
-import { plainDate } from "@/lib/format";
+import { weekdaysLabel } from "@/lib/format";
 import { createDawraAction } from "./actions";
 import HifzBotPanel from "./HifzBotPanel";
+import WeekdayPicker from "./WeekdayPicker";
 
 export const dynamic = "force-dynamic";
 
@@ -39,9 +40,9 @@ export default async function DawratPage() {
         </div>
         <form
           action={createDawraAction}
-          className="px-5 py-5 grid sm:grid-cols-[1fr_170px_170px_auto] gap-3 items-end"
+          className="px-5 py-5 grid sm:grid-cols-[1fr_auto] gap-3 items-end"
         >
-          <label className="block">
+          <label className="block sm:col-span-2">
             <span className="block text-xs font-semibold text-text mb-1">
               Name *
             </span>
@@ -52,18 +53,12 @@ export default async function DawratPage() {
               className={inputCls}
             />
           </label>
-          <label className="block">
-            <span className="block text-xs font-semibold text-text mb-1">
-              Starts
-            </span>
-            <input name="startDate" type="date" className={inputCls} />
-          </label>
-          <label className="block">
-            <span className="block text-xs font-semibold text-text mb-1">
-              Ends
-            </span>
-            <input name="endDate" type="date" className={inputCls} />
-          </label>
+          <fieldset>
+            <legend className="block text-xs font-semibold text-text mb-1">
+              Meets on
+            </legend>
+            <WeekdayPicker />
+          </fieldset>
           <button
             type="submit"
             className="text-sm bg-orange text-white px-4 py-2 rounded-md font-semibold hover:bg-orange-dark transition-colors"
@@ -87,9 +82,7 @@ export default async function DawratPage() {
                   {d.name}
                 </div>
                 <div className="text-sm text-text-light mt-1">
-                  {d.startDate || d.endDate
-                    ? `${plainDate(d.startDate)} – ${plainDate(d.endDate)} · `
-                    : ""}
+                  {d.weekdays.length ? `${weekdaysLabel(d.weekdays)} · ` : ""}
                   {d.studentCount} student{d.studentCount === 1 ? "" : "s"}
                 </div>
               </Link>

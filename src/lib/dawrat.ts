@@ -12,10 +12,12 @@ import { DATA_DIR, USE_PG, pgQuery } from "./store";
 export type Dawra = {
   id: string;
   name: string;
-  startDate: string | null;
-  endDate: string | null;
+  /** Days of the week it meets, as Date#getDay() numbers (0 = Sunday). */
+  weekdays: number[];
   createdAt: string;
 };
+
+export type DawraInput = Pick<Dawra, "name" | "weekdays">;
 
 export type DawraWithCount = Dawra & { studentCount: number };
 
@@ -85,8 +87,7 @@ function isUniqueViolation(err: unknown): boolean {
 type DawraRow = {
   id: string;
   name: string;
-  start_date: string | null;
-  end_date: string | null;
+  weekdays: number[] | null;
   created_at: Date;
 };
 
@@ -94,8 +95,7 @@ function rowToDawra(r: DawraRow): Dawra {
   return {
     id: r.id,
     name: r.name,
-    startDate: r.start_date,
-    endDate: r.end_date,
+    weekdays: r.weekdays ?? [],
     createdAt: r.created_at.toISOString(),
   };
 }
@@ -198,7 +198,10 @@ async function readFileDb(): Promise<DawratFile> {
   try {
     const parsed = JSON.parse(await fs.readFile(DAWRAT_FILE, "utf8"));
     return {
-      dawrat: parsed.dawrat ?? [],
+      dawrat: (parsed.dawrat ?? []).map((d: Dawra) => ({
+        ...d,
+        weekdays: d.weekdays ?? [],
+      })),
       students: parsed.students ?? [],
       reports: parsed.reports ?? [],
       photos: parsed.photos ?? [],
@@ -235,17 +238,13 @@ export async function listDawrat(): Promise<DawraWithCount[]> {
       `SELECT d.*, (SELECT COUNT(*)::int FROM dawra_students s
                      WHERE s.dawra_id = d.id) AS student_count
          FROM dawrat d
-        ORDER BY COALESCE(d.start_date, '') DESC, d.created_at DESC`,
+        ORDER BY d.created_at DESC`,
     );
     return rows.map((r) => ({ ...rowToDawra(r), studentCount: r.student_count }));
   }
   const db = await readFileDb();
   return [...db.dawrat]
-    .sort(
-      (a, b) =>
-        (b.startDate ?? "").localeCompare(a.startDate ?? "") ||
-        b.createdAt.localeCompare(a.createdAt),
-    )
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .map((d) => ({
       ...d,
       studentCount: db.students.filter((s) => s.dawraId === d.id).length,
@@ -264,14 +263,12 @@ export async function getDawra(id: string): Promise<Dawra | null> {
   return db.dawrat.find((d) => d.id === id) ?? null;
 }
 
-export async function addDawra(
-  input: Pick<Dawra, "name" | "startDate" | "endDate">,
-): Promise<Dawra> {
+export async function addDawra(input: DawraInput): Promise<Dawra> {
   if (USE_PG) {
     const { rows } = await pgQuery<DawraRow>(
-      `INSERT INTO dawrat (id, name, start_date, end_date)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [randomUUID(), input.name, input.startDate, input.endDate],
+      `INSERT INTO dawrat (id, name, weekdays)
+       VALUES ($1, $2, $3) RETURNING *`,
+      [randomUUID(), input.name, input.weekdays],
     );
     return rowToDawra(rows[0]);
   }
@@ -286,14 +283,11 @@ export async function addDawra(
   return dawra;
 }
 
-export async function updateDawra(
-  id: string,
-  input: Pick<Dawra, "name" | "startDate" | "endDate">,
-): Promise<void> {
+export async function updateDawra(id: string, input: DawraInput): Promise<void> {
   if (USE_PG) {
     await pgQuery(
-      `UPDATE dawrat SET name = $2, start_date = $3, end_date = $4 WHERE id = $1`,
-      [id, input.name, input.startDate, input.endDate],
+      `UPDATE dawrat SET name = $2, weekdays = $3 WHERE id = $1`,
+      [id, input.name, input.weekdays],
     );
     return;
   }

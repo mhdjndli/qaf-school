@@ -123,3 +123,22 @@ export function shortDay(value: string): string {
     day: "numeric",
   });
 }
+
+/** Week order for display, Monday first so Sat & Sun sit together. */
+export const WEEKDAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
+export const WEEKDAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** "Sat & Sun", "Mon, Wed & Fri" from getDay() numbers; "" when none. */
+export function weekdaysLabel(days: number[]): string {
+  const names = WEEKDAY_ORDER.filter((d) => days.includes(d)).map(
+    (d) => WEEKDAY_SHORT[d],
+  );
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} & ${names[names.length - 1]}`;
+}
+
+/** Day of the week (0 = Sunday) of a YYYY-MM-DD day. */
+export function weekdayOf(value: string): number {
+  const [y, mo, d] = value.split("-").map(Number);
+  return new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
+}
