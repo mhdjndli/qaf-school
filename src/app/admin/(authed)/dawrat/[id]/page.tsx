@@ -36,10 +36,21 @@ export default async function DawraPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ day?: string }>;
+  searchParams: Promise<{
+    day?: string;
+    student?: string;
+    from?: string;
+    to?: string;
+  }>;
 }) {
   const { id } = await params;
-  const { day: dayParam } = await searchParams;
+  const { day: dayParam, ...hifzParams } = await searchParams;
+  const isDay = (v?: string) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "");
+  const hifzFilters = {
+    student: hifzParams.student ?? "",
+    from: isDay(hifzParams.from),
+    to: isDay(hifzParams.to),
+  };
   const day =
     dayParam && /^\d{4}-\d{2}-\d{2}$/.test(dayParam) ? dayParam : todayISO();
 
@@ -139,7 +150,13 @@ export default async function DawraPage({
       </Card>
 
       {students.length > 0 ? (
-        <HifzCard students={students} records={hifz} />
+        <HifzCard
+          dawraId={dawra.id}
+          day={isDay(dayParam) || null}
+          students={students}
+          records={hifz}
+          filters={hifzFilters}
+        />
       ) : null}
 
       {/* Daily reports */}

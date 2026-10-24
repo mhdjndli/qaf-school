@@ -1,5 +1,13 @@
 import crypto from "crypto";
-import { getDawraStudent, listDawrat, listDawraStudents } from "./dawrat";
+import {
+  getDawraStudent,
+  getReport,
+  listDawrat,
+  listDawraStudents,
+  listReportsForDay,
+  setAttendance,
+  type DawraStudent,
+} from "./dawrat";
 import { shortDay, todayISO, weekdayOf, weekdaysLabel } from "./format";
 import {
   addHifzRecord,
@@ -14,11 +22,18 @@ import {
 } from "./hifz";
 
 // The Hifz Telegram bot. Telegram POSTs every update to
-// /api/telegram/hifz; approved teachers pick a Dawra, tap a student and
-// type what the child recited ("Al-Insan 1-4"), which is saved for today.
+// /api/telegram/hifz; approved teachers pick a Dawra, then either take
+// attendance (tap a student → Attended / Absent, or "All attended") or
+// record hifz (tap a student and type what they recited, "Al-Insan 1-4").
+// Everything is saved for today (Ottawa time).
 //
-// Callback data (max 64 bytes): "m" menu, "d:<dawraId>" student list,
-// "s:<studentId>" start entry, "x:<dawraId>" cancel entry, "u:<recordId>" undo.
+// Callback data (max 64 bytes):
+//   "m" Dawra menu            "d:<dawraId>" Attendance-or-Hifz choice
+//   "a:<dawraId>" attendance  "t:<studentId>" Attended/Absent prompt
+//   "p:<studentId>" present   "b:<studentId>" absent
+//   "A:<dawraId>" mark everyone not yet marked as present
+//   "h:<dawraId>" hifz list   "s:<studentId>" start hifz entry
+//   "x:<dawraId>" cancel hifz entry   "u:<recordId>" undo hifz entry
 
 const MAX_TEXT = 200;
 
@@ -150,7 +165,7 @@ async function dawraMenu(): Promise<Screen> {
     };
   }
   return {
-    text: `📖 <b>Hifz</b> · ${shortDay(today)}\n\nWhich dawra / halaqa?`,
+    text: `🕌 <b>QAF</b> · ${shortDay(today)}\n\nWhich dawra / halaqa?`,
     keyboard: dawrat.map((d) => [
       {
         text: `${d.weekdays.includes(weekday) ? "📅 " : ""}${d.name}${
@@ -162,48 +177,171 @@ async function dawraMenu(): Promise<Screen> {
   };
 }
 
-async function studentList(dawraId: string, header?: string): Promise<Screen> {
+/** Everything a Dawra screen needs about today. */
+async function loadDawraDay(dawraId: string) {
   const today = todayISO();
-  const [dawrat, students, latest, all] = await Promise.all([
+  const [dawrat, students, latest, hifz, reports] = await Promise.all([
     listDawrat(),
     listDawraStudents(dawraId),
     latestHifzByStudent(dawraId),
     listHifzForDawra(dawraId),
+    listReportsForDay(dawraId, today),
   ]);
-  const dawra = dawrat.find((d) => d.id === dawraId);
-  if (!dawra) return dawraMenu();
-
-  const doneToday = new Set(
-    all.filter((r) => r.day === today).map((r) => r.studentId),
+  const dawra = dawrat.find((d) => d.id === dawraId) ?? null;
+  const hifzToday = new Set(
+    hifz.filter((r) => r.day === today).map((r) => r.studentId),
   );
-  const lines = students.map((s) => {
-    const last = latest.get(s.id);
-    const mark = doneToday.has(s.id) ? "✅" : "▫️";
-    const detail = last
-      ? `${esc(last.text)} <i>(${when(last.day, today)})</i>`
-      : "<i>nothing yet</i>";
-    return `${mark} <b>${esc(fullName(s))}</b> — ${detail}`;
-  });
+  const attendance = new Map(reports.map((r) => [r.studentId, r.absent]));
+  const present = students.filter((s) => attendance.get(s.id) === false);
+  const absent = students.filter((s) => attendance.get(s.id) === true);
+  const unmarked = students.filter((s) => !attendance.has(s.id));
+  return { today, dawra, students, latest, hifzToday, attendance, present, absent, unmarked };
+}
 
-  const text = [
-    header,
-    `<b>${esc(dawra.name)}</b> · ${shortDay(today)} · ${doneToday.size}/${students.length} done today`,
-    "",
-    students.length ? lines.join("\n") : "No students in this dawra yet.",
-    "",
-    students.length ? "Tap a student to record today's tasmee3:" : "",
-  ]
+function joinLines(lines: (string | undefined)[]): string {
+  return lines
     .filter((l) => l !== undefined)
     .join("\n")
     .trim();
+}
 
+function studentButtons(
+  students: DawraStudent[],
+  label: (s: DawraStudent) => string,
+  kind: string,
+): Keyboard {
   const buttons: Button[] = students.map((s) => ({
-    text: `${doneToday.has(s.id) ? "✅ " : ""}${fullName(s)}`,
-    callback_data: `s:${s.id}`,
+    text: label(s),
+    callback_data: `${kind}:${s.id}`,
   }));
   const keyboard: Keyboard = [];
   for (let i = 0; i < buttons.length; i += 2) keyboard.push(buttons.slice(i, i + 2));
-  keyboard.push([{ text: "⬅️ All dawrat", callback_data: "m" }]);
+  return keyboard;
+}
+
+/** After picking a Dawra: take attendance or record hifz. */
+async function modeMenu(dawraId: string): Promise<Screen> {
+  const d = await loadDawraDay(dawraId);
+  if (!d.dawra) return dawraMenu();
+  const total = d.students.length;
+  const marked = total - d.unmarked.length;
+  return {
+    text: joinLines([
+      `<b>${esc(d.dawra.name)}</b> · ${shortDay(d.today)}`,
+      "",
+      `📋 Attendance: ${marked}/${total} marked` +
+        (marked ? ` (${d.present.length} present, ${d.absent.length} absent)` : ""),
+      `📖 Hifz: ${d.hifzToday.size}/${total} recorded`,
+      "",
+      "What do you want to record?",
+    ]),
+    keyboard: [
+      [
+        { text: "📋 Attendance", callback_data: `a:${dawraId}` },
+        { text: "📖 Hifz", callback_data: `h:${dawraId}` },
+      ],
+      [{ text: "⬅️ All dawrat", callback_data: "m" }],
+    ],
+  };
+}
+
+async function attendanceList(dawraId: string, header?: string): Promise<Screen> {
+  const d = await loadDawraDay(dawraId);
+  if (!d.dawra) return dawraMenu();
+  const mark = (s: DawraStudent) =>
+    d.attendance.get(s.id) === undefined ? "▫️" : d.attendance.get(s.id) ? "❌" : "✅";
+
+  const text = joinLines([
+    header,
+    `📋 <b>${esc(d.dawra.name)}</b> · ${shortDay(d.today)}`,
+    `${d.present.length} present · ${d.absent.length} absent · ${d.unmarked.length} not marked`,
+    "",
+    d.students.length
+      ? d.students.map((s) => `${mark(s)} ${esc(fullName(s))}`).join("\n")
+      : "No students in this dawra yet.",
+    "",
+    d.students.length ? "Tap a student to mark them:" : "",
+  ]);
+
+  const keyboard = studentButtons(d.students, (s) => `${mark(s)} ${fullName(s)}`, "t");
+  if (d.unmarked.length) {
+    const allLabel =
+      d.unmarked.length === d.students.length
+        ? "✅ All attended"
+        : `✅ Rest attended (${d.unmarked.length})`;
+    keyboard.push([{ text: allLabel, callback_data: `A:${dawraId}` }]);
+  }
+  keyboard.push([{ text: "⬅️ Back", callback_data: `d:${dawraId}` }]);
+  return { text, keyboard };
+}
+
+async function attendancePrompt(studentId: string): Promise<Screen | null> {
+  const student = await getDawraStudent(studentId);
+  if (!student) return null;
+  const today = todayISO();
+  const report = await getReport(studentId, today);
+  const current = !report ? "not marked yet" : report.absent ? "❌ absent" : "✅ attended";
+  return {
+    text: `📋 <b>${esc(fullName(student))}</b> · ${shortDay(today)}\nCurrently: ${current}`,
+    keyboard: [
+      [
+        { text: "✅ Attended", callback_data: `p:${studentId}` },
+        { text: "❌ Absent", callback_data: `b:${studentId}` },
+      ],
+      [{ text: "⬅️ Back", callback_data: `a:${student.dawraId}` }],
+    ],
+  };
+}
+
+async function markAttendance(studentId: string, absent: boolean): Promise<Screen | null> {
+  const student = await getDawraStudent(studentId);
+  if (!student) return null;
+  await setAttendance([studentId], todayISO(), absent);
+  return attendanceList(
+    student.dawraId,
+    `${absent ? "❌" : "✅"} ${esc(fullName(student))}: ${absent ? "absent" : "attended"}\n`,
+  );
+}
+
+async function markRestAttended(dawraId: string): Promise<Screen> {
+  const d = await loadDawraDay(dawraId);
+  await setAttendance(d.unmarked.map((s) => s.id), d.today, false);
+  return attendanceList(
+    dawraId,
+    d.unmarked.length ? `✅ Marked ${d.unmarked.length} as attended\n` : undefined,
+  );
+}
+
+async function hifzList(dawraId: string, header?: string): Promise<Screen> {
+  const d = await loadDawraDay(dawraId);
+  if (!d.dawra) return dawraMenu();
+  const mark = (s: DawraStudent) =>
+    d.hifzToday.has(s.id) ? "✅" : d.attendance.get(s.id) ? "❌" : "▫️";
+
+  const lines = d.students.map((s) => {
+    const last = d.latest.get(s.id);
+    const detail = last
+      ? `${esc(last.text)} <i>(${when(last.day, d.today)})</i>`
+      : "<i>nothing yet</i>";
+    const absent = d.attendance.get(s.id) ? " <i>· absent</i>" : "";
+    return `${mark(s)} <b>${esc(fullName(s))}</b> — ${detail}${absent}`;
+  });
+
+  const text = joinLines([
+    header,
+    `📖 <b>${esc(d.dawra.name)}</b> · ${shortDay(d.today)} · ${d.hifzToday.size}/${d.students.length} done today`,
+    "",
+    d.students.length ? lines.join("\n") : "No students in this dawra yet.",
+    "",
+    d.students.length ? "Tap a student to record today's tasmee3:" : "",
+  ]);
+
+  const keyboard = studentButtons(
+    d.students,
+    (s) => `${d.hifzToday.has(s.id) ? "✅ " : ""}${fullName(s)}`,
+    "s",
+  );
+  keyboard.push([{ text: "⬅️ Back", callback_data: `d:${dawraId}` }]);
   return { text, keyboard };
 }
 
@@ -243,7 +381,7 @@ function displayName(u: TgUser): string {
 function notApprovedText(teacher: HifzTeacher): string {
   return (
     `Assalamu alaikum ${esc(teacher.name)}!\n\n` +
-    "You're not approved to record hifz yet. Ask the QAF admin to approve " +
+    "You're not approved to use this bot yet. Ask the QAF admin to approve " +
     `<b>${esc(teacher.name)}</b> in the admin panel (Dawrat → Hifz bot).`
   );
 }
@@ -299,22 +437,33 @@ async function handleButton(
   const [kind, id] = [data.slice(0, 1), data.slice(2)];
   let screen: Screen | null = null;
 
-  if (kind === "d" && id) {
-    screen = await studentList(id);
-  } else if (kind === "s" && id) {
+  // Any button other than starting a hifz entry cancels a pending one.
+  if (kind !== "s" && teacher.pendingStudentId) {
+    await setPendingStudent(teacher.telegramId, null);
+  }
+
+  if (!id) {
+    // "m" or anything unknown falls through to the Dawra menu.
+  } else if (kind === "d") {
+    screen = await modeMenu(id);
+  } else if (kind === "a") {
+    screen = await attendanceList(id);
+  } else if (kind === "t") {
+    screen = await attendancePrompt(id);
+  } else if (kind === "p" || kind === "b") {
+    screen = await markAttendance(id, kind === "b");
+  } else if (kind === "A") {
+    screen = await markRestAttended(id);
+  } else if (kind === "h" || kind === "x") {
+    screen = await hifzList(id);
+  } else if (kind === "s") {
     screen = await entryPrompt(id);
     if (screen) await setPendingStudent(teacher.telegramId, id);
-  } else if (kind === "x" && id) {
-    await setPendingStudent(teacher.telegramId, null);
-    screen = await studentList(id);
-  } else if (kind === "u" && id) {
+  } else if (kind === "u") {
     screen = await undo(id);
   }
 
-  if (!screen) {
-    await setPendingStudent(teacher.telegramId, null);
-    screen = await dawraMenu();
-  }
+  screen ??= await dawraMenu();
   await edit(chatId, message.message_id, screen.text, screen.keyboard);
 }
 
@@ -337,7 +486,7 @@ async function saveEntry(
     text: text.slice(0, MAX_TEXT),
     recordedBy: teacher.name,
   });
-  const list = await studentList(
+  const list = await hifzList(
     student.dawraId,
     `✅ Saved for <b>${esc(fullName(student))}</b>: ${esc(record.text)}\n`,
   );
@@ -353,7 +502,7 @@ async function undo(recordId: string): Promise<Screen | null> {
   const student = await getDawraStudent(record.studentId);
   await deleteHifzRecord(recordId);
   if (!student) return null;
-  return studentList(
+  return hifzList(
     student.dawraId,
     `↩️ Removed for <b>${esc(fullName(student))}</b>: ${esc(record.text)}\n`,
   );

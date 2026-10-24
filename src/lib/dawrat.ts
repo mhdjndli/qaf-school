@@ -614,6 +614,47 @@ export async function upsertReport(
   await writeFileDb(db);
 }
 
+/**
+ * Marks students present or absent for a day without touching the written
+ * report (used by the Hifz bot's attendance screen).
+ */
+export async function setAttendance(
+  studentIds: string[],
+  day: string,
+  absent: boolean,
+): Promise<void> {
+  if (studentIds.length === 0) return;
+  if (USE_PG) {
+    await pgQuery(
+      `INSERT INTO dawra_reports (id, student_id, day, absent)
+       SELECT id, sid, $3, $4 FROM unnest($1::uuid[], $2::uuid[]) AS t(id, sid)
+       ON CONFLICT (student_id, day) DO UPDATE
+         SET absent = EXCLUDED.absent, updated_at = NOW()`,
+      [studentIds.map(() => randomUUID()), studentIds, day, absent],
+    );
+    return;
+  }
+  const db = await readFileDb();
+  const now = new Date().toISOString();
+  for (const studentId of studentIds) {
+    const r = db.reports.find((x) => x.studentId === studentId && x.day === day);
+    if (r) {
+      r.absent = absent;
+      r.updatedAt = now;
+    } else {
+      db.reports.push({
+        id: randomUUID(),
+        studentId,
+        day,
+        absent,
+        report: null,
+        updatedAt: now,
+      });
+    }
+  }
+  await writeFileDb(db);
+}
+
 /** Days in a Dawra that have any report or photo, newest first. */
 export async function listDawraDays(dawraId: string): Promise<string[]> {
   if (USE_PG) {
