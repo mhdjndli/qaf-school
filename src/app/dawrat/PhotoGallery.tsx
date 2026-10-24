@@ -3,9 +3,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-/** Grid of a day's pictures; tapping one opens a full-screen viewer. */
-export default function PhotoGallery({ ids }: { ids: string[] }) {
+export type MediaItem = { id: string; video: boolean };
+
+/** Grid of a day's photos and videos; tapping one opens a full-screen viewer. */
+export default function PhotoGallery({ items }: { items: MediaItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
+  const ids = items.map((m) => m.id);
   const src = (id: string) => `/api/dawrat/photos/${id}`;
 
   const step = useCallback(
@@ -32,19 +35,37 @@ export default function PhotoGallery({ ids }: { ids: string[] }) {
   return (
     <>
       <ul className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-        {ids.map((id, i) => (
-          <li key={id}>
+        {items.map((m, i) => (
+          <li key={m.id}>
             <button
               type="button"
               onClick={() => setOpen(i)}
-              className="block w-full aspect-square overflow-hidden rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-orange"
+              className="relative block w-full aspect-square overflow-hidden rounded-lg bg-cream focus:outline-none focus:ring-2 focus:ring-orange"
             >
-              <img
-                src={src(id)}
-                alt={`Picture ${i + 1}`}
-                loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition-transform"
-              />
+              {m.video ? (
+                <>
+                  {/* "#t=0.1" makes iOS Safari render the first frame. */}
+                  <video
+                    src={`${src(m.id)}#t=0.1`}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover pointer-events-none"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="w-10 h-10 rounded-full bg-black/55 text-white flex items-center justify-center text-lg pl-0.5">
+                      ▶
+                    </span>
+                  </span>
+                </>
+              ) : (
+                <img
+                  src={src(m.id)}
+                  alt={`Picture ${i + 1}`}
+                  loading="lazy"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                />
+              )}
             </button>
           </li>
         ))}
@@ -57,12 +78,24 @@ export default function PhotoGallery({ ids }: { ids: string[] }) {
           className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center"
           onClick={() => setOpen(null)}
         >
-          <img
-            src={src(ids[open])}
-            alt={`Picture ${open + 1} of ${ids.length}`}
-            className="max-w-[95vw] max-h-[85vh] object-contain rounded"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {items[open].video ? (
+            <video
+              key={ids[open]}
+              src={src(ids[open])}
+              controls
+              autoPlay
+              playsInline
+              className="max-w-[95vw] max-h-[85vh] rounded bg-black"
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <img
+              src={src(ids[open])}
+              alt={`Picture ${open + 1} of ${ids.length}`}
+              className="max-w-[95vw] max-h-[85vh] object-contain rounded"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
           <button
             type="button"
             aria-label="Close"

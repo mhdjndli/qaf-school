@@ -59,7 +59,21 @@ export type DawraPhoto = {
   createdAt: string;
 };
 
+/** A "General update" for everyone in a Dawra who wasn't absent that day. */
+export type DawraNote = {
+  id: string;
+  dawraId: string;
+  /** YYYY-MM-DD */
+  day: string;
+  text: string;
+  updatedAt: string;
+};
+
 export type ImageUpload = { data: Buffer; mimeType: string };
+
+export function isVideo(media: Pick<DawraPhoto, "mimeType">): boolean {
+  return media.mimeType.startsWith("video/");
+}
 
 // Unambiguous characters only (no 0/O, 1/I/L) so codes are easy to read out.
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -180,6 +194,7 @@ type DawratFile = {
   students: FileStudent[];
   reports: DawraReport[];
   photos: DawraPhoto[];
+  notes: DawraNote[];
 };
 
 const DAWRAT_FILE = path.join(DATA_DIR, "dawrat.json");
@@ -205,9 +220,10 @@ async function readFileDb(): Promise<DawratFile> {
       students: parsed.students ?? [],
       reports: parsed.reports ?? [],
       photos: parsed.photos ?? [],
+      notes: parsed.notes ?? [],
     };
   } catch {
-    return { dawrat: [], students: [], reports: [], photos: [] };
+    return { dawrat: [], students: [], reports: [], photos: [], notes: [] };
   }
 }
 
@@ -312,6 +328,7 @@ export async function deleteDawra(id: string): Promise<void> {
   db.students = db.students.filter((s) => s.dawraId !== id);
   db.reports = db.reports.filter((r) => !studentIds.has(r.studentId));
   db.photos = db.photos.filter((p) => p.dawraId !== id);
+  db.notes = db.notes.filter((n) => n.dawraId !== id);
   await writeFileDb(db);
   await Promise.all([
     ...photos.map((p) => fs.rm(photoPath(p.id), { force: true })),
@@ -664,6 +681,8 @@ export async function listDawraDays(dawraId: string): Promise<string[]> {
         WHERE s.dawra_id = $1
        UNION
        SELECT day FROM dawra_photos WHERE dawra_id = $1
+       UNION
+       SELECT day FROM dawra_notes WHERE dawra_id = $1
        ORDER BY day DESC`,
       [dawraId],
     );
@@ -676,8 +695,96 @@ export async function listDawraDays(dawraId: string): Promise<string[]> {
   const days = new Set<string>([
     ...db.reports.filter((r) => ids.has(r.studentId)).map((r) => r.day),
     ...db.photos.filter((p) => p.dawraId === dawraId).map((p) => p.day),
+    ...db.notes.filter((n) => n.dawraId === dawraId).map((n) => n.day),
   ]);
   return [...days].sort((a, b) => b.localeCompare(a));
+}
+
+// -------------------- General updates (notes) --------------------
+
+type NoteRow = {
+  id: string;
+  dawra_id: string;
+  day: string;
+  text: string;
+  updated_at: Date;
+};
+
+function rowToNote(r: NoteRow): DawraNote {
+  return {
+    id: r.id,
+    dawraId: r.dawra_id,
+    day: r.day,
+    text: r.text,
+    updatedAt: r.updated_at.toISOString(),
+  };
+}
+
+export async function getDawraNote(
+  dawraId: string,
+  day: string,
+): Promise<DawraNote | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<NoteRow>(
+      `SELECT * FROM dawra_notes WHERE dawra_id = $1 AND day = $2`,
+      [dawraId, day],
+    );
+    return rows[0] ? rowToNote(rows[0]) : null;
+  }
+  const db = await readFileDb();
+  return db.notes.find((n) => n.dawraId === dawraId && n.day === day) ?? null;
+}
+
+export async function listDawraNotes(dawraId: string): Promise<DawraNote[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<NoteRow>(
+      `SELECT * FROM dawra_notes WHERE dawra_id = $1 ORDER BY day DESC`,
+      [dawraId],
+    );
+    return rows.map(rowToNote);
+  }
+  const db = await readFileDb();
+  return db.notes
+    .filter((n) => n.dawraId === dawraId)
+    .sort((a, b) => b.day.localeCompare(a.day));
+}
+
+/** Sets the day's general update; empty text removes it. */
+export async function setDawraNote(
+  dawraId: string,
+  day: string,
+  text: string,
+): Promise<void> {
+  const clean = text.trim();
+  if (USE_PG) {
+    if (!clean) {
+      await pgQuery(
+        `DELETE FROM dawra_notes WHERE dawra_id = $1 AND day = $2`,
+        [dawraId, day],
+      );
+      return;
+    }
+    await pgQuery(
+      `INSERT INTO dawra_notes (id, dawra_id, day, text)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (dawra_id, day) DO UPDATE
+         SET text = EXCLUDED.text, updated_at = NOW()`,
+      [randomUUID(), dawraId, day, clean],
+    );
+    return;
+  }
+  const db = await readFileDb();
+  db.notes = db.notes.filter((n) => !(n.dawraId === dawraId && n.day === day));
+  if (clean) {
+    db.notes.push({
+      id: randomUUID(),
+      dawraId,
+      day,
+      text: clean,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+  await writeFileDb(db);
 }
 
 // -------------------- Photos --------------------
@@ -763,22 +870,44 @@ export async function listPhotosVisibleToStudent(
     );
 }
 
-export async function getDawraPhotoFile(
-  id: string,
-): Promise<{ photo: DawraPhoto; data: Buffer } | null> {
+export async function getDawraPhoto(id: string): Promise<DawraPhoto | null> {
   if (USE_PG) {
-    const { rows } = await pgQuery<PhotoRow & { data: Buffer }>(
-      `SELECT ${PHOTO_COLUMNS}, data FROM dawra_photos WHERE id = $1`,
+    const { rows } = await pgQuery<PhotoRow>(
+      `SELECT ${PHOTO_COLUMNS} FROM dawra_photos WHERE id = $1`,
       [id],
     );
-    if (!rows[0]) return null;
-    return { photo: rowToPhoto(rows[0]), data: rows[0].data };
+    return rows[0] ? rowToPhoto(rows[0]) : null;
   }
   const db = await readFileDb();
-  const photo = db.photos.find((p) => p.id === id);
-  if (!photo) return null;
+  return db.photos.find((p) => p.id === id) ?? null;
+}
+
+/**
+ * Reads `length` bytes of a photo/video starting at `start`, so videos can be
+ * streamed in ranges without loading the whole file each time.
+ */
+export async function readDawraPhotoBytes(
+  id: string,
+  start: number,
+  length: number,
+): Promise<Buffer | null> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<{ data: Buffer }>(
+      `SELECT substring(data FROM $2 FOR $3) AS data FROM dawra_photos
+        WHERE id = $1`,
+      [id, start + 1, length],
+    );
+    return rows[0]?.data ?? null;
+  }
   try {
-    return { photo, data: await fs.readFile(photoPath(id)) };
+    const handle = await fs.open(photoPath(id), "r");
+    try {
+      const buf = Buffer.alloc(length);
+      const { bytesRead } = await handle.read(buf, 0, length, start);
+      return buf.subarray(0, bytesRead);
+    } finally {
+      await handle.close();
+    }
   } catch {
     return null;
   }

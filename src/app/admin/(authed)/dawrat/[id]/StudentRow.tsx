@@ -29,7 +29,7 @@ export default function StudentRow({
 }) {
   const [editing, setEditing] = useState(false);
   const fullName = `${student.firstName} ${student.lastName}`.trim();
-  const invitation = `Assalamu alaikum! You can follow ${student.firstName}'s daily updates for ${dawraName} here:
+  const invitation = `Assalamu alaikum! You can follow ${student.firstName}'s weekly updates for ${dawraName} here:
 
 Link: https://qafschool.com/dawrat
 Username: ${student.firstName}

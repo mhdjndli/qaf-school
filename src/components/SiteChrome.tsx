@@ -11,9 +11,11 @@ export default function SiteChrome({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAdmin = pathname?.startsWith("/admin");
+  // The admin panel and the parent portal are app-like: no site chrome.
+  const bare =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/dawrat");
 
-  if (isAdmin) {
+  if (bare) {
     return <main className="flex-1">{children}</main>;
   }
 

@@ -2,10 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getDawra,
+  getDawraNote,
+  isVideo,
   listDawraDays,
   listDawraStudents,
   listPhotosForDay,
   listReportsForDay,
+  type DawraPhoto,
 } from "@/lib/dawrat";
 import { listHifzForDawra } from "@/lib/hifz";
 import {
@@ -16,7 +19,11 @@ import {
   todayISO,
   weekdaysLabel,
 } from "@/lib/format";
-import { deleteDawraAction, updateDawraAction } from "../actions";
+import {
+  deleteDawraAction,
+  saveDawraNoteAction,
+  updateDawraAction,
+} from "../actions";
 import ConfirmButton from "./ConfirmButton";
 import DayReportCard from "./DayReportCard";
 import HifzCard from "./HifzCard";
@@ -56,13 +63,16 @@ export default async function DawraPage({
 
   const dawra = await getDawra(id);
   if (!dawra) notFound();
-  const [students, reports, photos, days, hifz] = await Promise.all([
+  const [students, reports, photos, days, hifz, note] = await Promise.all([
     listDawraStudents(id),
     listReportsForDay(id, day),
     listPhotosForDay(id, day),
     listDawraDays(id),
     listHifzForDawra(id),
+    getDawraNote(id, day),
   ]);
+  const thumbs = (list: DawraPhoto[]) =>
+    list.map((p) => ({ id: p.id, video: isVideo(p) }));
 
   const reportBy = new Map(reports.map((r) => [r.studentId, r]));
   const sharedPhotos = photos.filter((p) => p.studentId === null);
@@ -233,9 +243,43 @@ export default async function DawraPage({
             </p>
           ) : (
             <>
+              <form
+                key={`note-${day}`}
+                action={saveDawraNoteAction}
+                className="border border-border rounded-lg p-4 mb-5"
+              >
+                <input type="hidden" name="dawraId" value={dawra.id} />
+                <input type="hidden" name="day" value={day} />
+                <label className="block">
+                  <span className="block text-sm font-semibold text-text mb-1">
+                    General update
+                  </span>
+                  <span className="block text-xs text-text-light mb-3">
+                    A note for the parents of every student not marked absent
+                    this day. Leave empty and save to remove it.
+                  </span>
+                  <textarea
+                    name="text"
+                    rows={3}
+                    maxLength={2000}
+                    defaultValue={note?.text ?? ""}
+                    placeholder="e.g. Today we revised Juz' Amma and talked about kindness to parents."
+                    className="w-full px-3 py-2 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20 transition-all"
+                  />
+                </label>
+                <div className="mt-2 flex justify-end">
+                  <button
+                    type="submit"
+                    className="text-sm bg-orange text-white px-4 py-2 rounded-md font-semibold hover:bg-orange-dark transition-colors"
+                  >
+                    Save update
+                  </button>
+                </div>
+              </form>
+
               <div className="border border-dashed border-orange/40 rounded-lg p-4 mb-5 bg-orange/[0.03]">
                 <div className="text-sm font-semibold text-text mb-1">
-                  Pictures for everyone today
+                  Media for everyone this day
                 </div>
                 <p className="text-xs text-text-light mb-3">
                   Shown on every student&apos;s report for this day, except
@@ -243,7 +287,7 @@ export default async function DawraPage({
                 </p>
                 {sharedPhotos.length ? (
                   <div className="mb-3">
-                    <PhotoThumbs ids={sharedPhotos.map((p) => p.id)} />
+                    <PhotoThumbs items={thumbs(sharedPhotos)} />
                   </div>
                 ) : null}
                 <SharedPhotoUploader dawraId={dawra.id} day={day} />
@@ -260,7 +304,7 @@ export default async function DawraPage({
                       day={day}
                       student={s}
                       report={report}
-                      photos={<PhotoThumbs ids={own.map((p) => p.id)} />}
+                      photos={<PhotoThumbs items={thumbs(own)} />}
                     />
                   );
                 })}

@@ -19,6 +19,7 @@ import {
   deleteDawraPhoto,
   deleteDawraStudent,
   getDawraStudent,
+  setDawraNote,
   regenerateAccessCode,
   updateDawra,
   updateDawraStudent,
@@ -176,6 +177,16 @@ export async function uploadDawraPhotoAction(
   await addDawraPhoto({ dawraId, studentId, day }, image);
   revalidateDawrat();
   return {};
+}
+
+/** Saves the day's general update; empty text removes it. */
+export async function saveDawraNoteAction(formData: FormData) {
+  await requireAdmin();
+  const dawraId = str(formData, "dawraId");
+  const day = optionalDay(formData, "day");
+  if (!dawraId || !day) return;
+  await setDawraNote(dawraId, day, str(formData, "text").slice(0, 2000));
+  revalidateDawrat();
 }
 
 export async function deleteDawraPhotoAction(formData: FormData) {

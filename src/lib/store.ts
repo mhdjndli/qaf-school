@@ -369,6 +369,23 @@ function ensurePg(): Promise<void> {
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
       `);
+      // What the teacher's next message is for (hifz text, media, or a
+      // general update), as JSON; replaces the older pending_student_id.
+      await pool.query(
+        `ALTER TABLE hifz_teachers ADD COLUMN IF NOT EXISTS pending JSONB`,
+      );
+      // A "General update": one note per Dawra per session day, shown to
+      // parents of every student not marked absent that day.
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS dawra_notes (
+          id UUID PRIMARY KEY,
+          dawra_id UUID NOT NULL REFERENCES dawrat(id) ON DELETE CASCADE,
+          day TEXT NOT NULL,
+          text TEXT NOT NULL,
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          UNIQUE (dawra_id, day)
+        );
+      `);
       const { rows } = await pool.query<{ count: string }>(
         `SELECT COUNT(*)::text AS count FROM templates`,
       );

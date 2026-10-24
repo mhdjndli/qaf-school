@@ -8,8 +8,8 @@ import { DATA_DIR, USE_PG, pgQuery } from "./store";
 // Each Dawra student gets one record per tasmee3 ("Al-Insan 1-4"), usually
 // sent by a teacher through the Hifz Telegram bot. Teachers are Telegram
 // users who messaged the bot and were approved in the admin panel; while a
-// teacher is mid-entry, `pendingStudentId` remembers which child the next
-// text message is for.
+// teacher is mid-entry, `pending` remembers what their next message is for
+// (a hifz entry, media, or a general update) and for which session day.
 
 export type HifzRecord = {
   id: string;
@@ -26,9 +26,29 @@ export type HifzTeacher = {
   name: string;
   username: string | null;
   approved: boolean;
-  pendingStudentId: string | null;
+  pending: HifzPending | null;
   createdAt: string;
 };
+
+export type HifzPending =
+  /** Next text is the tasmee3 for this student. */
+  | { action: "hifz"; studentId: string; day: string }
+  /** Next text is the Dawra's general update for the day. */
+  | { action: "note"; dawraId: string; day: string }
+  /**
+   * Photos/videos that follow go to `studentId`, or to everyone in the Dawra
+   * when null. `statusMessageId` is the bot's running "N saved" message for
+   * the album (`group`) currently being received.
+   */
+  | {
+      action: "media";
+      dawraId: string;
+      studentId: string | null;
+      day: string;
+      saved: number;
+      statusMessageId: number | null;
+      group: string | null;
+    };
 
 // -------------------- Postgres rows --------------------
 
@@ -57,7 +77,7 @@ type TeacherRow = {
   name: string;
   username: string | null;
   approved: boolean;
-  pending_student_id: string | null;
+  pending: HifzPending | null;
   created_at: Date;
 };
 
@@ -67,7 +87,7 @@ function rowToTeacher(r: TeacherRow): HifzTeacher {
     name: r.name,
     username: r.username,
     approved: r.approved,
-    pendingStudentId: r.pending_student_id,
+    pending: r.pending,
     createdAt: r.created_at.toISOString(),
   };
 }
@@ -179,17 +199,6 @@ export async function listHifzForDawra(dawraId: string): Promise<HifzRecord[]> {
   return db.records.filter((r) => ids.has(r.studentId)).sort(newestFirst);
 }
 
-/** The most recent record per student in a Dawra (students with none are absent). */
-export async function latestHifzByStudent(
-  dawraId: string,
-): Promise<Map<string, HifzRecord>> {
-  const latest = new Map<string, HifzRecord>();
-  for (const r of await listHifzForDawra(dawraId)) {
-    if (!latest.has(r.studentId)) latest.set(r.studentId, r);
-  }
-  return latest;
-}
-
 // -------------------- Teachers (Telegram users) --------------------
 
 export async function listHifzTeachers(): Promise<HifzTeacher[]> {
@@ -236,7 +245,7 @@ export async function touchHifzTeacher(input: {
     teacher = {
       ...input,
       approved: false,
-      pendingStudentId: null,
+      pending: null,
       createdAt: new Date().toISOString(),
     };
     db.teachers.push(teacher);
@@ -251,7 +260,7 @@ export async function setHifzTeacherApproved(
 ): Promise<void> {
   if (USE_PG) {
     await pgQuery(
-      `UPDATE hifz_teachers SET approved = $2, pending_student_id = NULL
+      `UPDATE hifz_teachers SET approved = $2, pending = NULL
         WHERE telegram_id = $1`,
       [telegramId, approved],
     );
@@ -261,7 +270,7 @@ export async function setHifzTeacherApproved(
   const t = db.teachers.find((x) => x.telegramId === telegramId);
   if (!t) return;
   t.approved = approved;
-  t.pendingStudentId = null;
+  t.pending = null;
   await writeFileDb(db);
 }
 
@@ -275,21 +284,21 @@ export async function deleteHifzTeacher(telegramId: string): Promise<void> {
   await writeFileDb(db);
 }
 
-/** Which student the teacher's next text message will be recorded for. */
-export async function setPendingStudent(
+/** What the teacher's next message is for (null clears it). */
+export async function setPending(
   telegramId: string,
-  studentId: string | null,
+  pending: HifzPending | null,
 ): Promise<void> {
   if (USE_PG) {
     await pgQuery(
-      `UPDATE hifz_teachers SET pending_student_id = $2 WHERE telegram_id = $1`,
-      [telegramId, studentId],
+      `UPDATE hifz_teachers SET pending = $2 WHERE telegram_id = $1`,
+      [telegramId, pending ? JSON.stringify(pending) : null],
     );
     return;
   }
   const db = await readFileDb();
   const t = db.teachers.find((x) => x.telegramId === telegramId);
   if (!t) return;
-  t.pendingStudentId = studentId;
+  t.pending = pending;
   await writeFileDb(db);
 }

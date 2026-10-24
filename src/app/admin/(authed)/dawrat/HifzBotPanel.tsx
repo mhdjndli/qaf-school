@@ -66,6 +66,12 @@ export default async function HifzBotPanel() {
             {status.lastError ? (
               <p className="text-xs text-red">Last error: {status.lastError}</p>
             ) : null}
+            {connected && status.outdated ? (
+              <p className="text-sm text-orange-dark font-medium">
+                The bot has new features. Click Reconnect once to apply its
+                latest settings.
+              </p>
+            ) : null}
             <ConnectBotButton label={connected ? "Reconnect" : "Connect bot"} />
           </div>
         )}
