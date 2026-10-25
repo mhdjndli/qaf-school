@@ -9,7 +9,6 @@ import {
   listReportsForStudent,
   type DawraStudent,
 } from "@/lib/dawrat";
-import { longDay, shortDay } from "@/lib/format";
 import { listHifzForStudent } from "@/lib/hifz";
 import { parentLoginAction, parentLogoutAction } from "./actions";
 import PhotoGallery, { type MediaItem } from "./PhotoGallery";
@@ -142,7 +141,6 @@ async function Updates({ student }: { student: DawraStudent }) {
   for (const h of [...hifz].reverse()) {
     hifzBy.set(h.day, [...(hifzBy.get(h.day) ?? []), h.text]);
   }
-  const latestHifz = hifz[0];
   const days = [
     ...new Set([
       ...reportBy.keys(),
@@ -194,28 +192,8 @@ async function Updates({ student }: { student: DawraStudent }) {
             </div>
           </header>
 
-          {latestHifz ? (
-            <div className="bg-white border border-border rounded-xl px-5 py-4 mb-5 flex items-center gap-4">
-              <span className="text-2xl" aria-hidden>
-                📖
-              </span>
-              <div className="min-w-0">
-                <div className="text-xs font-semibold uppercase tracking-wide text-text-light">
-                  Latest Quran memorization
-                </div>
-                <div className="font-semibold text-text text-lg">
-                  {latestHifz.text}
-                </div>
-                <div className="text-xs text-text-light">
-                  {shortDay(latestHifz.day)} · {hifz.length} session
-                  {hifz.length === 1 ? "" : "s"} recorded
-                </div>
-              </div>
-            </div>
-          ) : null}
-
           {days.length === 0 ? (
-            <div className="bg-white border border-border rounded-xl p-8 text-center text-text-light">
+            <div className="bg-white border border-border rounded-2xl p-8 text-center text-text-light">
               No updates yet. Check back after the first class, in sha&apos;
               Allah.
             </div>
@@ -223,72 +201,94 @@ async function Updates({ student }: { student: DawraStudent }) {
             <ol className="space-y-5">
               {days.map((day) => {
                 const report = reportBy.get(day);
-                const dayPhotos = photosBy.get(day) ?? [];
+                const absent = Boolean(report?.absent);
+                const media = photosBy.get(day) ?? [];
                 const dayHifz = hifzBy.get(day) ?? [];
                 const note = noteBy.get(day);
-                const hifzLine = dayHifz.length ? (
-                  <p className="text-text">
-                    <span className="font-semibold">Hifz:</span>{" "}
-                    {dayHifz.join(", ")}
-                  </p>
-                ) : null;
+                const personal = report?.report ?? null;
+                const empty =
+                  !dayHifz.length && !personal && !note && !media.length;
+                const { weekday, date } = dayParts(day);
                 return (
                   <li
                     key={day}
-                    className="bg-white border border-border rounded-xl shadow-sm overflow-hidden"
+                    className="bg-white border border-border rounded-2xl shadow-sm overflow-hidden"
                   >
-                    <div className="px-5 py-3 border-b border-border flex items-center justify-between gap-3 bg-warm-white">
-                      <h2 className="font-semibold text-text">{longDay(day)}</h2>
-                      {report?.absent ? (
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red/10 text-red">
+                    <div className="px-5 py-4 flex items-center justify-between gap-3 bg-warm-white border-b border-border">
+                      <div>
+                        <div className="text-xs font-semibold uppercase tracking-wide text-orange-dark">
+                          {weekday}
+                        </div>
+                        <h2 className="font-heading text-xl font-bold text-text">
+                          {date}
+                        </h2>
+                      </div>
+                      {absent ? (
+                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red/10 text-red">
                           Absent
                         </span>
                       ) : (
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-green/10 text-green">
+                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green/10 text-green">
                           Present
                         </span>
                       )}
                     </div>
-                    <div className="px-5 py-4">
-                      {report?.absent ? (
-                        <div className="space-y-2">
-                          <p className="text-text-light">
-                            Your child was absent.
-                          </p>
-                          {hifzLine}
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {note ? (
-                            <div className="rounded-lg bg-orange/[0.07] border border-orange/20 px-4 py-3">
-                              <div className="text-xs font-semibold uppercase tracking-wide text-orange-dark mb-1">
-                                General update
-                              </div>
-                              <p className="text-text whitespace-pre-wrap leading-relaxed">
-                                {note}
-                              </p>
+
+                    {absent ? (
+                      <p className="px-5 py-4 text-text-light">
+                        {student.firstName} was absent this day.
+                      </p>
+                    ) : empty ? (
+                      <p className="px-5 py-4 text-text-light italic">
+                        No details for this day yet.
+                      </p>
+                    ) : (
+                      <div className="divide-y divide-border">
+                        {dayHifz.length ? (
+                          <DaySection icon="📖" label="Quran memorization">
+                            <div className="flex flex-wrap gap-2">
+                              {dayHifz.map((text, i) => (
+                                <span
+                                  key={i}
+                                  dir="auto"
+                                  className="inline-block text-lg font-semibold text-orange-dark bg-orange/10 rounded-lg px-3 py-1"
+                                >
+                                  {text}
+                                </span>
+                              ))}
                             </div>
-                          ) : null}
-                          {hifzLine}
-                          {report?.report ? (
-                            <p className="text-text whitespace-pre-wrap leading-relaxed">
-                              {report.report}
+                          </DaySection>
+                        ) : null}
+                        {personal ? (
+                          <DaySection icon="💬" label={`About ${student.firstName}`}>
+                            <p
+                              dir="auto"
+                              className="text-text whitespace-pre-wrap leading-relaxed text-start"
+                            >
+                              {personal}
                             </p>
-                          ) : null}
-                          {dayPhotos.length ? (
-                            <PhotoGallery items={dayPhotos} />
-                          ) : null}
-                          {!report?.report &&
-                          !dayPhotos.length &&
-                          !dayHifz.length &&
-                          !note ? (
-                            <p className="text-text-light italic">
-                              No written report for this day.
+                          </DaySection>
+                        ) : null}
+                        {note ? (
+                          <DaySection icon="📝" label="General update">
+                            <p
+                              dir="auto"
+                              className="text-text whitespace-pre-wrap leading-relaxed text-start"
+                            >
+                              {note}
                             </p>
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
+                          </DaySection>
+                        ) : null}
+                        {media.length ? (
+                          <DaySection
+                            icon="📸"
+                            label={`Photos & videos · ${media.length}`}
+                          >
+                            <PhotoGallery items={media} />
+                          </DaySection>
+                        ) : null}
+                      </div>
+                    )}
                   </li>
                 );
               })}
@@ -298,4 +298,41 @@ async function Updates({ student }: { student: DawraStudent }) {
       </section>
     </div>
   );
+}
+
+/** One labelled part of a day's card (hifz, notes, media). */
+function DaySection({
+  icon,
+  label,
+  children,
+}: {
+  icon: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="px-5 py-4">
+      <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-text-light mb-2">
+        <span aria-hidden className="text-base leading-none">
+          {icon}
+        </span>
+        {label}
+      </h3>
+      <div className="space-y-1">{children}</div>
+    </section>
+  );
+}
+
+/** "Tuesday" and "October 20, 2026" for a YYYY-MM-DD day. */
+function dayParts(value: string): { weekday: string; date: string } {
+  const [y, m, d] = value.split("-").map(Number);
+  const dt = new Date(y, m - 1, d);
+  return {
+    weekday: dt.toLocaleDateString("en-CA", { weekday: "long" }),
+    date: dt.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }),
+  };
 }
