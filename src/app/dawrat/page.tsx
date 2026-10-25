@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import { getParentStudent } from "@/lib/dawrat-auth";
 import {
   getDawra,
   isVideo,
   listDawraNotes,
+  listFamilyEnrolments,
   listPhotosVisibleToStudent,
   listReportsForStudent,
   type DawraStudent,
@@ -28,14 +30,24 @@ export const viewport: Viewport = { themeColor: "#FFF8F0" };
 export default async function DawratParentPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; h?: string }>;
 }) {
-  const student = await getParentStudent();
-  if (!student) {
-    const { error } = await searchParams;
-    return <LoginForm error={error} />;
-  }
-  return <Updates student={student} />;
+  const { error, h } = await searchParams;
+  const signedIn = await getParentStudent();
+  if (!signedIn) return <LoginForm error={error} />;
+
+  // A child can be in several Dawrat (one row each); `h` picks which one.
+  const enrolments = await listFamilyEnrolments(signedIn.familyId);
+  const student =
+    enrolments.find((e) => e.dawraId === h) ??
+    enrolments.find((e) => e.id === signedIn.id) ??
+    signedIn;
+  return (
+    <Updates
+      student={student}
+      halaqat={enrolments.map((e) => ({ dawraId: e.dawraId, name: e.dawraName }))}
+    />
+  );
 }
 
 function LoginForm({ error }: { error?: string }) {
@@ -115,7 +127,14 @@ function LoginForm({ error }: { error?: string }) {
   );
 }
 
-async function Updates({ student }: { student: DawraStudent }) {
+async function Updates({
+  student,
+  halaqat,
+}: {
+  student: DawraStudent;
+  /** Every Dawra the child is in; tabs are shown when there's more than one. */
+  halaqat: { dawraId: string; name: string }[];
+}) {
   const [dawra, reports, photos, hifz, notes] = await Promise.all([
     getDawra(student.dawraId),
     listReportsForStudent(student.id),
@@ -186,11 +205,36 @@ async function Updates({ student }: { student: DawraStudent }) {
               <h1 className="font-heading text-2xl md:text-3xl font-bold text-text">
                 {student.firstName}&apos;s weekly updates
               </h1>
-              {dawra ? (
+              {dawra && halaqat.length < 2 ? (
                 <p className="text-text-light text-sm mt-0.5">{dawra.name}</p>
               ) : null}
             </div>
           </header>
+
+          {halaqat.length > 1 ? (
+            <nav
+              aria-label="Halaqat"
+              className="flex gap-2 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 mb-5 pb-1"
+            >
+              {halaqat.map((h) => {
+                const active = h.dawraId === student.dawraId;
+                return (
+                  <Link
+                    key={h.dawraId}
+                    href={`/dawrat?h=${h.dawraId}`}
+                    aria-current={active ? "page" : undefined}
+                    className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                      active
+                        ? "bg-orange text-white shadow-sm"
+                        : "bg-white border border-border text-text hover:border-orange"
+                    }`}
+                  >
+                    {h.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          ) : null}
 
           {days.length === 0 ? (
             <div className="bg-white border border-border rounded-2xl p-8 text-center text-text-light">

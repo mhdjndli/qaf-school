@@ -13,6 +13,7 @@ import {
 import { connectHifzWebhook } from "@/lib/hifz-bot";
 import {
   addDawra,
+  addExistingStudentToDawra,
   addDawraPhoto,
   addDawraStudent,
   deleteDawra,
@@ -117,6 +118,16 @@ export async function saveDawraStudentAction(
   else await addDawraStudent(dawraId, input, photo);
   revalidateDawrat();
   return {};
+}
+
+/** Enrols a child from another Dawra here, keeping their parent login. */
+export async function addExistingStudentAction(formData: FormData) {
+  await requireAdmin();
+  const dawraId = str(formData, "dawraId");
+  const studentId = str(formData, "studentId");
+  if (!dawraId || !studentId) return;
+  await addExistingStudentToDawra(studentId, dawraId);
+  revalidateDawrat();
 }
 
 export async function regenerateCodeAction(formData: FormData) {

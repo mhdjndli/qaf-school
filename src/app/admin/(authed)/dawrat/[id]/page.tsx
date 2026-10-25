@@ -4,7 +4,9 @@ import {
   getDawra,
   getDawraNote,
   isVideo,
+  listAllDawraStudents,
   listDawraDays,
+  listDawrat,
   listDawraStudents,
   listPhotosForDay,
   listReportsForDay,
@@ -20,6 +22,7 @@ import {
   weekdaysLabel,
 } from "@/lib/format";
 import {
+  addExistingStudentAction,
   deleteDawraAction,
   saveDawraNoteAction,
   updateDawraAction,
@@ -63,14 +66,32 @@ export default async function DawraPage({
 
   const dawra = await getDawra(id);
   if (!dawra) notFound();
-  const [students, reports, photos, days, hifz, note] = await Promise.all([
-    listDawraStudents(id),
-    listReportsForDay(id, day),
-    listPhotosForDay(id, day),
-    listDawraDays(id),
-    listHifzForDawra(id),
-    getDawraNote(id, day),
-  ]);
+  const [students, reports, photos, days, hifz, note, everyone, dawrat] =
+    await Promise.all([
+      listDawraStudents(id),
+      listReportsForDay(id, day),
+      listPhotosForDay(id, day),
+      listDawraDays(id),
+      listHifzForDawra(id),
+      getDawraNote(id, day),
+      listAllDawraStudents(),
+      listDawrat(),
+    ]);
+  // Children in other Dawrat: "Also in …" labels, and the "add existing" list.
+  const dawraName = new Map(dawrat.map((d) => [d.id, d.name]));
+  const halaqatOf = new Map<string, string[]>();
+  for (const s of everyone) {
+    const names = halaqatOf.get(s.familyId) ?? [];
+    names.push(dawraName.get(s.dawraId) ?? "");
+    halaqatOf.set(s.familyId, names);
+  }
+  const familiesHere = new Set(students.map((s) => s.familyId));
+  const seen = new Set<string>();
+  const addable = everyone.filter((s) => {
+    if (familiesHere.has(s.familyId) || seen.has(s.familyId)) return false;
+    seen.add(s.familyId);
+    return true;
+  });
   const thumbs = (list: DawraPhoto[]) =>
     list.map((p) => ({ id: p.id, video: isVideo(p) }));
 
@@ -151,12 +172,54 @@ export default async function DawraPage({
                 student={s}
                 age={ageFrom(s.dob)}
                 dobLabel={plainDate(s.dob)}
+                alsoIn={(halaqatOf.get(s.familyId) ?? []).filter(
+                  (n) => n !== dawra.name,
+                )}
               />
             ))}
           </ul>
         ) : null}
         <h3 className="text-sm font-semibold text-text mb-2">Add a student</h3>
         <StudentForm dawraId={dawra.id} />
+        {addable.length > 0 ? (
+          <form
+            action={addExistingStudentAction}
+            className="mt-5 pt-5 border-t border-border"
+          >
+            <input type="hidden" name="dawraId" value={dawra.id} />
+            <h3 className="text-sm font-semibold text-text mb-1">
+              Or add a student from another halaqa
+            </h3>
+            <p className="text-xs text-text-light mb-2">
+              Their parents keep the same login and will see a tab for each
+              halaqa.
+            </p>
+            <div className="flex gap-2 flex-wrap">
+              <select
+                name="studentId"
+                required
+                defaultValue=""
+                className="flex-1 min-w-[14rem] px-3 py-2 text-sm border border-border rounded-md bg-white focus:outline-none focus:border-orange focus:ring-2 focus:ring-orange/20"
+              >
+                <option value="" disabled>
+                  Choose a student…
+                </option>
+                {addable.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {`${s.firstName} ${s.lastName}`.trim()} —{" "}
+                    {(halaqatOf.get(s.familyId) ?? []).join(", ")}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="text-sm bg-orange text-white px-4 py-2 rounded-md font-semibold hover:bg-orange-dark transition-colors"
+              >
+                Add to {dawra.name}
+              </button>
+            </div>
+          </form>
+        ) : null}
       </Card>
 
       {students.length > 0 ? (

@@ -21,9 +21,15 @@ export type DawraInput = Pick<Dawra, "name" | "weekdays">;
 
 export type DawraWithCount = Dawra & { studentCount: number };
 
+/**
+ * A child's enrolment in one Dawra. A child in several Dawrat has one row per
+ * Dawra, linked by `familyId`, each with its own reports, hifz and photos.
+ */
 export type DawraStudent = {
   id: string;
   dawraId: string;
+  /** Shared by every row of the same child (equals `id` for the first one). */
+  familyId: string;
   firstName: string;
   lastName: string;
   /** YYYY-MM-DD */
@@ -117,6 +123,7 @@ function rowToDawra(r: DawraRow): Dawra {
 type StudentRow = {
   id: string;
   dawra_id: string;
+  family_id: string | null;
   first_name: string;
   last_name: string;
   dob: string | null;
@@ -125,13 +132,14 @@ type StudentRow = {
   created_at: Date;
 };
 
-const STUDENT_COLUMNS = `id, dawra_id, first_name, last_name, dob, access_code,
-  (photo IS NOT NULL) AS has_photo, created_at`;
+const STUDENT_COLUMNS = `id, dawra_id, family_id, first_name, last_name, dob,
+  access_code, (photo IS NOT NULL) AS has_photo, created_at`;
 
 function rowToStudent(r: StudentRow): DawraStudent {
   return {
     id: r.id,
     dawraId: r.dawra_id,
+    familyId: r.family_id ?? r.id,
     firstName: r.first_name,
     lastName: r.last_name,
     dob: r.dob,
@@ -217,7 +225,10 @@ async function readFileDb(): Promise<DawratFile> {
         ...d,
         weekdays: d.weekdays ?? [],
       })),
-      students: parsed.students ?? [],
+      students: (parsed.students ?? []).map((s: FileStudent) => ({
+        ...s,
+        familyId: s.familyId ?? s.id,
+      })),
       reports: parsed.reports ?? [],
       photos: parsed.photos ?? [],
       notes: parsed.notes ?? [],
@@ -403,9 +414,9 @@ export async function addDawraStudent(
       try {
         const { rows } = await pgQuery<StudentRow>(
           `INSERT INTO dawra_students
-             (id, dawra_id, first_name, last_name, dob, access_code,
-              photo_mime, photo)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+             (id, dawra_id, family_id, first_name, last_name, dob,
+              access_code, photo_mime, photo)
+           VALUES ($1,$2,$1,$3,$4,$5,$6,$7,$8)
            RETURNING ${STUDENT_COLUMNS}`,
           [
             id,
@@ -436,6 +447,7 @@ export async function addDawraStudent(
     ...input,
     id,
     dawraId,
+    familyId: id,
     accessCode: code,
     hasPhoto: Boolean(photo),
     photoMime: photo?.mimeType ?? null,
@@ -446,42 +458,142 @@ export async function addDawraStudent(
   return stripFileStudent(student);
 }
 
-/** Updates name/DOB; replaces the photo only when a new one is given. */
+/**
+ * Updates name/DOB (and the photo, when a new one is given) for the child in
+ * every Dawra they're in.
+ */
 export async function updateDawraStudent(
   id: string,
   input: DawraStudentInput,
   photo: ImageUpload | null,
 ): Promise<void> {
+  const sameChild = `family_id = (SELECT family_id FROM dawra_students WHERE id = $1)`;
   if (USE_PG) {
     if (photo) {
       await pgQuery(
         `UPDATE dawra_students
             SET first_name = $2, last_name = $3, dob = $4,
                 photo_mime = $5, photo = $6
-          WHERE id = $1`,
+          WHERE ${sameChild}`,
         [id, input.firstName, input.lastName, input.dob, photo.mimeType, photo.data],
       );
     } else {
       await pgQuery(
         `UPDATE dawra_students
             SET first_name = $2, last_name = $3, dob = $4
-          WHERE id = $1`,
+          WHERE ${sameChild}`,
         [id, input.firstName, input.lastName, input.dob],
       );
     }
     return;
   }
   const db = await readFileDb();
-  const idx = db.students.findIndex((s) => s.id === id);
-  if (idx === -1) return;
-  db.students[idx] = { ...db.students[idx], ...input };
-  if (photo) {
-    await fs.mkdir(DAWRAT_UPLOADS, { recursive: true });
-    await fs.writeFile(avatarPath(id), photo.data);
-    db.students[idx].hasPhoto = true;
-    db.students[idx].photoMime = photo.mimeType;
+  const familyId = db.students.find((s) => s.id === id)?.familyId;
+  if (!familyId) return;
+  for (const s of db.students) {
+    if (s.familyId !== familyId) continue;
+    Object.assign(s, input);
+    if (photo) {
+      await fs.mkdir(DAWRAT_UPLOADS, { recursive: true });
+      await fs.writeFile(avatarPath(s.id), photo.data);
+      s.hasPhoto = true;
+      s.photoMime = photo.mimeType;
+    }
   }
   await writeFileDb(db);
+}
+
+/**
+ * Enrols an existing child in another Dawra: a new row with the same name,
+ * DOB and photo, linked to the child's other rows. Returns null if the child
+ * is already in that Dawra.
+ */
+export async function addExistingStudentToDawra(
+  sourceId: string,
+  dawraId: string,
+): Promise<DawraStudent | null> {
+  const source = await getDawraStudent(sourceId);
+  if (!source) return null;
+  const family = await listFamilyEnrolments(source.familyId);
+  if (family.some((s) => s.dawraId === dawraId)) return null;
+  const id = randomUUID();
+  if (USE_PG) {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        const { rows } = await pgQuery<StudentRow>(
+          `INSERT INTO dawra_students
+             (id, dawra_id, family_id, first_name, last_name, dob,
+              access_code, photo_mime, photo)
+           SELECT $1, $2, family_id, first_name, last_name, dob, $3,
+                  photo_mime, photo
+             FROM dawra_students WHERE id = $4
+           RETURNING ${STUDENT_COLUMNS}`,
+          [id, dawraId, generateAccessCode(), sourceId],
+        );
+        return rows[0] ? rowToStudent(rows[0]) : null;
+      } catch (err) {
+        if (!isUniqueViolation(err) || attempt >= 5) throw err;
+      }
+    }
+  }
+  const db = await readFileDb();
+  const src = db.students.find((s) => s.id === sourceId)!;
+  const taken = new Set(db.students.map((s) => s.accessCode));
+  let code = generateAccessCode();
+  while (taken.has(code)) code = generateAccessCode();
+  if (src.hasPhoto) {
+    await fs.mkdir(DAWRAT_UPLOADS, { recursive: true });
+    await fs.copyFile(avatarPath(src.id), avatarPath(id)).catch(() => {});
+  }
+  const student: FileStudent = {
+    ...src,
+    id,
+    dawraId,
+    accessCode: code,
+    createdAt: new Date().toISOString(),
+  };
+  db.students.push(student);
+  await writeFileDb(db);
+  return stripFileStudent(student);
+}
+
+/** Every Dawra row of one child, with the Dawra's name, oldest first. */
+export async function listFamilyEnrolments(
+  familyId: string,
+): Promise<(DawraStudent & { dawraName: string })[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentRow & { dawra_name: string }>(
+      `SELECT s.id, s.dawra_id, s.family_id, s.first_name, s.last_name, s.dob,
+              s.access_code, (s.photo IS NOT NULL) AS has_photo, s.created_at,
+              d.name AS dawra_name
+         FROM dawra_students s JOIN dawrat d ON d.id = s.dawra_id
+        WHERE s.family_id = $1
+        ORDER BY s.created_at`,
+      [familyId],
+    );
+    return rows.map((r) => ({ ...rowToStudent(r), dawraName: r.dawra_name }));
+  }
+  const db = await readFileDb();
+  return db.students
+    .filter((s) => s.familyId === familyId)
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    .map((s) => ({
+      ...stripFileStudent(s),
+      dawraName: db.dawrat.find((d) => d.id === s.dawraId)?.name ?? "",
+    }));
+}
+
+/** Every student row in every Dawra (for "add an existing student"). */
+export async function listAllDawraStudents(): Promise<DawraStudent[]> {
+  if (USE_PG) {
+    const { rows } = await pgQuery<StudentRow>(
+      `SELECT ${STUDENT_COLUMNS} FROM dawra_students
+        ORDER BY first_name, last_name, created_at`,
+    );
+    return rows.map(rowToStudent);
+  }
+  const db = await readFileDb();
+  return sortStudents(db.students.map(stripFileStudent));
 }
 
 /** Issues a new access code; the old one (and any parent session) stops working. */

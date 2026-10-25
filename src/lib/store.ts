@@ -315,6 +315,18 @@ function ensurePg(): Promise<void> {
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
       `);
+      // A child in several Dawrat has one dawra_students row per Dawra; rows
+      // of the same child share a family_id so the parent sees them all.
+      await pool.query(
+        `ALTER TABLE dawra_students ADD COLUMN IF NOT EXISTS family_id UUID`,
+      );
+      await pool.query(
+        `UPDATE dawra_students SET family_id = id WHERE family_id IS NULL`,
+      );
+      await pool.query(
+        `CREATE INDEX IF NOT EXISTS dawra_students_family_idx
+           ON dawra_students (family_id)`,
+      );
       await pool.query(`
         CREATE TABLE IF NOT EXISTS dawra_reports (
           id UUID PRIMARY KEY,

@@ -13,6 +13,7 @@ export default function StudentRow({
   student,
   age,
   dobLabel,
+  alsoIn,
 }: {
   dawraId: string;
   dawraName: string;
@@ -26,6 +27,8 @@ export default function StudentRow({
   };
   age: string;
   dobLabel: string;
+  /** Other halaqat this child is in. */
+  alsoIn: string[];
 }) {
   const [editing, setEditing] = useState(false);
   const fullName = `${student.firstName} ${student.lastName}`.trim();
@@ -44,6 +47,11 @@ Password: ${student.accessCode}`;
           <div className="text-xs text-text-light">
             {student.dob ? `${age} · born ${dobLabel}` : "Date of birth not set"}
           </div>
+          {alsoIn.length ? (
+            <div className="text-xs text-orange-dark mt-0.5">
+              Also in: {alsoIn.join(", ")}
+            </div>
+          ) : null}
         </div>
         <div className="text-xs text-text-light">
           <div>
@@ -80,7 +88,7 @@ Password: ${student.accessCode}`;
           <ConfirmButton
             action={deleteDawraStudentAction}
             fields={{ id: student.id }}
-            message={`Remove ${fullName} from this Dawra? Their reports and pictures will be deleted. This cannot be undone.`}
+            message={`Remove ${fullName} from this Dawra? Their attendance, hifz and media here will be deleted${alsoIn.length ? " (other halaqat are not affected)" : ""}. This cannot be undone.`}
             className="text-sm text-red hover:underline"
           >
             Remove

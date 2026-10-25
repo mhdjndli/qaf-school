@@ -1,5 +1,5 @@
 import { isAdmin } from "@/lib/auth";
-import { getParentStudent } from "@/lib/dawrat-auth";
+import { getParentEnrolments } from "@/lib/dawrat-auth";
 import {
   canStudentSeePhoto,
   getDawraPhoto,
@@ -22,7 +22,10 @@ export async function GET(
   if (!photo) return new Response("Not found", { status: 404 });
 
   if (!(await isAdmin())) {
-    const student = await getParentStudent();
+    // The child's row in the photo's Dawra (a child can be in several).
+    const student = (await getParentEnrolments()).find(
+      (s) => s.dawraId === photo.dawraId,
+    );
     if (!student || !(await canStudentSeePhoto(student, photo))) {
       return new Response("Not found", { status: 404 });
     }

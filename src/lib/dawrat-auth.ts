@@ -3,6 +3,7 @@ import crypto from "crypto";
 import {
   findStudentByLogin,
   getDawraStudent,
+  listFamilyEnrolments,
   type DawraStudent,
 } from "./dawrat";
 
@@ -41,6 +42,17 @@ export async function getParentStudent(): Promise<DawraStudent | null> {
   const student = await getDawraStudent(studentId);
   if (!student) return null;
   return safeEqual(sig, sign(student.id, student.accessCode)) ? student : null;
+}
+
+/**
+ * The signed-in parent's child in every Dawra they're in (one row each).
+ * Empty when nobody is signed in.
+ */
+export async function getParentEnrolments(): Promise<
+  Awaited<ReturnType<typeof listFamilyEnrolments>>
+> {
+  const student = await getParentStudent();
+  return student ? listFamilyEnrolments(student.familyId) : [];
 }
 
 // Simple in-memory throttle against guessing codes: 10 failed tries per

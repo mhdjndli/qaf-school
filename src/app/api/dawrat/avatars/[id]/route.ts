@@ -1,5 +1,5 @@
 import { isAdmin } from "@/lib/auth";
-import { getParentStudent } from "@/lib/dawrat-auth";
+import { getParentEnrolments } from "@/lib/dawrat-auth";
 import { getStudentAvatar } from "@/lib/dawrat";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +11,10 @@ export async function GET(
 ) {
   const { id } = await params;
   if (!(await isAdmin())) {
-    const student = await getParentStudent();
-    if (student?.id !== id) return new Response("Not found", { status: 404 });
+    const family = await getParentEnrolments();
+    if (!family.some((s) => s.id === id)) {
+      return new Response("Not found", { status: 404 });
+    }
   }
   const avatar = await getStudentAvatar(id);
   if (!avatar) return new Response("Not found", { status: 404 });
