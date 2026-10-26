@@ -20,7 +20,7 @@ const SITE_URL = "https://qafschool.com";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Islamic School in Ottawa · JK & SK Kindergarten · QAF School",
+    default: "Islamic School in Ottawa · Montessori JK & SK · QAF Islamic School",
     template: "%s · QAF School",
   },
   description:
@@ -76,7 +76,7 @@ const schoolJsonLd = {
   "@type": ["School", "Preschool"],
   "@id": `${SITE_URL}/#school`,
   name: "QAF School",
-  alternateName: "Qabas Academic Foundation",
+  alternateName: ["QAF Islamic School", "Qabas Academic Foundation"],
   description:
     "Islamic school in Ottawa offering Junior and Senior Kindergarten (ages 4–5) with Montessori-inspired learning, daily Arabic immersion, Quran, and Islamic values.",
   url: SITE_URL,
@@ -94,8 +94,8 @@ const schoolJsonLd = {
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: 45.37,
-    longitude: -75.7,
+    latitude: 45.3694474,
+    longitude: -75.7043661,
   },
   openingHoursSpecification: [
     {
@@ -107,8 +107,9 @@ const schoolJsonLd = {
   ],
   sameAs: [
     "https://instagram.com/qafottawa",
-    "https://www.google.com/searchviewer/10?svid=CAwSHRIbCgNwdnESFENnMHZaeTh4TVd0d1h6RnpOR1JvGAo",
+    "https://maps.google.com/?cid=13733511260584689931",
   ],
+  hasMap: "https://maps.google.com/?cid=13733511260584689931",
   areaServed: {
     "@type": "City",
     name: "Ottawa",

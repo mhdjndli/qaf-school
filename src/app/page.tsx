@@ -17,6 +17,9 @@ export default function Home() {
         <div className="absolute bottom-[-30%] left-[-10%] w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(192,57,43,0.05)_0%,transparent_70%)] rounded-full" />
         <div className="max-w-4xl mx-auto px-6 relative">
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-5 text-text">
+            <span className="block font-[var(--font-inter)] text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-orange-dark mb-4">
+              Islamic School in Ottawa &middot; Montessori JK &amp; SK
+            </span>
             Where Faith, Language, and Learning Take Root.
           </h1>
           <p className="text-text-light text-lg md:text-xl max-w-2xl mx-auto mb-9 leading-relaxed">
@@ -365,8 +368,68 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== VISIT US / MAP ===== */}
+      {/* ===== PARENT GUIDES ===== */}
       <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4">
+            Guides for Ottawa Muslim Families
+          </h2>
+          <p className="text-text-light text-center mb-12 max-w-2xl mx-auto">
+            Comparing Islamic schools in Ottawa, looking for a Muslim daycare,
+            or planning JK? Start with our honest, regularly updated guides.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                href: "/blog/islamic-schools-in-ottawa-guide",
+                title: "Islamic Schools in Ottawa: Full List & Comparison",
+                text: "Every full-time Islamic school, kindergarten, and weekend program in Ottawa, side by side.",
+              },
+              {
+                href: "/blog/islamic-schools-near-me-ottawa",
+                title: "Islamic Schools Near Me: Ottawa by Neighbourhood",
+                text: "Barrhaven, Kanata, Nepean, Orléans, and more: what is close to home in each part of the city.",
+              },
+              {
+                href: "/blog/weekend-islamic-schools-ottawa",
+                title: "Weekend Islamic Schools & Quran Classes in Ottawa",
+                text: "Saturday and Sunday Quran, Arabic, and Islamic Studies programs for school-age children.",
+              },
+              {
+                href: "/blog/muslim-daycare-ottawa-guide",
+                title: "Islamic Daycare & Preschool in Ottawa",
+                text: "Halal food, duas, Arabic, and licensing: what to check, and when a kindergarten fits better.",
+              },
+              {
+                href: "/blog/ottawa-islamic-school-fees-explained",
+                title: "Ottawa Islamic School Fees 2026/27",
+                text: "How tuition, registration, and resource fees work, with QAF\u2019s full price list.",
+              },
+              {
+                href: "/blog/junior-kindergarten-ottawa-guide",
+                title: "Junior Kindergarten in Ottawa: 2027 Guide",
+                text: "Age cutoffs, registration dates, and public vs. private options for JK.",
+              },
+            ].map((g) => (
+              <Link
+                key={g.href}
+                href={g.href}
+                className="bg-warm-white rounded-lg p-7 border border-card-line transition-colors hover:border-orange group"
+              >
+                <h3 className="font-heading text-lg font-bold mb-2 group-hover:text-orange-dark">
+                  {g.title}
+                </h3>
+                <p className="text-text-light text-[0.93rem] leading-relaxed">
+                  {g.text}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== VISIT US / MAP ===== */}
+      <section className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4">
             Come Visit Us

@@ -53,6 +53,7 @@ export default async function BlogPostLayout({
           description: post.metaDescription,
           image: `${SITE_URL}${post.image}`,
           datePublished: new Date(post.date).toISOString(),
+          dateModified: new Date(post.updated ?? post.date).toISOString(),
           url: `${SITE_URL}/blog/${post.slug}`,
           author: {
             "@type": "Organization",

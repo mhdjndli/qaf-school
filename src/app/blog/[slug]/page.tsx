@@ -541,50 +541,147 @@ function IslamicSchoolsGuideContent() {
   return (
     <div className="space-y-6">
       <p className="text-text-light leading-relaxed">
-        If you have typed &ldquo;Islamic schools in Ottawa&rdquo; into a search bar recently, you already know the problem: the results are a scattered mix of school websites, outdated directories, and forum threads from years ago. Ottawa actually has a rich and growing landscape of Islamic education, but there is no single honest map of it. This guide is our attempt to draw one — including where QAF fits, and where another school might serve your family better.
+        If you have typed &ldquo;Islamic schools in Ottawa&rdquo; into a search bar recently, you already know the problem: the results are a scattered mix of school websites, outdated directories, and forum threads from years ago. Ottawa actually has a rich and growing landscape of Islamic education, with more than ten full-time Islamic schools plus kindergartens, Montessori programs, and weekend schools. This guide is our attempt at one honest map of it, including where QAF fits and where another school might serve your family better.
       </p>
+      <BCallout>
+        <strong>How we built this list:</strong> we started from the Ontario Ministry of Education&rsquo;s private school registry (updated October 2026) and checked every school against its own website. Grades, programs, and fees change from year to year, so always confirm details directly with each school. Listing on the Ministry registry means a school has filed a notice to operate; the Ministry does not rank or endorse private elementary schools. Spot something out of date?{" "}
+        <Link href="/contact" className="text-orange-dark font-semibold hover:underline">Tell us</Link> and we will correct it.
+      </BCallout>
 
-      <h2 className="font-heading text-2xl font-bold text-text pt-4">The Four Types of Islamic Schooling in Ottawa</h2>
-      <p className="text-text-light leading-relaxed">
-        <strong className="text-text">Full-time elementary schools.</strong> Ottawa is home to several established full-time Islamic schools serving kindergarten through Grade 8, including Abraar School, Ottawa Islamic School, Ahlul-Bayt Islamic School, and Tarbiyah Learning Academy. These offer a complete elementary pathway with Islamic Studies, Quran, and Arabic layered on top of Ontario academics. Programs and availability change from year to year, so confirm details with each school directly.
-      </p>
-      <p className="text-text-light leading-relaxed">
-        <strong className="text-text">Specialized early-years programs.</strong> This is where QAF School sits. Rather than serving every grade, we focus exclusively on{" "}
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Full-Time Islamic Schools in Ottawa at a Glance</h2>
+      <BTable
+        head={["School", "Grades", "Area", "Notable"]}
+        rows={[
+          ["Ottawa Islamic School", "JK–12", "Nepean (Merivale)", "One of the few with a full high school (OSSD)"],
+          ["Abraar School", "JK–6 and 7–12", "Nepean & west end", "Two campuses; run by MAC"],
+          ["Ahlul Bayt Islamic School", "JK–10", "Hunt Club / South Keys", "French from JK; Shia Ithna Asheri Islamic studies"],
+          ["Tarbiyah Learning Academy", "JK–8", "Bells Corners", "Hifdh track; core French"],
+          ["SNMC Albushra School", "JK–6", "Barrhaven", "Quran, Arabic, and French"],
+          ["Ummaty School", "JK–8", "Nepean (Colonnade)", "English stream plus a French stream in early grades"],
+          ["Marifah School", "JK–8", "Stittsville", "French Immersion JK/SK; toddler and preschool care"],
+          ["Fitra School", "Elementary", "Stittsville", "Run by the Stittsville Muslim Association"],
+          ["Al-Furqan School", "Upper elementary", "West end (Bayshore)", "Selective full-time hifz program"],
+          ["Jamia Islamia", "JK–8", "Orléans", "East-end elementary option"],
+          ["Islamic Montessori Academy", "Ages 4–12", "St. Laurent Blvd", "Montessori Casa and Elementary"],
+          ["QAF School", "JK & SK (ages 4–5)", "Nepean (Carleton Heights)", "Kindergarten specialist; daily Arabic immersion"],
+        ]}
+      />
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">The Schools, One by One</h2>
+
+      <BH3>Ottawa Islamic School (JK to Grade 12)</BH3>
+      <BP>
+        One of the few Islamic schools in Ottawa offering a complete pathway from kindergarten through high school, with Ontario Secondary School Diploma credits. Located at 10 Coral Ave in Nepean, near Merivale Rd and Colonnade. The school reports strong enrolment growth and a building expansion underway. Website:{" "}
+        <BX href="https://www.ottawaislamicschool.org/">ottawaislamicschool.org</BX>.
+      </BP>
+
+      <BH3>Abraar School (JK to Grade 12, two campuses)</BH3>
+      <BP>
+        Operated by the Muslim Association of Canada. The elementary campus (JK to Grade 6) is at 70 Fieldrow St in Nepean; the secondary campus (Grades 7 to 12, with OSSD credits) is at 1085 Grenon Ave in the west end, which also houses MAC&rsquo;s licensed preschool and child care centre. Website:{" "}
+        <BX href="https://schools.macnet.ca/abraarelementary/">Abraar Elementary</BX>.
+      </BP>
+
+      <BH3>Ahlul Bayt Islamic School (JK to Grade 10)</BH3>
+      <BP>
+        Operating since 2002 at 3025 Albion Rd N, in the Hunt Club and South Keys area. Offers French from JK and OSSD credits in the upper grades, and teaches Islamic education according to Shia Ithna Asheri teachings, as the school describes on its own site. Website:{" "}
+        <BX href="https://abischool.com/">abischool.com</BX>.
+      </BP>
+
+      <BH3>Tarbiyah Learning Academy (JK to Grade 8)</BH3>
+      <BP>
+        Founded in 2012 and located on the second floor of Jami Omar Mosque at 3990 Old Richmond Rd in Bells Corners. Known for its hifdh track, which aims for students to complete the Quran by Grade 8, alongside core French. The school notes a significant waiting list, so apply early. Website:{" "}
+        <BX href="https://www.tarbiyahlearning.ca/">tarbiyahlearning.ca</BX>.
+      </BP>
+
+      <BH3>SNMC Albushra School (JK to Grade 6)</BH3>
+      <BP>
+        Run by the South Nepean Muslim Community at 3020 Woodroffe Ave, the most convenient full-time option for many Barrhaven families. Curriculum includes Quran, Arabic, and French alongside Ontario academics. Website:{" "}
+        <BX href="https://albushraschool.ca/">albushraschool.ca</BX>.
+      </BP>
+
+      <BH3>Ummaty School (JK to Grade 8)</BH3>
+      <BP>
+        At 154 Colonnade Rd S in Nepean. Runs an English stream from JK to Grade 8 and, depending on registrations, a French stream in the early grades, a rare option for francophone Muslim families. Website:{" "}
+        <BX href="https://ummatyschool.ca/">ummatyschool.ca</BX>.
+      </BP>
+
+      <BH3>Marifah School (JK to Grade 8, plus toddler and preschool)</BH3>
+      <BP>
+        A not-for-profit school established in 2023 at 1586 Stittsville Main St. Offers French Immersion in JK and SK, toddler care for ages 1 to 3, a preschool for ages 2.5 to 5, and a supported online high-school credit program in an Islamic setting. Website:{" "}
+        <BX href="https://marifah.ca/">marifah.ca</BX>.
+      </BP>
+
+      <BH3>Fitra School (Elementary)</BH3>
+      <BP>
+        A full-time elementary school run by the Stittsville Muslim Association at 1469 Stittsville Main St, with Quran, Arabic, and an after-school clubs program. Contact the school for its current grade range. Website:{" "}
+        <BX href="https://fitraschool.ca/">fitraschool.ca</BX>.
+      </BP>
+
+      <BH3>Al-Furqan School (full-time hifz)</BH3>
+      <BP>
+        A specialized MAC program at 2825 DuMaurier Ave in the west end, built around full-time Quran memorization: students aim to memorize the entire Quran over three years, with a small, selective intake in the upper elementary grades. A strong fit for children who already read Arabic fluently and families committed to hifz. Website:{" "}
+        <BX href="https://schools.macnet.ca/ottawaalfurqan/">Al-Furqan Ottawa</BX>.
+      </BP>
+
+      <BH3>Jamia Islamia (JK to Grade 8)</BH3>
+      <BP>
+        Describes itself as the first elementary Islamic school in Orléans, at 3555 St Joseph Blvd, making it the main full-time option for east-end families. Website:{" "}
+        <BX href="https://jamiaislamiaottawa.org/">jamiaislamiaottawa.org</BX>.
+      </BP>
+
+      <BH3>Islamic Montessori Academy (ages 4 to 12)</BH3>
+      <BP>
+        An Islamic Montessori school at 2465 St. Laurent Blvd offering a Montessori Casa for ages 4 to 6, an Elementary program for ages 6 to 12, and a Quran academy. It shares a home with Blossom Montessori School, which runs toddler and Casa programs for younger children. Website:{" "}
+        <BX href="https://imaottawa.ca/">imaottawa.ca</BX>.
+      </BP>
+
+      <BH3>QAF School (JK &amp; SK, ages 4 to 5)</BH3>
+      <BP>
+        That is us. Rather than serving every grade, we focus exclusively on{" "}
         <Link href="/program" className="text-orange-dark font-medium hover:underline">Junior and Senior Kindergarten</Link>{" "}
-        for ages 4 and 5. The advantage of specialization is depth: every shelf, material, routine, and teacher in the building is purpose-built for one developmental stage — the stage researchers consistently identify as the most formative.
-      </p>
+        at 900 Dynes Rd, near Carleton Heights. The advantage of specialization is depth: every shelf, material, routine, and teacher is purpose-built for one developmental stage, with Montessori-inspired learning, daily Arabic immersion, Quran, and Ontario&rsquo;s Kindergarten Program. Many of our families continue to one of the full-time schools above for Grade 1; others move to public school with their identity firmly rooted.
+      </BP>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Beyond Full-Time: Weekend, Hifz, and Early-Years Options</h2>
       <p className="text-text-light leading-relaxed">
-        <strong className="text-text">Weekend and evening programs.</strong> Many masajid and community centres across Ottawa run Saturday or Sunday schools teaching Quran, Arabic, and Islamic Studies. These are a wonderful supplement for children attending public school during the week. QAF runs its own{" "}
+        <strong className="text-text">Weekend and evening programs.</strong> Many masajid and community groups run Saturday or Sunday schools teaching Quran, Arabic, and Islamic Studies, and the OCDSB and OCSB offer free Saturday Arabic classes. We list them all by area in our{" "}
+        <BL href="/blog/weekend-islamic-schools-ottawa">guide to weekend Islamic schools in Ottawa</BL>. QAF runs its own{" "}
         <Link href="/sunday-camp" className="text-orange-dark font-medium hover:underline">Sunday Camp</Link>{" "}
-        in this spirit.
+        for ages 8 to 15.
       </p>
       <p className="text-text-light leading-relaxed">
-        <strong className="text-text">Hifz and Quran academies.</strong> For families prioritizing Quran memorization, several Ottawa institutions offer dedicated hifz tracks, usually for older children who already read Arabic fluently.
+        <strong className="text-text">Daycare and preschool.</strong> For children under four, options include MAC&rsquo;s licensed preschool and child care centre, Marifah&rsquo;s toddler and preschool programs, and Montessori toddler programs. See our{" "}
+        <BL href="/blog/muslim-daycare-ottawa-guide">guide to Islamic daycare in Ottawa</BL>.
+      </p>
+      <p className="text-text-light leading-relaxed">
+        <strong className="text-text">Looking for something close to home?</strong> Our{" "}
+        <BL href="/blog/islamic-schools-near-me-ottawa">neighbourhood-by-neighbourhood guide</BL>{" "}
+        groups every option by part of the city, from Barrhaven and Kanata to Orléans.
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">What &ldquo;Best&rdquo; Actually Means</h2>
       <p className="text-text-light leading-relaxed">
-        Parents often ask us which Islamic school in Ottawa is the best. The honest answer is that &ldquo;best&rdquo; is the wrong frame — the right one is <em>fit</em>. A school that is perfect for an eight-year-old working toward hifz may be a poor match for a four-year-old who needs hands-on learning and a gentle introduction to Arabic. When you compare schools, weigh five things: the depth of the Arabic and Quran program (daily immersion or a weekly class?), the teaching approach (worksheets or hands-on materials?), class size and ratios, alignment with Ontario curriculum expectations, and the total yearly cost — which we break down honestly in our{" "}
-        <Link href="/blog/ottawa-islamic-school-fees-explained" className="text-orange-dark font-medium hover:underline">guide to Ottawa Islamic school fees</Link>.
+        Parents often ask us which Islamic school in Ottawa is the best. The honest answer is that &ldquo;best&rdquo; is the wrong frame; the right one is <em>fit</em>. A school that is perfect for an eight-year-old working toward hifz may be a poor match for a four-year-old who needs hands-on learning and a gentle introduction to Arabic. When you compare schools, weigh six things: the grades offered (will your child need to switch schools later?), the depth of the Arabic and Quran program (daily immersion or a weekly class?), the teaching approach (worksheets or hands-on materials?), class size and ratios, alignment with Ontario curriculum expectations, and the total yearly cost, which we break down honestly in our{" "}
+        <Link href="/blog/ottawa-islamic-school-fees-explained" className="text-orange-dark font-medium hover:underline">guide to Ottawa Islamic school fees</Link>. Commute matters too: a school 40 minutes away is 400 hours in the car over a school year.
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">Seven Questions to Ask on Any School Tour</h2>
       <p className="text-text-light leading-relaxed">
-        A website tells you what a school wants to say. A visit tells you what it actually is. When you tour any Islamic school in Ottawa — including ours — ask: How much Arabic will my child hear per day, and from whom? How is Quran taught — with love and understanding, or memorization under pressure? What does discipline look like in practice? What are the actual class sizes this year? How do teachers communicate with parents, and how often? Is the academic program aligned with Ontario&rsquo;s curriculum? And finally: may I see a classroom in session? A school confident in its answers will welcome every one of these questions.
+        A website tells you what a school wants to say. A visit tells you what it actually is. When you tour any Islamic school in Ottawa, including ours, ask: How much Arabic will my child hear per day, and from whom? How is Quran taught: with love and understanding, or memorization under pressure? What does discipline look like in practice? What are the actual class sizes this year? How do teachers communicate with parents, and how often? Is the academic program aligned with Ontario&rsquo;s curriculum? And finally: may I see a classroom in session? A school confident in its answers will welcome every one of these questions.
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">Why the Early Years Deserve Special Attention</h2>
       <p className="text-text-light leading-relaxed">
-        Between ages 4 and 6, children are in the critical window for language acquisition and identity formation. A child who spends JK and SK immersed in Arabic, Quran, and Islamic adab does not just learn content — they form a self-image in which being Muslim is natural, joyful, and theirs. This is why we built QAF as an early-years specialist:{" "}
+        Between ages 4 and 6, children are in the critical window for language acquisition and identity formation. A child who spends JK and SK immersed in Arabic, Quran, and Islamic adab does not just learn content; they form a self-image in which being Muslim is natural, joyful, and theirs. This is why we built QAF as an early-years specialist:{" "}
         <Link href="/blog/why-early-arabic-immersion-matters" className="text-orange-dark font-medium hover:underline">daily Arabic immersion</Link>,{" "}
         <Link href="/blog/montessori-meets-islamic-values" className="text-orange-dark font-medium hover:underline">Montessori-inspired learning</Link>, and full{" "}
-        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">Ontario Grade 1 readiness</Link>{" "}
-        — whether your child continues to a full-time Islamic school afterward or moves to a public school with their identity firmly rooted.
+        <Link href="/blog/preparing-your-child-for-grade-1" className="text-orange-dark font-medium hover:underline">Ontario Grade 1 readiness</Link>,
+        whether your child continues to a full-time Islamic school afterward or moves to a public school.
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">Start With a Visit</h2>
       <p className="text-text-light leading-relaxed">
-        Wherever your search leads, visit in person before you decide. If your child is 4 or 5, we would love for QAF to be one of your visits. We are located at 900 Dynes Rd in Ottawa — see our{" "}
+        Wherever your search leads, visit in person before you decide, and apply early: several Ottawa Islamic schools keep waiting lists. If your child is 4 or 5, we would love for QAF to be one of your visits. We are located at 900 Dynes Rd in Ottawa; see our{" "}
         <Link href="/admissions" className="text-orange-dark font-medium hover:underline">admissions process</Link>{" "}
         or browse our{" "}
         <Link href="/faq" className="text-orange-dark font-medium hover:underline">FAQ</Link>{" "}
@@ -688,6 +785,23 @@ function MuslimDaycareContent() {
       <h2 className="font-heading text-2xl font-bold text-text pt-4">The Question Nobody Asks: Is Your Child Ready for More Than Daycare?</h2>
       <p className="text-text-light leading-relaxed">
         Here is the distinction that matters at age four. In Ontario, children can begin Junior Kindergarten the year they turn four — and this is the age when a play-based but <em>structured</em> educational program starts to matter. A four-year-old in an excellent daycare is cared for; a four-year-old in an excellent kindergarten is cared for <em>and</em> systematically taught early literacy, numeracy, self-regulation, and — at an Islamic school — Quran and Arabic through daily immersion. If your child is 4 or 5, the real comparison is no longer between daycares. It is between daycare and school.
+      </p>
+
+      <h2 className="font-heading text-2xl font-bold text-text pt-4">Muslim Daycare and Preschool Options in Ottawa</h2>
+      <p className="text-text-light leading-relaxed">
+        Dedicated Islamic child care for children under four is still limited in Ottawa. These are the programs we could verify in October 2026; always confirm licensing, spaces, and fees directly:
+      </p>
+      <BList
+        items={[
+          <><strong className="text-text">MAC Preschool and Childcare (Abraar location)</strong>, 1085 Grenon Ave, west end: a licensed child care centre run by the Muslim Association of Canada, with toddler and preschool spaces.</>,
+          <><strong className="text-text">Marifah School toddler care and preschool</strong>, 1586 Stittsville Main St: toddler care for ages 1 to 3 and preschool for ages 2.5 to 5, attached to a JK to Grade 8 Islamic school. <BX href="https://marifah.ca/">Website</BX></>,
+          <><strong className="text-text">Islamic Montessori Academy and Blossom Montessori</strong>, 2465 St. Laurent Blvd: an Islamic Montessori Casa for ages 4 to 6, with Montessori toddler (18 months to 3) and Casa programs offered by Blossom Montessori at the same address. <BX href="https://imaottawa.ca/">Website</BX></>,
+          <><strong className="text-text">Kindergarten at full-time Islamic schools</strong>: from age four, JK is available at Ottawa Islamic School, Abraar, Ahlul Bayt, Tarbiyah, Albushra, Ummaty, Marifah, Jamia Islamia, and QAF. See our{" "}<BL href="/blog/islamic-schools-in-ottawa-guide">full list of Islamic schools in Ottawa</BL>.</>,
+        ]}
+      />
+      <p className="text-text-light leading-relaxed">
+        Many Muslim families also use home daycares run by Muslim caregivers, found mostly through word of mouth and community groups. To check whether any centre or agency is licensed, search the Ontario government&rsquo;s licensed child care locator, and for options by neighbourhood see{" "}
+        <BL href="/blog/islamic-schools-near-me-ottawa">Islamic schools and preschools near you in Ottawa</BL>.
       </p>
 
       <h2 className="font-heading text-2xl font-bold text-text pt-4">Where QAF Fits</h2>
@@ -1059,7 +1173,281 @@ function EcoleIslamiqueOttawaContent() {
   );
 }
 
+// External link to another organization's site (opens in a new tab).
+function BX({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener" className="text-orange-dark font-medium hover:underline">
+      {children}
+    </a>
+  );
+}
+function BH3({ children }: { children: React.ReactNode }) {
+  return <h3 className="font-heading text-xl font-bold text-text pt-2">{children}</h3>;
+}
+function BTable({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
+  return (
+    <div className="overflow-x-auto rounded-lg border border-card-line">
+      <table className="w-full bg-white text-sm">
+        <thead className="bg-orange text-white">
+          <tr>
+            {head.map((h) => (
+              <th key={h} className="py-3 px-4 text-left font-semibold whitespace-nowrap">{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className="border-b border-card-line last:border-0 align-top">
+              {r.map((c, j) => (
+                <td key={j} className={`py-3 px-4 text-text-light ${j === 0 ? "font-semibold text-text" : ""}`}>{c}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function WeekendIslamicSchoolsContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        Most Muslim children in Ottawa go to public or Catholic school during the week, so for many families the weekend is where Quran, Arabic, and Islamic Studies happen. The good news: Ottawa has more weekend options than most parents realize, from mosque Sunday schools to free Arabic classes run by the school boards. The hard part is that the information is scattered across a dozen websites, PDFs, and Facebook posts. We pulled it together in one place, organized by part of the city.
+      </BP>
+      <BCallout>
+        <strong>How we built this list:</strong> every program below was checked against its organizer&rsquo;s own website in October 2026. Mosques and community groups often update schedules late in the summer, and some only run classes when enough children register, so always confirm days, ages, and fees directly before you enrol. Spot something out of date?{" "}
+        <Link href="/contact" className="text-orange-dark font-semibold hover:underline">Let us know</Link> and we will fix it.
+      </BCallout>
+
+      <BH2>At a Glance: Weekend Islamic Programs in Ottawa</BH2>
+      <BTable
+        head={["Program", "Area", "When", "Focus"]}
+        rows={[
+          ["OMA Sunday School", "Central (Ottawa Main Mosque)", "Sun 9:30 AM–1:00 PM", "Quran reading, Islamic basics"],
+          ["AlFajr School (OMA)", "Central (Ottawa Main Mosque)", "Sun 1:30–4:30 PM", "Quran, Islamic Studies"],
+          ["Om Al-Qura School", "Central (Melrose Ave)", "Sat 12:30–4:30 PM", "Arabic, Quran, Islamic Studies"],
+          ["Alnour School", "Westboro & Kanata", "Sat 9:30 AM–2:30 PM", "Arabic, Quran, Islamic education"],
+          ["Dar-Ul-Huda School (AICP)", "East-central (St. Laurent Blvd)", "Sat morning", "Arabic, Quran"],
+          ["KMA Hikmah Saturday School", "Kanata", "Saturdays", "Quran, Islamic Studies, Arabic, Urdu"],
+          ["Masjid Bilal Quran Program", "Orléans", "Sat & Sun late morning; weekday evenings", "Quran reading, tajweed, memorization"],
+          ["QAF Sunday Camp", "Nepean (Dynes Rd)", "Sun 11 AM–3 PM", "Quran, Arabic, STEM, soccer"],
+          ["OCDSB & OCSB Arabic classes", "Sites across the city", "Sat 9:30 AM–12:00 PM", "Arabic language (free)"],
+        ]}
+      />
+
+      <BH2>Free Option First: School-Board Arabic Classes</BH2>
+      <BP>
+        Many parents do not know that Ottawa&rsquo;s English school boards run <strong className="text-text">free Arabic classes</strong> for elementary students through their International Languages programs. They teach the language rather than Quran or Islamic Studies, but they are an excellent, low-cost foundation that makes Quran reading easier later.
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">OCDSB International Languages (JK to Grade 8).</strong> Saturday mornings from 9:30 to 12:00 at schools across the city, including Bayshore, Knoxdale, Broadview Avenue, Cambridge Street, Carleton Heights, Charles H. Hulse, Blossom Park, Sawmill Creek, Farley Mowat (Barrhaven), Vimy Ridge (Findlay Creek), Roch Carrier (Kanata), Westwind (Stittsville), and Fallingbrook (Orléans). There are also online Saturday and after-school options. Open to students from any board; free for Ontario residents apart from a small activity fee. Details on the{" "}
+            <BX href="https://www.ocdsb.ca/programs-learning/continuing-education/international-languages-program/international-indigenous-languages-elementary-program">OCDSB International Languages page</BX>.</>,
+          <><strong className="text-text">OCSB International Languages (JK to Grade 8).</strong> Saturday mornings from 9:30 to 12:00 at St. Patrick&rsquo;s High School (Alta Vista), St. Mother Teresa High School (Barrhaven), and St. Matthew High School (Orléans), plus an online beginner class for Grades 2 to 8. Free for Ontario residents apart from a small materials fee, and registration stays open through the school year. Details on the{" "}
+            <BX href="https://conted.ocsb.ca/elementary/international-languages-elementary/">OCSB Continuing Education site</BX>.</>,
+        ]}
+      />
+
+      <BH2>Central Ottawa</BH2>
+      <BH3>Ottawa Muslim Association (Ottawa Main Mosque), 251 Northwestern Ave</BH3>
+      <BP>
+        The OMA hosts several weekend programs under one roof. <strong className="text-text">OMA Sunday School</strong> runs Sundays from 9:30 AM to 1:00 PM from September to June for children six and up, teaching Quran reading and the foundations of Islam, with some of the most affordable fees in the city (published at $100 per year for one child for 2026/27). <strong className="text-text">AlFajr School</strong> runs Sunday afternoons from 1:30 to 4:30 with Quran and Islamic subjects. For children who want to go deeper into recitation and memorization, the mosque&rsquo;s Ottawa Qur&rsquo;an Institute offers <strong className="text-text">Tarteel Juniors</strong> for ages 6 to 18. See{" "}
+        <BX href="https://ss.ottawamosque.ca/">OMA Sunday School</BX>,{" "}
+        <BX href="https://alfajr.ottawamosque.ca/">AlFajr School</BX>, and{" "}
+        <BX href="https://ottawamosque.ca/tarteel/">Tarteel</BX>.
+      </BP>
+      <BH3>Om Al-Qura School, 35 Melrose Ave</BH3>
+      <BP>
+        A Saturday-afternoon school (12:30 to 4:30) teaching Arabic, Quran, and Islamic Studies, listed through the Ottawa Main Mosque&rsquo;s education page. Classes run when enough students register, so contact them early. More at{" "}
+        <BX href="https://omalqura.ottawamosque.ca/">omalqura.ottawamosque.ca</BX>.
+      </BP>
+      <BH3>Alnour School (Westboro campus at Broadview Public School)</BH3>
+      <BP>
+        Alnour runs a full Saturday: Arabic from 9:30 to 12:00, then Quran and Islamic education from 12:00 to 2:30, with instruction in Arabic. Published fees for 2026/27 start at $240 per child for the year, with a sibling discount. Registration is on the{" "}
+        <BX href="https://www.alnourschool.ca/registration-form-2/">Alnour School website</BX>.
+      </BP>
+      <BH3>Dar-Ul-Huda School (AICP), 847 St. Laurent Blvd</BH3>
+      <BP>
+        Run by the Association of Islamic Charitable Projects, Dar-Ul-Huda offers Saturday-morning Arabic and Quran classes from age five, with materials designed for children who are not yet fluent in Arabic. Call 613-747-1444 or see the{" "}
+        <BX href="https://www.aicp.ca/activities-ottawa-ontario/">AICP activities page</BX> to confirm this year&rsquo;s schedule.
+      </BP>
+
+      <BH2>West End &amp; Kanata</BH2>
+      <BH3>Kanata Muslim Association, 351 Sandhill Rd</BH3>
+      <BP>
+        KMA runs <strong className="text-text">Hikmah Saturday School</strong> for JK to Grade 8, covering Quran, Islamic Studies in English, and Arabic and Urdu, and the <strong className="text-text">Al-Madinah Quran School</strong>, an evening program for ages 5 to 14 focused on tajweed and memorization. Hours are not published online, so contact KMA directly. See the{" "}
+        <BX href="https://www.kanatamuslims.ca/education/hikmah-school">KMA education pages</BX>.
+      </BP>
+      <BH3>Alnour School (Kanata campus at Jack Donohue Public School)</BH3>
+      <BP>
+        Same Saturday schedule and fees as the Westboro campus above, for families in Kanata and Stittsville.
+      </BP>
+
+      <BH2>East End &amp; Orléans</BH2>
+      <BH3>Masjid Bilal (Islamic Society of Cumberland), Orléans</BH3>
+      <BP>
+        Masjid Bilal offers a Quran program with two tracks: a weekday evening option (Monday to Thursday, 5:30 to 7:30 PM) and a weekend option (Saturday and Sunday, 11:00 AM to 1:00 PM), covering Quran reading, tajweed, and memorization with students placed by level. Contact the Islamic Society of Cumberland to confirm location and fees for this year.
+      </BP>
+
+      <BH2>South Ottawa, Nepean &amp; Barrhaven</BH2>
+      <BH3>QAF Sunday Camp, 900 Dynes Rd</BH3>
+      <BP>
+        Our own weekend program, for ages 8 to 15, every Sunday from 11 AM to 3 PM near Carleton Heights. Instead of a morning of Quran alone, <BL href="/sunday-camp">Sunday Camp</BL> combines Quran in small groups by level, Arabic reading and writing, math and STEM, and soccer or indoor games, so children come back because they want to. Tuition is $190 a month, month to month, with no long-term commitment. We explain the thinking behind it in{" "}
+        <BL href="/blog/quran-classes-for-kids-ottawa">Quran classes and weekend Islamic school for kids</BL>.
+      </BP>
+      <BH3>Hunt Club &amp; Barrhaven mosques</BH3>
+      <BP>
+        Masjid ar-Rahmah (Assunnah Muslims Association, 1216 Hunt Club Rd) has run a Sunday-afternoon Arabic circle for young children in recent years, and South Nepean Muslim Community (SNMC) in Barrhaven is the largest mosque in the south end. Neither had current children&rsquo;s schedules published when we checked, so contact them directly. For free Arabic in Barrhaven, the OCDSB site at Farley Mowat and the OCSB site at St. Mother Teresa are both close by.
+      </BP>
+
+      <BH2>How to Choose Between Them</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Start with the goal.</strong> Arabic language (try the free board classes), Quran reading and memorization (a mosque program or Tarteel), or a well-rounded day your child enjoys (a program that mixes Quran with Arabic, activities, and friends).</>,
+          <><strong className="text-text">Check how classes are grouped.</strong> Quran groups split by reading level, not just age, keep strong readers moving and beginners from feeling lost.</>,
+          <><strong className="text-text">Count the real commitment.</strong> A two-hour Sunday class and a five-hour Saturday are very different for a child who already has a full school week.</>,
+          <><strong className="text-text">Ask what happens at home.</strong> Ten minutes of daily review does more than any weekend program alone.</>,
+          <><strong className="text-text">Visit once.</strong> Watch whether children look engaged or just endure it. That tells you more than any flyer.</>,
+        ]}
+      />
+
+      <BH2>Looking for Full-Time Instead?</BH2>
+      <BP>
+        If you are weighing a full-time Islamic school rather than a weekend program, see our{" "}
+        <BL href="/blog/islamic-schools-in-ottawa-guide">complete list of Islamic schools in Ottawa</BL> or browse{" "}
+        <BL href="/blog/islamic-schools-near-me-ottawa">Islamic schools by neighbourhood</BL>. For children aged 4 and 5, our{" "}
+        <BL href="/program">Islamic JK/SK program</BL> builds Quran and Arabic into every school day.
+      </BP>
+
+      <BCallout>
+        Want a weekend program your child actually looks forward to?{" "}
+        <Link href="/sunday-camp" className="text-orange-dark font-semibold hover:underline">See QAF Sunday Camp</Link>{" "}
+        and reserve a spot.
+      </BCallout>
+    </div>
+  );
+}
+
+function NearMeContent() {
+  return (
+    <div className="space-y-6">
+      <BP>
+        &ldquo;Islamic school near me&rdquo; is one of the most common searches Ottawa Muslim parents make, and for good reason. A great school across the city can mean an hour in the car every day, while a good school ten minutes away can change your whole family&rsquo;s routine. Ottawa is big, and its Islamic schools, preschools, and weekend programs are spread from Stittsville to Orléans. This guide groups every option by area so you can see what is actually close to home.
+      </BP>
+      <BCallout>
+        Every school and program below was checked against its own website and, for full-time schools, the Ontario Ministry of Education&rsquo;s private school registry in October 2026. Details change, so confirm grades, availability, and fees directly. For full school profiles, see our{" "}
+        <Link href="/blog/islamic-schools-in-ottawa-guide" className="text-orange-dark font-semibold hover:underline">complete list of Islamic schools in Ottawa</Link>.
+      </BCallout>
+
+      <BH2>Nepean, Merivale &amp; Carleton Heights</BH2>
+      <BP>
+        The densest cluster of Islamic schools in the city, convenient for families in Nepean, Centrepointe, Carlington, Hunt Club West, and Barrhaven commuters.
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">Ottawa Islamic School</strong>, 10 Coral Ave: JK to Grade 12. <BX href="https://www.ottawaislamicschool.org/">Website</BX></>,
+          <><strong className="text-text">Ummaty School</strong>, 154 Colonnade Rd S: JK to Grade 8, English and early-grades French streams. <BX href="https://ummatyschool.ca/">Website</BX></>,
+          <><strong className="text-text">Abraar School (Elementary)</strong>, 70 Fieldrow St: JK to Grade 6. <BX href="https://schools.macnet.ca/abraarelementary/">Website</BX></>,
+          <><strong className="text-text">QAF School</strong>, 900 Dynes Rd: Islamic JK &amp; SK for ages 4 to 5, plus <BL href="/sunday-camp">Sunday Camp</BL> for ages 8 to 15. <BL href="/program">Program</BL></>,
+        ]}
+      />
+
+      <BH2>West End: Bayshore, Britannia &amp; Bells Corners</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Abraar School (Secondary)</strong>, 1085 Grenon Ave: Grades 7 to 12. The same building houses <strong className="text-text">MAC Preschool and Childcare</strong>, a licensed centre with toddler and preschool spaces.</>,
+          <><strong className="text-text">Al-Furqan School</strong>, 2825 DuMaurier Ave: full-time hifz program for upper-elementary students. <BX href="https://schools.macnet.ca/ottawaalfurqan/">Website</BX></>,
+          <><strong className="text-text">Tarbiyah Learning Academy</strong>, 3990 Old Richmond Rd (Jami Omar Mosque), Bells Corners: JK to Grade 8 with a hifdh track. <BX href="https://www.tarbiyahlearning.ca/">Website</BX></>,
+          <><strong className="text-text">Alnour School</strong>, Saturdays at Broadview Public School in Westboro: Arabic, Quran, and Islamic education. <BX href="https://www.alnourschool.ca/">Website</BX></>,
+        ]}
+      />
+
+      <BH2>Kanata &amp; Stittsville</BH2>
+      <BP>
+        Stittsville has grown into a real hub, with two full-time schools on Stittsville Main St. We could not find a full-time Islamic school in Kanata itself, but it has strong weekend programs.
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">Marifah School</strong>, 1586 Stittsville Main St: JK to Grade 8 with French Immersion in kindergarten, plus toddler care (ages 1 to 3) and preschool (ages 2.5 to 5). <BX href="https://marifah.ca/">Website</BX></>,
+          <><strong className="text-text">Fitra School</strong>, 1469 Stittsville Main St: full-time elementary run by the Stittsville Muslim Association. <BX href="https://fitraschool.ca/">Website</BX></>,
+          <><strong className="text-text">Kanata Muslim Association</strong>, 351 Sandhill Rd: Hikmah Saturday School (JK to Grade 8) and the Al-Madinah evening Quran school (ages 5 to 14). <BX href="https://www.kanatamuslims.ca/education/hikmah-school">Website</BX></>,
+          <><strong className="text-text">Alnour School (Kanata campus)</strong>, Saturdays at Jack Donohue Public School.</>,
+        ]}
+      />
+      <BP>
+        For full-time Islamic school, Kanata families typically look at Stittsville, Bells Corners, or the west end, all a short drive away.
+      </BP>
+
+      <BH2>Barrhaven &amp; Riverside South</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">SNMC Albushra School</strong>, 3020 Woodroffe Ave: JK to Grade 6 with Quran, Arabic, and French. <BX href="https://albushraschool.ca/">Website</BX></>,
+          <><strong className="text-text">Free board Arabic classes</strong> on Saturday mornings at Farley Mowat Public School (OCDSB) and St. Mother Teresa High School (OCSB).</>,
+        ]}
+      />
+      <BP>
+        For JK and SK, Barrhaven and Riverside South families are also within easy reach of the Nepean schools above via Woodroffe, Merivale, or Prince of Wales; QAF on Dynes Rd is just off Prince of Wales Dr.
+      </BP>
+
+      <BH2>Hunt Club, South Keys &amp; Alta Vista</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Ahlul Bayt Islamic School</strong>, 3025 Albion Rd N: JK to Grade 10, French from JK. <BX href="https://abischool.com/">Website</BX></>,
+          <><strong className="text-text">Islamic Montessori Academy</strong>, 2465 St. Laurent Blvd: Montessori Casa (ages 4 to 6) and Elementary (6 to 12), alongside Blossom Montessori&rsquo;s toddler and Casa programs. <BX href="https://imaottawa.ca/">Website</BX></>,
+          <><strong className="text-text">Masjid ar-Rahmah</strong>, 1216 Hunt Club Rd: has run Sunday Arabic circles for young children; contact for this year&rsquo;s schedule.</>,
+        ]}
+      />
+
+      <BH2>Central &amp; East-Central Ottawa</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Ottawa Main Mosque (OMA)</strong>, 251 Northwestern Ave: OMA Sunday School, AlFajr School, and Tarteel Juniors Quran program. <BX href="https://ss.ottawamosque.ca/">Website</BX></>,
+          <><strong className="text-text">Om Al-Qura School</strong>, 35 Melrose Ave: Saturday Arabic, Quran, and Islamic Studies. <BX href="https://omalqura.ottawamosque.ca/">Website</BX></>,
+          <><strong className="text-text">Dar-Ul-Huda School</strong>, run by AICP (847 St. Laurent Blvd): Saturday Arabic and Quran from age five.</>,
+        ]}
+      />
+
+      <BH2>Orléans &amp; the East End</BH2>
+      <BList
+        items={[
+          <><strong className="text-text">Jamia Islamia</strong>, 3555 St Joseph Blvd: JK to Grade 8; describes itself as the first elementary Islamic school in Orléans. <BX href="https://jamiaislamiaottawa.org/">Website</BX></>,
+          <><strong className="text-text">Masjid Bilal (Islamic Society of Cumberland)</strong>: weekday-evening and weekend Quran program with tajweed and memorization.</>,
+          <><strong className="text-text">Free board Arabic classes</strong> on Saturday mornings at Fallingbrook Community Elementary (OCDSB) and St. Matthew High School (OCSB).</>,
+        ]}
+      />
+
+      <BH2>Islamic Daycare &amp; Preschool Near You</BH2>
+      <BP>
+        Dedicated Muslim child care for under-fours is still limited in Ottawa. The options we could verify are MAC Preschool and Childcare at 1085 Grenon Ave (licensed, west end), Marifah&rsquo;s toddler and preschool programs in Stittsville, and Montessori toddler and Casa programs at Blossom Montessori and the Islamic Montessori Academy on St. Laurent Blvd. Once your child turns four, an Islamic JK program becomes an option too; we explain the difference in our{" "}
+        <BL href="/blog/muslim-daycare-ottawa-guide">guide to Islamic daycare in Ottawa</BL>.
+      </BP>
+
+      <BH2>Weighing Distance Against Fit</BH2>
+      <BP>
+        Proximity matters, especially for young children: a short commute means more sleep, calmer mornings, and easier playdates with classmates. But it is only one factor. A few rules of thumb:
+      </BP>
+      <BList
+        items={[
+          <><strong className="text-text">For JK and SK, fit beats distance up to about 20 minutes.</strong> The early years shape how your child feels about school and about being Muslim; an extra ten minutes for the right classroom is usually worth it.</>,
+          <><strong className="text-text">Think about the whole pathway.</strong> If you want one school through Grade 8 or 12, check which schools near you offer the grades you will need later.</>,
+          <><strong className="text-text">Ask about carpools.</strong> Families often come from the same neighbourhoods; ask whether the school can connect you with others nearby.</>,
+          <><strong className="text-text">Visit at drop-off time.</strong> You will see the real traffic, the real routine, and how children arrive.</>,
+        ]}
+      />
+
+      <BCallout>
+        Live in Nepean, Barrhaven, Riverside South, or anywhere near Prince of Wales Dr with a 4- or 5-year-old?{" "}
+        <Link href="/inquiry" className="text-orange-dark font-semibold hover:underline">Submit an inquiry</Link>{" "}
+        and come see QAF&rsquo;s classroom at 900 Dynes Rd.
+      </BCallout>
+    </div>
+  );
+}
+
 const contentMap: Record<string, () => React.ReactNode> = {
+  "islamic-schools-near-me-ottawa": NearMeContent,
+  "weekend-islamic-schools-ottawa": WeekendIslamicSchoolsContent,
   "junior-kindergarten-ottawa-guide": JKOttawaGuideContent,
   "arabic-classes-for-kids-ottawa": ArabicClassesKidsContent,
   "quran-classes-for-kids-ottawa": QuranClassesKidsContent,
@@ -1107,7 +1495,9 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
             <h1 className="font-heading text-2xl md:text-4xl lg:text-5xl font-bold text-white mt-3 leading-tight">
               {post.title}
             </h1>
-            <p className="text-white/80 mt-3 text-sm">{post.date}</p>
+            <p className="text-white/80 mt-3 text-sm">
+              {post.updated ? `Updated ${post.updated}` : post.date}
+            </p>
           </div>
         </div>
       </section>

@@ -10,6 +10,8 @@ export interface BlogPost {
   metaDescription: string;
   image: string;
   date: string;
+  /** Last substantial content update, shown as "Updated …" and used for dateModified. */
+  updated?: string;
   category: string;
   relatedSlugs: string[];
   faqs: BlogFAQ[];
@@ -20,6 +22,68 @@ export interface BlogPost {
 }
 
 export const posts: BlogPost[] = [
+  {
+    slug: "islamic-schools-near-me-ottawa",
+    seoTitle: "Islamic Schools Near Me in Ottawa, by Neighbourhood",
+    title: "Islamic Schools Near Me: Ottawa Neighbourhood-by-Neighbourhood Guide (2026/27)",
+    excerpt:
+      "Nepean, Barrhaven, Kanata, Stittsville, South Keys, Orléans: every full-time Islamic school, Muslim preschool, and weekend program in Ottawa, grouped by area so you can see what is actually close to home.",
+    metaDescription:
+      "Find Islamic schools near you in Ottawa: full-time schools, Muslim preschools, and weekend Quran programs in Nepean, Barrhaven, Kanata, Stittsville, and Orléans.",
+    image: "/gallery/IMG_1816.jpg",
+    date: "October 26, 2026",
+    category: "Choosing a School",
+    relatedSlugs: ["islamic-schools-in-ottawa-guide", "weekend-islamic-schools-ottawa", "muslim-daycare-ottawa-guide", "junior-kindergarten-ottawa-guide"],
+    faqs: [
+      {
+        q: "Is there an Islamic school near me in Ottawa?",
+        a: "Most likely. Ottawa has full-time Islamic schools in Nepean (Ottawa Islamic School, Ummaty School, Abraar Elementary, QAF School), the west end and Bells Corners (Abraar Secondary, Al-Furqan, Tarbiyah Learning Academy), Stittsville (Marifah School, Fitra School), Barrhaven (SNMC Albushra School), Hunt Club (Ahlul Bayt Islamic School), St. Laurent Blvd (Islamic Montessori Academy), and Orléans (Jamia Islamia), plus weekend programs across the city.",
+      },
+      {
+        q: "Is there an Islamic school in Kanata?",
+        a: "We could not find a full-time Islamic school in Kanata itself as of October 2026. Kanata families typically choose full-time schools in Stittsville, Bells Corners, or the west end, and the Kanata Muslim Association runs Hikmah Saturday School and an evening Quran school at 351 Sandhill Rd.",
+      },
+      {
+        q: "Is there an Islamic school in Barrhaven?",
+        a: "Yes. SNMC Albushra School at 3020 Woodroffe Ave offers JK to Grade 6 with Quran, Arabic, and French. Barrhaven families are also close to several Nepean schools, including QAF School's Islamic JK and SK at 900 Dynes Rd, just off Prince of Wales Dr.",
+      },
+      {
+        q: "Is there an Islamic school in Orléans?",
+        a: "Yes. Jamia Islamia at 3555 St Joseph Blvd offers JK to Grade 8. Masjid Bilal also runs a weekday-evening and weekend Quran program in the east end, and free Saturday Arabic classes run at Fallingbrook Community Elementary and St. Matthew High School.",
+      },
+    ],
+  },
+  {
+    slug: "weekend-islamic-schools-ottawa",
+    seoTitle: "Weekend Islamic Schools & Quran Classes in Ottawa",
+    title: "Weekend Islamic Schools & Quran Classes in Ottawa: The 2026/27 List",
+    excerpt:
+      "Sunday schools at the Ottawa Main Mosque, Saturday Arabic and Quran programs, free school-board Arabic classes, and more: every weekend Islamic program for kids in Ottawa, organized by area.",
+    metaDescription:
+      "Weekend Islamic schools in Ottawa for 2026/27: Saturday and Sunday Quran, Arabic, and Islamic Studies programs by area, plus free OCDSB and OCSB Arabic classes.",
+    image: "/gallery/IMG_3078.jpg",
+    date: "October 26, 2026",
+    category: "Weekend Programs",
+    relatedSlugs: ["quran-classes-for-kids-ottawa", "arabic-classes-for-kids-ottawa", "islamic-schools-in-ottawa-guide", "islamic-schools-near-me-ottawa"],
+    faqs: [
+      {
+        q: "Are there free Arabic classes for kids in Ottawa?",
+        a: "Yes. Both the OCDSB and the OCSB run free International Languages Arabic classes for JK to Grade 8 students on Saturday mornings from 9:30 to 12:00 at schools across Ottawa, with online options too. Ontario residents pay only a small activity or materials fee, and students from any school board can register.",
+      },
+      {
+        q: "What weekend Islamic schools are there in Ottawa?",
+        a: "Options include OMA Sunday School and AlFajr School at the Ottawa Main Mosque, Om Al-Qura School, Alnour School in Westboro and Kanata, Dar-Ul-Huda School, the Kanata Muslim Association's Hikmah Saturday School, Masjid Bilal's Quran program in Orléans, and QAF Sunday Camp in Nepean for ages 8 to 15.",
+      },
+      {
+        q: "How much do weekend Islamic schools cost in Ottawa?",
+        a: "Fees vary widely. Published 2026/27 fees range from about $100 per year at OMA Sunday School and $240 per year at Alnour School to monthly programs such as QAF Sunday Camp at $190 per month, which includes four hours of Quran, Arabic, STEM, and sports every Sunday. Board-run Arabic classes are free for Ontario residents apart from a small fee.",
+      },
+      {
+        q: "Is there a Sunday Islamic school for kids in Ottawa?",
+        a: "Yes. OMA Sunday School runs Sunday mornings and AlFajr School Sunday afternoons at the Ottawa Main Mosque on Northwestern Ave, and QAF Sunday Camp runs every Sunday from 11 AM to 3 PM at 900 Dynes Rd for ages 8 to 15.",
+      },
+    ],
+  },
   {
     slug: "junior-kindergarten-ottawa-guide",
     seoTitle: "Junior Kindergarten in Ottawa: 2027 Parent Guide",
@@ -327,24 +391,29 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "islamic-schools-in-ottawa-guide",
-    seoTitle: "Islamic Schools in Ottawa: 2026/27 Parent Guide",
-    title: "Islamic Schools in Ottawa (2026/27): Full-Time, Kindergarten & Weekend Options",
+    seoTitle: "Islamic Schools in Ottawa: 2026/27 List & Comparison",
+    title: "Islamic Schools in Ottawa (2026/27): The Full List, Compared",
     excerpt:
       "Ottawa has more Islamic education options than most parents realize \u2014 full-time elementary schools, specialized kindergartens, weekend programs, and Quran academies. Here is an honest map of the landscape and how to choose well.",
     metaDescription:
-      "Compare Islamic schools in Ottawa for 2026/27: full-time K\u20138 schools, Islamic kindergartens, and weekend Quran programs, plus questions to ask on tours.",
+      "12 Islamic schools in Ottawa for 2026/27, compared: grades, location, and programs for Ottawa Islamic School, Abraar, Tarbiyah, Albushra, and more.",
     image: "/gallery/IMG_1795.jpg",
     date: "September 2, 2026",
+    updated: "October 26, 2026",
     category: "Choosing a School",
-    relatedSlugs: ["quran-classes-for-kids-ottawa", "junior-kindergarten-ottawa-guide", "ottawa-islamic-school-fees-explained", "arabic-classes-for-kids-ottawa"],
+    relatedSlugs: ["islamic-schools-near-me-ottawa", "weekend-islamic-schools-ottawa", "ottawa-islamic-school-fees-explained", "junior-kindergarten-ottawa-guide"],
     faqs: [
       {
         q: "How many Islamic schools are there in Ottawa?",
-        a: "Ottawa is home to several full-time Islamic elementary schools (such as Abraar School, Ottawa Islamic School, Ahlul-Bayt Islamic School, and Tarbiyah Learning Academy), specialized early-years programs like QAF School, and many weekend and evening Quran and Arabic programs run through local masajid. Offerings change from year to year, so always confirm details directly with each school.",
+        a: "As of October 2026, Ottawa has about a dozen full-time Islamic schools: Ottawa Islamic School, Abraar School, Ahlul Bayt Islamic School, Tarbiyah Learning Academy, SNMC Albushra School, Ummaty School, Marifah School, Fitra School, Al-Furqan School, Jamia Islamia, Islamic Montessori Academy, and QAF School, plus many weekend and evening Quran and Arabic programs run through local masajid. Offerings change from year to year, so always confirm details directly with each school.",
       },
       {
         q: "What is the best Islamic school in Ottawa?",
         a: "There is no single answer \u2014 the best school is the one that fits your child\u2019s age, learning style, and your family\u2019s priorities. Compare the depth of the Arabic and Quran program, class sizes, teaching approach, Ontario curriculum alignment, location, and fees. Then visit in person: fifteen minutes inside a classroom tells you more than any website.",
+      },
+      {
+        q: "Is there an Islamic high school in Ottawa?",
+        a: "Yes. Ottawa Islamic School offers JK to Grade 12 with Ontario Secondary School Diploma credits, Abraar School's secondary campus serves Grades 7 to 12, and Ahlul Bayt Islamic School runs to Grade 10. Marifah School also offers a supported online high-school credit program in an Islamic setting.",
       },
       {
         q: "What ages does QAF School serve?",
@@ -389,20 +458,21 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "muslim-daycare-ottawa-guide",
-    seoTitle: "Islamic Daycare in Ottawa: A Parent\u2019s Guide",
+    seoTitle: "Islamic Daycare & Muslim Preschools in Ottawa (2026)",
     title: "Islamic Daycare in Ottawa: A Parent\u2019s Guide to Muslim Child Care",
     excerpt:
       "When parents search for a \u201cMuslim daycare near me,\u201d they are really looking for four things: halal food, Islamic values, Arabic exposure, and people they trust. Here is how to evaluate your options in Ottawa \u2014 and when a kindergarten is the better fit.",
     metaDescription:
-      "Looking for an Islamic daycare in Ottawa? What to check \u2014 halal food, duas, Arabic, licensing \u2014 and when an Islamic JK/SK program for ages 4\u20135 fits better.",
+      "Islamic daycare and Muslim preschool options in Ottawa for 2026, plus what to check (halal food, duas, Arabic, licensing) and when JK/SK fits better.",
     image: "/gallery/IMG_1799.jpg",
     date: "September 4, 2026",
+    updated: "October 26, 2026",
     category: "Choosing a School",
-    relatedSlugs: ["junior-kindergarten-ottawa-guide", "islamic-schools-in-ottawa-guide", "arabic-classes-for-kids-ottawa", "what-a-day-looks-like-at-qaf"],
+    relatedSlugs: ["islamic-schools-near-me-ottawa", "junior-kindergarten-ottawa-guide", "islamic-schools-in-ottawa-guide", "what-a-day-looks-like-at-qaf"],
     faqs: [
       {
         q: "Is there a Muslim daycare near me in Ottawa?",
-        a: "Ottawa has a growing number of Muslim-run home daycares and licensed child care centres, particularly in the south and west ends. For children ages 4\u20135, there is another option many parents overlook: a full-day Islamic kindergarten like QAF School at 900 Dynes Rd, which provides a structured JK/SK education with Arabic, Quran, and Islamic values built into every day.",
+        a: "Options are still limited but growing. Verified programs include MAC Preschool and Childcare at 1085 Grenon Ave (a licensed centre in the west end), Marifah School's toddler care and preschool in Stittsville, and Montessori toddler and Casa programs at Blossom Montessori and the Islamic Montessori Academy on St. Laurent Blvd. Many families also use Muslim-run home daycares found through community networks. For children ages 4\u20135, there is another option many parents overlook: a full-day Islamic kindergarten like QAF School at 900 Dynes Rd, which provides a structured JK/SK education with Arabic, Quran, and Islamic values built into every day.",
       },
       {
         q: "Is QAF School a daycare?",
