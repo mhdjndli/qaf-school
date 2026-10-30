@@ -25,3 +25,49 @@ body {
 ::selection {
   background: rgba(242, 140, 40, 0.2);
 }
+
+/* ---- Markdown blog posts (src/content/blog/*.md) ---- */
+.qaf-prose {
+  color: #5A5A5A; line-height: 1.75; font-size: 1.0625rem;
+  /* Latin text stays Inter; Arabic glyphs fall through to Amiri Quran. */
+  font-family: var(--font-inter), var(--font-arabic), system-ui, sans-serif;
+}
+.qaf-prose .qaf-arabic {
+  font-family: var(--font-arabic), "Geeza Pro", serif; font-size: 1.75rem; line-height: 2.3;
+  color: #2D2D2D; text-align: right;
+}
+.qaf-table td { unicode-bidi: plaintext; }
+.qaf-prose > * + * { margin-top: 1.25rem; }
+.qaf-prose h2 {
+  font-family: var(--font-heading), Georgia, serif; font-weight: 700; color: #2D2D2D;
+  font-size: 1.6rem; line-height: 1.25; margin-top: 2.75rem; scroll-margin-top: 6rem;
+}
+.qaf-prose h3 {
+  font-family: var(--font-heading), Georgia, serif; font-weight: 700; color: #2D2D2D;
+  font-size: 1.25rem; line-height: 1.3; margin-top: 2rem; scroll-margin-top: 6rem;
+}
+.qaf-prose h2 + *, .qaf-prose h3 + * { margin-top: 0.75rem; }
+.qaf-prose strong { color: #2D2D2D; font-weight: 600; }
+.qaf-prose a { color: #E07B1A; font-weight: 500; text-underline-offset: 3px; }
+.qaf-prose a:hover { text-decoration: underline; }
+.qaf-prose ul, .qaf-prose ol { padding-left: 1.5rem; }
+.qaf-prose ul { list-style: none; padding-left: 0.25rem; }
+.qaf-prose ul > li { position: relative; padding-left: 1.5rem; }
+.qaf-prose ul > li::before { content: "\25B8"; position: absolute; left: 0; color: #F28C28; }
+.qaf-prose ol { list-style: decimal; }
+.qaf-prose ol > li::marker { color: #E07B1A; font-weight: 700; }
+.qaf-prose li + li { margin-top: 0.5rem; }
+.qaf-prose li > ul, .qaf-prose li > ol { margin-top: 0.5rem; }
+.qaf-prose blockquote {
+  background: #FFF8F0; border: 1px solid #E5D6BE; border-left: 4px solid #F28C28;
+  border-radius: 0.5rem; padding: 1.25rem 1.5rem; color: #2D2D2D;
+}
+.qaf-prose blockquote > * + * { margin-top: 0.6rem; }
+.qaf-prose hr { border: 0; border-top: 1px solid #E5D6BE; margin: 2.5rem 0; }
+.qaf-prose code { background: #FFF8F0; border-radius: 4px; padding: 0.1rem 0.35rem; font-size: 0.9em; }
+.qaf-table { overflow-x: auto; border: 1px solid #E5D6BE; border-radius: 0.5rem; }
+.qaf-table table { width: 100%; min-width: 600px; background: #fff; font-size: 0.9rem; border-collapse: collapse; }
+.qaf-table thead { background: #F28C28; color: #fff; }
+.qaf-table th { padding: 0.75rem 1rem; text-align: left; font-weight: 600; white-space: nowrap; }
+.qaf-table td { padding: 0.75rem 1rem; vertical-align: top; border-top: 1px solid #E5D6BE; }
+.qaf-table td:first-child { font-weight: 600; color: #2D2D2D; }

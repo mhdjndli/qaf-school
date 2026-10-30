@@ -1,3 +1,5 @@
+import { guidePosts } from "./blog-posts-guides";
+
 export interface BlogFAQ {
   q: string;
   a: string;
@@ -19,9 +21,13 @@ export interface BlogPost {
   seoTitle?: string;
   /** Content language; defaults to English. */
   lang?: "en" | "fr";
+  /** True for designed 1600×900 covers with a headline baked in (shown un-cropped, no overlay). */
+  imageHasText?: boolean;
+  imageAlt?: string;
+  keywords?: string[];
 }
 
-export const posts: BlogPost[] = [
+const corePosts: BlogPost[] = [
   {
     slug: "islamic-schools-near-me-ottawa",
     seoTitle: "Islamic Schools Near Me in Ottawa, by Neighbourhood",
@@ -520,6 +526,9 @@ export const posts: BlogPost[] = [
     ],
   },
 ];
+
+// Newest long-form guides first, so the blog index features the latest.
+export const posts: BlogPost[] = [...guidePosts, ...corePosts];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return posts.find((p) => p.slug === slug);

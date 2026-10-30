@@ -1,33 +1,61 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { useState, use } from "react";
 import { posts, getPostBySlug, getRelatedPosts } from "@/data/blog-posts";
 import type { BlogFAQ } from "@/data/blog-posts";
+import { renderMarkdownPost } from "@/lib/markdown";
 
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return posts.map((p) => ({ slug: p.slug }));
+}
+
+// Native <details> keeps every answer in the HTML (crawlable) with no client JS.
 function FAQItem({ q, a }: BlogFAQ) {
-  const [open, setOpen] = useState(false);
   return (
-    <div className="bg-warm-white rounded-lg border border-card-line overflow-hidden">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full text-left px-6 py-4 flex justify-between items-center gap-4 hover:bg-orange/[0.03] transition-colors"
-      >
-        <span className="font-semibold text-text text-[0.95rem]">{q}</span>
-        <span
-          className={`text-orange transition-transform flex-shrink-0 ${open ? "rotate-180" : ""}`}
-        >
+    <details className="group bg-warm-white rounded-lg border border-card-line overflow-hidden">
+      <summary className="cursor-pointer list-none px-6 py-4 flex justify-between items-center gap-4 hover:bg-orange/[0.03] transition-colors [&::-webkit-details-marker]:hidden">
+        <h3 className="font-semibold text-text text-[0.95rem]">{q}</h3>
+        <span className="text-orange transition-transform flex-shrink-0 group-open:rotate-180">
           &#9660;
         </span>
-      </button>
-      {open && (
-        <div className="px-6 pb-5 text-text-light text-[0.93rem] leading-relaxed">
-          {a}
+      </summary>
+      <div className="px-6 pb-5 text-text-light text-[0.93rem] leading-relaxed">{a}</div>
+    </details>
+  );
+}
+
+// Mid-article conversion box: one path per age group QAF serves.
+function MidArticleCTA() {
+  return (
+    <aside aria-label="QAF programs" className="my-12 rounded-xl overflow-hidden border border-card-line shadow-sm">
+      <div className="bg-gradient-to-r from-orange to-red px-6 py-4">
+        <p className="font-heading text-xl font-bold text-white">Looking for an Islamic school or Quran program in Ottawa?</p>
+      </div>
+      <div className="grid md:grid-cols-2 bg-warm-white">
+        <div className="p-6 md:border-r border-card-line">
+          <p className="text-xs font-semibold uppercase tracking-wide text-orange-dark">Ages 4&ndash;5 &middot; Mon&ndash;Fri</p>
+          <p className="font-heading text-lg font-bold text-text mt-1">Islamic JK &amp; SK at QAF</p>
+          <p className="text-text-light text-sm mt-2 leading-relaxed">
+            Full-day kindergarten with daily Arabic, Quran and Islamic Studies, aligned with Ontario&rsquo;s curriculum. 900 Dynes Rd, Nepean.
+          </p>
+          <Link href="/inquiry" className="inline-block mt-4 bg-orange text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-orange-dark transition-colors">
+            Book a visit &rarr;
+          </Link>
         </div>
-      )}
-    </div>
+        <div className="p-6 border-t md:border-t-0 border-card-line">
+          <p className="text-xs font-semibold uppercase tracking-wide text-green">Ages 8&ndash;15 &middot; Sundays 11&ndash;3</p>
+          <p className="font-heading text-lg font-bold text-text mt-1">QAF Sunday Camp</p>
+          <p className="text-text-light text-sm mt-2 leading-relaxed">
+            Quran, Arabic reading and writing, math &amp; STEM, and soccer every Sunday. $190/month, September to June.
+          </p>
+          <Link href="/sunday-camp" className="inline-block mt-4 bg-green text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity">
+            See Sunday Camp &rarr;
+          </Link>
+        </div>
+      </div>
+    </aside>
   );
 }
 
@@ -1445,7 +1473,7 @@ function NearMeContent() {
   );
 }
 
-const contentMap: Record<string, () => React.ReactNode> = {
+const contentMap: Partial<Record<string, () => React.ReactNode>> = {
   "islamic-schools-near-me-ottawa": NearMeContent,
   "weekend-islamic-schools-ottawa": WeekendIslamicSchoolsContent,
   "junior-kindergarten-ottawa-guide": JKOttawaGuideContent,
@@ -1464,53 +1492,116 @@ const contentMap: Record<string, () => React.ReactNode> = {
   "building-islamic-identity-in-early-years": IslamicIdentityContent,
 };
 
-export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const related = getRelatedPosts(post.relatedSlugs);
   const ContentComponent = contentMap[slug];
+  const md = ContentComponent ? null : renderMarkdownPost(slug);
+  const lang = post.lang ?? "en";
 
   return (
     <>
       {/* HERO */}
-      <section className="relative" lang={post.lang ?? "en"}>
-        <div className="relative aspect-[21/9] md:aspect-[3/1] max-h-[400px] w-full">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-          <div className="max-w-3xl mx-auto">
+      {post.imageHasText ? (
+        <section className="bg-gradient-to-br from-cream via-[#FFF3E6] to-[#FDEBD0] pt-10 md:pt-14 pb-12" lang={lang}>
+          <div className="max-w-4xl mx-auto px-6">
+            <nav aria-label="Breadcrumb" className="text-sm text-text-light mb-5">
+              <Link href="/" className="hover:text-orange-dark">Home</Link>
+              <span className="mx-2 text-orange">/</span>
+              <Link href="/blog" className="hover:text-orange-dark">Blog</Link>
+              <span className="mx-2 text-orange">/</span>
+              <span className="text-text">{post.category}</span>
+            </nav>
             <span className="bg-orange text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
               {post.category}
             </span>
-            <h1 className="font-heading text-2xl md:text-4xl lg:text-5xl font-bold text-white mt-3 leading-tight">
+            <h1 className="font-heading text-3xl md:text-5xl font-bold text-text mt-4 leading-tight">
               {post.title}
             </h1>
-            <p className="text-white/80 mt-3 text-sm">
-              {post.updated ? `Updated ${post.updated}` : post.date}
+            <p className="text-text-light text-lg mt-4 max-w-3xl leading-relaxed">{post.excerpt}</p>
+            <p className="text-text-light/80 mt-4 text-sm">
+              By the QAF School team &middot;{" "}
+              <time dateTime={new Date(post.updated ?? post.date).toISOString().slice(0, 10)}>
+                {post.updated ? `Updated ${post.updated}` : post.date}
+              </time>
+              {md && <> &middot; {md.readingMinutes} min read</>}
             </p>
+            <div className="relative aspect-video w-full mt-8 rounded-xl overflow-hidden shadow-lg border border-card-line">
+              <Image
+                src={post.image}
+                alt={post.imageAlt ?? post.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 896px) 100vw, 896px"
+                priority
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="relative" lang={lang}>
+          <div className="relative aspect-[21/9] md:aspect-[3/1] max-h-[400px] w-full">
+            <Image
+              src={post.image}
+              alt={post.imageAlt ?? post.title}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
+            <div className="max-w-3xl mx-auto">
+              <span className="bg-orange text-white text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
+                {post.category}
+              </span>
+              <h1 className="font-heading text-2xl md:text-4xl lg:text-5xl font-bold text-white mt-3 leading-tight">
+                {post.title}
+              </h1>
+              <p className="text-white/80 mt-3 text-sm">
+                {post.updated ? `Updated ${post.updated}` : post.date}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ARTICLE BODY */}
       <section className="py-16">
-        <article className="max-w-3xl mx-auto px-6" lang={post.lang ?? "en"}>
+        <article className="max-w-3xl mx-auto px-6" lang={lang}>
           {ContentComponent && <ContentComponent />}
+          {md && (
+            <>
+              {/* Intro + key takeaways first, then the table of contents, then the body. */}
+              <div className="qaf-prose" dangerouslySetInnerHTML={{ __html: md.intro }} />
+              {md.toc.length > 2 && (
+                <nav aria-label="Table of contents" className="bg-cream rounded-lg border border-card-line p-6 my-10">
+                  <p className="font-heading text-lg font-bold text-text mb-3">In this guide</p>
+                  <ol className="space-y-1.5 list-decimal list-inside marker:text-orange marker:font-semibold">
+                    {md.toc.map((t) => (
+                      <li key={t.id} className="text-[0.95rem]">
+                        <a href={`#${t.id}`} className="text-text-light hover:text-orange-dark hover:underline">
+                          {t.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+              <div className="qaf-prose" dangerouslySetInnerHTML={{ __html: md.bodyFirst }} />
+              {md.bodyRest && <MidArticleCTA />}
+              {md.bodyRest && <div className="qaf-prose" dangerouslySetInnerHTML={{ __html: md.bodyRest }} />}
+            </>
+          )}
         </article>
       </section>
 
       {/* FAQ SECTION */}
-      <section className="py-16 bg-cream" lang={post.lang ?? "en"}>
+      <section className="py-16 bg-cream" lang={lang}>
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-8 text-center">
             {post.lang === "fr" ? "Questions fréquentes" : "Frequently Asked Questions"}
@@ -1540,7 +1631,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
                   <div className="relative aspect-[16/9]">
                     <Image
                       src={rp.image}
-                      alt={rp.title}
+                      alt={rp.imageAlt ?? rp.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 768px) 100vw, 50vw"

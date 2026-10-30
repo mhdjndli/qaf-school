@@ -4,13 +4,23 @@ import Link from "next/link";
 import { posts } from "@/data/blog-posts";
 
 export const metadata: Metadata = {
-  title: "Blog · Islamic Early Education in Ottawa",
+  title: "Blog · Islamic Parenting, Quran & Arabic Guides",
   alternates: { canonical: "/blog" },
   description:
-    "Insights, tips, and stories from QAF. Learn about Islamic early education, Arabic immersion, Montessori-inspired learning, and life at our Ottawa kindergarten.",
+    "Guides for Muslim parents from QAF School in Ottawa: choosing a school, Quran and Arabic for kids, duas, Ramadan ideas, apps compared, and Islamic parenting tips.",
 };
 
+const categoryId = (cat: string) =>
+  cat.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 export default function Blog() {
+  // Group every post after the featured one by category, largest topics first.
+  const groups = new Map<string, typeof posts>();
+  for (const post of posts.slice(1)) {
+    groups.set(post.category, [...(groups.get(post.category) ?? []), post]);
+  }
+  const categories = [...groups.entries()].sort((x, y) => y[1].length - x[1].length);
+
   return (
     <>
       {/* HERO */}
@@ -20,8 +30,9 @@ export default function Blog() {
             The QAF Blog
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto">
-            Insights, stories, and resources from Ottawa&rsquo;s Islamic
-            kindergarten. Learn more about our approach to early education.
+            Practical guides for Muslim parents from Ottawa&rsquo;s Islamic
+            kindergarten: choosing a school, Quran and Arabic at home, Islamic
+            parenting, and the apps and tools that actually help.
           </p>
         </div>
       </section>
@@ -33,10 +44,10 @@ export default function Blog() {
             href={`/blog/${posts[0].slug}`}
             className="grid md:grid-cols-2 gap-8 items-center mb-16 group"
           >
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
+            <div className={`relative ${posts[0].imageHasText ? "aspect-video" : "aspect-[4/3]"} rounded-lg overflow-hidden shadow-lg`}>
               <Image
                 src={posts[0].image}
-                alt={posts[0].title}
+                alt={posts[0].imageAlt ?? posts[0].title}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -59,43 +70,55 @@ export default function Blog() {
             </div>
           </Link>
 
-          {/* ALL POSTS GRID */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {posts.slice(1).map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="bg-warm-white rounded-lg border border-card-line overflow-hidden transition-colors hover:border-orange group"
+          {/* BROWSE BY TOPIC */}
+          <nav aria-label="Blog topics" className="flex flex-wrap justify-center gap-2 mb-14">
+            {categories.map(([cat, list]) => (
+              <a
+                key={cat}
+                href={`#${categoryId(cat)}`}
+                className="px-4 py-2 rounded-full border border-card-line bg-warm-white text-sm font-medium text-text hover:border-orange hover:text-orange-dark transition-colors"
               >
-                <div className="relative aspect-[16/9]">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <span className="text-orange-dark text-xs font-semibold uppercase tracking-wide">
-                    {post.category}
-                  </span>
-                  <h3 className="font-heading text-xl font-bold mt-2 mb-3 text-text">
-                    {post.title}
-                  </h3>
-                  <p className="text-text-light text-[0.93rem] leading-relaxed mb-3 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-text-light/60 text-sm">{post.date}</span>
-                    <span className="text-orange-dark font-semibold text-sm group-hover:underline">
-                      Read more &rarr;
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                {cat} <span className="text-text-light/70">({list.length})</span>
+              </a>
             ))}
-          </div>
+          </nav>
+
+          {categories.map(([cat, list]) => (
+            <section key={cat} id={categoryId(cat)} className="mb-16 scroll-mt-24">
+              <h2 className="font-heading text-2xl md:text-3xl font-bold mb-8 text-text">{cat}</h2>
+              <div className="grid md:grid-cols-2 gap-8">
+                {list.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="bg-warm-white rounded-lg border border-card-line overflow-hidden transition-colors hover:border-orange group"
+                  >
+                    <div className="relative aspect-[16/9]">
+                      <Image
+                        src={post.image}
+                        alt={post.imageAlt ?? post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="font-heading text-xl font-bold mb-3 text-text">{post.title}</h3>
+                      <p className="text-text-light text-[0.93rem] leading-relaxed mb-3 line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-text-light/60 text-sm">{post.updated ?? post.date}</span>
+                        <span className="text-orange-dark font-semibold text-sm group-hover:underline">
+                          Read more &rarr;
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </section>
 
