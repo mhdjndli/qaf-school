@@ -18,28 +18,27 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 relative">
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-5 text-text">
             <span className="block font-[var(--font-inter)] text-sm md:text-base font-semibold uppercase tracking-[0.18em] text-orange-dark mb-4">
-              Islamic School in Ottawa &middot; Montessori JK &amp; SK
+              Quran &amp; Arabic Programs for Kids in Ottawa
             </span>
             Where Faith, Language, and Learning Take Root.
           </h1>
           <p className="text-text-light text-lg md:text-xl max-w-2xl mx-auto mb-9 leading-relaxed">
-            QAF is Ottawa&rsquo;s Islamic Junior and Senior Kindergarten for
-            children ages 4 and 5, blending the Ontario curriculum with
-            Montessori-inspired learning, daily Arabic, and a joyful Islamic
-            environment.
+            QAF runs weekly Islamic programs for school-age children: Sunday
+            Camp for ages 8&ndash;15 and a Tuesday evening program for ages
+            9&ndash;13, both at 900 Dynes Rd.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/inquiry"
+              href="/sunday-camp"
               className="bg-orange text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange-dark transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Submit Inquiry &rarr;
+              Enrol in Sunday Camp &rarr;
             </Link>
             <Link
-              href="/program"
+              href="/tuesday"
               className="border-2 border-orange text-orange-dark px-8 py-4 rounded-lg font-semibold text-lg hover:bg-orange hover:text-white transition-all hover:-translate-y-0.5"
             >
-              See Our Program
+              Tuesday Program Waitlist
             </Link>
           </div>
         </div>
@@ -48,113 +47,94 @@ export default function Home() {
       {/* ===== SCHOOL PHOTOS (carousel) ===== */}
       <PhotoStrip />
 
-      {/* ===== QAF DIFFERENCE ===== */}
+      {/* ===== PROGRAMS ===== */}
       <section className="py-20 bg-warm-white">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
             <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-              The QAF Difference
+              Our Programs
             </h2>
             <p className="text-text-light text-lg max-w-2xl mx-auto">
-              Three pillars that make QAF unlike any other kindergarten in Ottawa.
+              Two weekly programs that fit around the school week.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-10 md:gap-0 md:divide-x md:divide-card-line">
+          <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                icon: "\u262A",
-                color: "bg-red/10 text-red",
-                title: "Faith at the Center",
-                text: "Mornings begin with duas, days unfold with adab, and children hear the Quran as naturally as they hear their teacher\u2019s voice. Islam isn\u2019t a subject at QAF; it\u2019s the air we breathe.",
+                badge: "Seats available",
+                badgeCls: "bg-green/10 text-green",
+                title: "Sunday Camp",
+                meta: "Ages 8\u201315 \u00b7 Sundays 11 AM \u2013 3 PM \u00b7 $190/month",
+                text: "Four hours of Quran, Arabic reading and writing, math & STEM, and soccer or indoor activity, split into junior and senior classes.",
+                href: "/sunday-camp",
+                cta: "Enrol in Sunday Camp",
+                img: "/gallery/IMG_1817.jpg",
+                alt: "Children playing together outdoors",
               },
               {
-                icon: "\u270E",
-                color: "bg-orange/10 text-orange",
-                title: "Montessori-Inspired Learning",
-                text: "We combine Ontario\u2019s Kindergarten Program with Montessori-inspired materials and practices: purposeful activities, mixed-age work, and respect for each child\u2019s pace.",
+                badge: "Full \u00b7 Join the waitlist",
+                badgeCls: "bg-red/10 text-red",
+                title: "Tuesday Evening Program",
+                meta: "Ages 9\u201313 \u00b7 Tuesdays 6 \u2013 8:30 PM",
+                text: "An evening of Quran, Tajweed, and Sira: recitation by level, the rules of correct reading, and the life of the Prophet \uFDFA.",
+                href: "/tuesday",
+                cta: "Join the Waitlist",
+                img: "/gallery/IMG_1807.jpg",
+                alt: "Students reading together",
               },
-              {
-                icon: "\u0639",
-                color: "bg-green/10 text-green",
-                title: "Arabic as a Living Language",
-                text: "Arabic is spoken daily in our classroom, in songs, stories, play, and transitions. Children absorb the language naturally, whether from Arabic-speaking homes or not.",
-              },
-            ].map((card, i) => (
+            ].map((p) => (
               <div
-                key={i}
-                className="bg-warm-white rounded-lg p-8 border border-card-line transition-colors hover:border-orange"
+                key={p.href}
+                className="bg-warm-white rounded-lg border border-card-line overflow-hidden flex flex-col transition-colors hover:border-orange"
               >
-                <div
-                  className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl mb-5 ${card.color}`}
-                >
-                  {card.icon}
+                <div className="relative aspect-[16/9]">
+                  <Image src={p.img} alt={p.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
                 </div>
-                <h3 className="font-heading text-xl font-bold mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-text-light leading-relaxed text-[0.95rem]">
-                  {card.text}
-                </p>
+                <div className="p-8 flex flex-col flex-1">
+                  <span className={`self-start font-semibold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full mb-4 ${p.badgeCls}`}>
+                    {p.badge}
+                  </span>
+                  <h3 className="font-heading text-2xl font-bold mb-2 text-orange-dark">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm font-semibold text-text mb-3">{p.meta}</p>
+                  <p className="text-text-light leading-relaxed mb-6">{p.text}</p>
+                  <Link
+                    href={p.href}
+                    className="mt-auto self-start bg-orange text-white px-7 py-3 rounded-lg font-semibold hover:bg-orange-dark transition-all hover:-translate-y-0.5"
+                  >
+                    {p.cta} &rarr;
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== PROGRAM AT A GLANCE ===== */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-8 text-center">
-            Our Program at a Glance
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
-              <Image src="/gallery/IMG_1798.jpg" alt="Child painting during art time" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-            </div>
-            <div className="bg-warm-white rounded-lg p-8 border border-card-line">
-              <h3 className="font-heading text-2xl font-bold mb-3 text-orange-dark">
-                Junior &amp; Senior Kindergarten (Ages 4&ndash;5)
-              </h3>
-              <p className="text-text-light leading-relaxed mb-6">
-                A full-day kindergarten experience blending Ontario&rsquo;s curriculum
-                with Montessori-inspired practice, daily Arabic, and Islamic values.
-                Small groups, qualified educators, and a carefully prepared environment
-                designed for your child&rsquo;s first steps into formal learning.
-              </p>
-              <Link
-                href="/program"
-                className="inline-block bg-orange text-white px-7 py-3 rounded-lg font-semibold hover:bg-orange-dark transition-all hover:-translate-y-0.5"
-              >
-                Explore the JK/SK Program &rarr;
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ===== WHY QAF ===== */}
-      <section className="py-20">
+      <section className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
             Why QAF
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-y-10">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                title: "Small, nurturing classrooms",
-                text: "A low student-to-teacher ratio means your child is seen, known, and supported every day.",
+                title: "Small groups by level",
+                text: "Quran groups are split by level, so every student is challenged and supported at the right pace.",
               },
               {
-                title: "Qualified educators",
-                text: "Our team includes RECEs and Arabic specialists, credentialed, caring, and deeply invested.",
+                title: "Qualified teachers",
+                text: "Experienced Quran and Arabic teachers who know every student by name.",
               },
               {
                 title: "Arabic-rich, not Arabic-required",
-                text: "Your family does not need to speak Arabic at home. Our environment does the teaching.",
+                text: "Your family does not need to speak Arabic at home. We start where your child is.",
               },
               {
-                title: "Ready for Grade 1 and beyond",
-                text: "Our graduates leave QAF confident, bilingual, and academically prepared for any school.",
+                title: "Serving Ottawa since 2021",
+                text: "A warm community of Muslim families from across the city, at 900 Dynes Rd.",
               },
             ].map((item, i) => (
               <div
@@ -173,201 +153,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== A DAY AT QAF ===== */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-10">
-            A Day at QAF
-          </h2>
-          <div className="overflow-x-auto rounded-lg border border-card-line">
-            <table className="w-full bg-white">
-              <thead className="bg-orange text-white">
-                <tr>
-                  <th className="py-4 px-6 text-left font-semibold text-sm">
-                    Time
-                  </th>
-                  <th className="py-4 px-6 text-left font-semibold text-sm">
-                    What&rsquo;s Happening
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ["8:45 - 9:00 AM", "Drop-off, warm greeting in Arabic, settling into the classroom"],
-                  ["9:00 - 9:20 AM", "Morning circle: duas, calendar, weather, a short surah, and the day\u2019s theme"],
-                  ["9:20 - 11:00 AM", "Work cycle: Montessori-inspired activities alongside Ontario curriculum learning"],
-                  ["11:00 - 11:30 AM", "Outdoor play, movement, fresh air, and free play"],
-                  ["11:30 - 12:15 PM", "Lunch: Bismillah, conversation in Arabic, adab of eating"],
-                  ["12:15 - 1:30 PM", "Quiet time: rest, stories, individual work for non-nappers"],
-                  ["1:30 - 2:15 PM", "Arabic lesson or Islamic Studies (alternates)"],
-                  ["2:15 - 3:00 PM", "Art, music, science exploration, or small-group enrichment"],
-                  ["3:00 - 3:15 PM", "Pick-up, closing dua, goodbye"],
-                ].map(([time, desc], i) => (
-                  <tr key={i} className="border-b border-card-line last:border-0 hover:bg-orange/[0.03]">
-                    <td className="py-3.5 px-6 font-semibold text-orange-dark whitespace-nowrap text-sm">
-                      {time}
-                    </td>
-                    <td className="py-3.5 px-6 text-text-light text-sm">
-                      {desc}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CLASSDOJO / STAY CONNECTED ===== */}
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <h2 className="font-heading text-3xl md:text-4xl font-bold mb-5">
-                Stay Connected with ClassDojo
-              </h2>
-              <p className="text-text-light leading-relaxed mb-4">
-                At QAF, we believe parents should be part of their child&rsquo;s
-                learning journey every step of the way. Through ClassDojo, our
-                parent communication platform, you&rsquo;ll receive:
-              </p>
-              <ul className="space-y-3 mb-6">
-                {[
-                  "Daily photos and videos from the classroom",
-                  "Updates on your child\u2019s academic progress and milestones",
-                  "Direct messaging with your child\u2019s teacher",
-                  "Weekly classroom stories and highlights",
-                  "Important announcements and reminders",
-                ].map((item, i) => (
-                  <li key={i} className="pl-6 relative text-text-light text-[0.93rem] before:content-['\2713'] before:absolute before:left-0 before:text-green before:font-bold">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-text-light text-sm">
-                Every parent gets their own ClassDojo account so you never miss a
-                moment of your child&rsquo;s growth at QAF.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="relative aspect-square rounded-lg overflow-hidden">
-                <Image src="/gallery/IMG_1803.jpg" alt="Classroom learning activity" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
-              </div>
-              <div className="relative aspect-square rounded-lg overflow-hidden">
-                <Image src="/gallery/IMG_1806.jpg" alt="Children during group time" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
-              </div>
-              <div className="relative aspect-square rounded-lg overflow-hidden">
-                <Image src="/gallery/IMG_1802.jpg" alt="Art project in progress" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
-              </div>
-              <div className="relative aspect-square rounded-lg overflow-hidden">
-                <Image src="/gallery/IMG_1807.jpg" alt="Children reading together" fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== GALLERY ===== */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-4">
-            Life at QAF
-          </h2>
-          <p className="text-text-light text-center mb-10 text-lg">
-            A glimpse into our classroom, outdoor play, and hands-on learning.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[
-              { src: "/gallery/IMG_1817.jpg", alt: "Parachute play outdoors" },
-              { src: "/gallery/IMG_1796.jpg", alt: "Outdoor exploration in snow" },
-              { src: "/gallery/IMG_1811.jpg", alt: "Winter outdoor play" },
-              { src: "/gallery/IMG_1804.jpg", alt: "Learning through play" },
-              { src: "/gallery/IMG_1808.jpg", alt: "Creative activities" },
-              { src: "/gallery/IMG_1816.jpg", alt: "Group activity outdoors" },
-              { src: "/gallery/IMG_1799.jpg", alt: "Classroom exploration" },
-              { src: "/gallery/IMG_1813.jpg", alt: "Winter fun at QAF" },
-            ].map((img, i) => (
-              <div key={i} className="relative aspect-square rounded-lg overflow-hidden transition-colors hover:border-orange">
-                <Image src={img.src} alt={img.alt} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PARENT VOICES ===== */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
-            Parent Voices
-          </h2>
-          <div className="grid md:grid-cols-3 gap-10 md:gap-0 md:divide-x md:divide-card-line">
-            {[
-              {
-                quote:
-                  "After three months at QAF, my daughter started saying her morning duas without any prompting. Her teachers made dhikr feel like play.",
-                author: "Amira",
-                role: "Mother of a JK student",
-              },
-              {
-                quote:
-                  "We don\u2019t speak Arabic at home and I was nervous. By month two, my son was counting to ten in Arabic at bedtime.",
-                author: "Hassan",
-                role: "Father of a JK student",
-              },
-              {
-                quote:
-                  "QAF gave our SK graduate the confidence to walk into Grade 1 reading, praying, and proud of who she is.",
-                author: "Fatima",
-                role: "Mother of a QAF alumna",
-              },
-            ].map((t, i) => (
-              <figure key={i} className="flex flex-col md:px-8 md:first:pl-0 md:last:pr-0">
-                <span aria-hidden className="font-heading text-6xl text-orange leading-none mb-5">
-                  &ldquo;
-                </span>
-                <blockquote className="font-heading text-xl leading-relaxed mb-6">
-                  {t.quote}
-                </blockquote>
-                <figcaption className="mt-auto text-sm text-text-light">
-                  <span className="font-semibold uppercase tracking-wider text-text text-xs">
-                    {t.author}
-                  </span>{" "}
-                  &mdash; {t.role}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== BY THE NUMBERS ===== */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-center mb-12">
-            By the Numbers
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-y-10">
-            {[
-              { stat: "2021", label: "Serving Ottawa families since" },
-              { stat: "8:1", label: "Student-to-teacher ratio" },
-              { stat: "3", label: "Languages in daily use" },
-              { stat: "100%", label: "Graduates meet Ontario Grade 1 benchmarks" },
-            ].map((s, i) => (
-              <div
-                key={i}
-                className="text-center px-6 lg:border-l lg:border-card-line lg:first:border-l-0"
-              >
-                <div className="font-heading text-5xl font-bold text-orange-dark mb-3">
-                  {s.stat}
-                </div>
-                <p className="text-text-light text-sm max-w-[190px] mx-auto">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ===== PARENT GUIDES ===== */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
@@ -375,8 +160,8 @@ export default function Home() {
             Guides for Ottawa Muslim Families
           </h2>
           <p className="text-text-light text-center mb-12 max-w-2xl mx-auto">
-            Comparing Islamic schools in Ottawa, looking for a Muslim daycare,
-            or planning JK? Start with our honest, regularly updated guides.
+            Looking for Quran classes, weekend Islamic school, or Arabic for
+            your child in Ottawa? Start with our honest, regularly updated guides.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -394,21 +179,6 @@ export default function Home() {
                 href: "/blog/weekend-islamic-schools-ottawa",
                 title: "Weekend Islamic Schools & Quran Classes in Ottawa",
                 text: "Saturday and Sunday Quran, Arabic, and Islamic Studies programs for school-age children.",
-              },
-              {
-                href: "/blog/muslim-daycare-ottawa-guide",
-                title: "Islamic Daycare & Preschool in Ottawa",
-                text: "Halal food, duas, Arabic, and licensing: what to check, and when a kindergarten fits better.",
-              },
-              {
-                href: "/blog/ottawa-islamic-school-fees-explained",
-                title: "Ottawa Islamic School Fees 2026/27",
-                text: "How tuition, registration, and resource fees work, with QAF\u2019s full price list.",
-              },
-              {
-                href: "/blog/junior-kindergarten-ottawa-guide",
-                title: "Junior Kindergarten in Ottawa: 2027 Guide",
-                text: "Age cutoffs, registration dates, and public vs. private options for JK.",
               },
             ].map((g) => (
               <Link
@@ -466,17 +236,17 @@ export default function Home() {
       <section className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4 text-white">
-            See QAF for yourself.
+            Sunday Camp seats are still open.
           </h2>
           <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">
-            The best way to understand what makes QAF different is to walk
-            through the classroom. Tours run weekly during the school year.
+            Quran, Arabic, math &amp; STEM, and soccer every Sunday for ages
+            8&ndash;15. Reserve your child&rsquo;s seat today.
           </p>
           <Link
-            href="/inquiry"
+            href="/sunday-camp#pricing"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Submit Inquiry &rarr;
+            Enrol in Sunday Camp &rarr;
           </Link>
         </div>
       </section>

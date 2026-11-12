@@ -20,29 +20,29 @@ const SITE_URL = "https://qafschool.com";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Islamic School in Ottawa · Montessori JK & SK · QAF Islamic School",
+    default: "Quran & Arabic Programs for Kids in Ottawa · Sunday Camp & Tuesday Evenings · QAF School",
     template: "%s · QAF School",
   },
   description:
-    "QAF School is an Islamic school in Ottawa offering Junior & Senior Kindergarten (ages 4–5) with Montessori-inspired learning, daily Arabic immersion, Quran, and Islamic values. Book a tour today.",
+    "QAF School in Ottawa offers weekend and evening Islamic programs for school-age children: Sunday Camp (Quran, Arabic, math & STEM, soccer, ages 8–15) and a Tuesday evening program (Quran, Tajweed, Sira, ages 9–13). Sunday Camp seats available.",
   keywords: [
+    "Quran classes for kids Ottawa",
+    "Sunday Islamic school Ottawa",
+    "weekend Islamic school Ottawa",
+    "Arabic classes for kids Ottawa",
+    "Tajweed classes Ottawa",
+    "Sira classes for kids",
+    "after school Quran program Ottawa",
     "Islamic school Ottawa",
-    "Islamic kindergarten Ottawa",
-    "Muslim school Ottawa",
-    "Arabic immersion school Ottawa",
-    "Montessori Islamic school",
-    "JK SK Ottawa",
-    "Islamic preschool Ottawa",
-    "Quran school for kids Ottawa",
   ],
   openGraph: {
     type: "website",
     locale: "en_CA",
     url: SITE_URL,
     siteName: "QAF School",
-    title: "Islamic School in Ottawa · JK & SK Kindergarten · QAF School",
+    title: "Quran & Arabic Programs for Kids in Ottawa · QAF School",
     description:
-      "Ottawa's Islamic Junior & Senior Kindergarten — Montessori-inspired learning, daily Arabic, Quran, and Islamic values for ages 4–5.",
+      "Sunday Camp (Quran, Arabic, STEM, soccer · ages 8–15) and a Tuesday evening Quran, Tajweed & Sira program (ages 9–13) at 900 Dynes Rd, Ottawa.",
     images: [
       {
         url: "/og.jpg",
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Islamic School in Ottawa · JK & SK Kindergarten · QAF School",
+    title: "Quran & Arabic Programs for Kids in Ottawa · QAF School",
     description:
-      "Ottawa's Islamic Junior & Senior Kindergarten — Montessori-inspired learning, daily Arabic, Quran, and Islamic values for ages 4–5.",
+      "Sunday Camp (Quran, Arabic, STEM, soccer · ages 8–15) and a Tuesday evening Quran, Tajweed & Sira program (ages 9–13) at 900 Dynes Rd, Ottawa.",
     images: ["/og.jpg"],
   },
   robots: {
@@ -73,12 +73,12 @@ export const metadata: Metadata = {
 
 const schoolJsonLd = {
   "@context": "https://schema.org",
-  "@type": ["School", "Preschool"],
+  "@type": ["School", "EducationalOrganization"],
   "@id": `${SITE_URL}/#school`,
   name: "QAF School",
   alternateName: ["QAF Islamic School", "Qabas Academic Foundation"],
   description:
-    "Islamic school in Ottawa offering Junior and Senior Kindergarten (ages 4–5) with Montessori-inspired learning, daily Arabic immersion, Quran, and Islamic values.",
+    "QAF School in Ottawa offers weekend and evening Islamic programs for school-age children: Sunday Camp (Quran, Arabic, math & STEM, soccer, ages 8–15) and a Tuesday evening program (Quran, Tajweed, Sira, ages 9–13).",
   url: SITE_URL,
   logo: `${SITE_URL}/logo.jpg`,
   image: `${SITE_URL}/og.jpg`,
@@ -100,9 +100,15 @@ const schoolJsonLd = {
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "08:45",
-      closes: "15:15",
+      dayOfWeek: "Tuesday",
+      opens: "18:00",
+      closes: "20:30",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: "11:00",
+      closes: "15:00",
     },
   ],
   sameAs: [

@@ -4,7 +4,7 @@ import InquiryForm from "@/components/InquiryForm";
 export const metadata: Metadata = {
   title: "Submit an Inquiry",
   description:
-    "Start your child's journey at QAF School, Ottawa's Islamic JK & SK kindergarten. Tell us about your family and we'll reach out to schedule a tour.",
+    "Have a question about QAF's Sunday Camp or Tuesday evening program in Ottawa? Tell us about your family and we'll be in touch.",
   alternates: { canonical: "/inquiry" },
 };
 
@@ -18,9 +18,12 @@ export default function InquiryPage() {
             Submit an Inquiry
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto leading-relaxed">
-            Tell us a little about your family and your child. Our admissions
-            team will review your inquiry and, if it looks like a good fit,
-            reach out to schedule a tour.
+            Tell us a little about your family and your child, and we&rsquo;ll
+            be in touch within two business days. Looking for a specific
+            program? <a href="/sunday-camp" className="text-orange-dark font-medium hover:underline">Sunday Camp</a> has
+            seats available, and the{" "}
+            <a href="/tuesday" className="text-orange-dark font-medium hover:underline">Tuesday program</a> has
+            a waitlist.
           </p>
         </div>
       </section>

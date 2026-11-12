@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { faqData } from "@/data/faqs";
 
 export const metadata: Metadata = {
-  title: "FAQ · Islamic Kindergarten in Ottawa",
+  title: "FAQ · Sunday Camp & Tuesday Program",
   description:
-    "Answers to common questions about QAF School: Arabic immersion for non-Arabic-speaking families, Montessori-inspired learning, hours, tuition, meals, and Grade 1 readiness.",
+    "Answers to common questions about QAF's Sunday Camp and Tuesday evening program in Ottawa: schedules, ages, seats, fees, and Arabic for non-Arabic-speaking families.",
   alternates: { canonical: "/faq" },
 };
 

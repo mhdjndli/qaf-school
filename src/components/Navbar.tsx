@@ -8,12 +8,11 @@ import { useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
-  { href: "/program", label: "JK/SK Program" },
   { href: "/sunday-camp", label: "Sunday Camp" },
-  { href: "/admissions", label: "Admissions" },
+  { href: "/tuesday", label: "Tuesday Program" },
+  { href: "/admissions", label: "How to Join" },
   { href: "/faq", label: "FAQ" },
   { href: "/blog", label: "Blog" },
-  { href: "/parents", label: "Parents" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -55,10 +54,10 @@ export default function Navbar() {
           ))}
           <li>
             <Link
-              href="/inquiry"
+              href="/sunday-camp#pricing"
               className="bg-orange text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-orange-dark transition-all hover:-translate-y-0.5"
             >
-              Submit Inquiry
+              Enrol in Sunday Camp
             </Link>
           </li>
         </ul>
@@ -108,11 +107,11 @@ export default function Navbar() {
             ))}
             <li>
               <Link
-                href="/inquiry"
+                href="/sunday-camp#pricing"
                 onClick={() => setOpen(false)}
                 className="block mt-3 bg-orange text-white text-center px-5 py-3 rounded-lg font-semibold"
               >
-                Submit Inquiry
+                Enrol in Sunday Camp
               </Link>
             </li>
           </ul>

@@ -4,7 +4,7 @@ import InquiryForm from "@/components/InquiryForm";
 export const metadata: Metadata = {
   title: "Contact Us · Islamic School in Ottawa",
   description:
-    "Contact QAF School: 900 Dynes Rd, Ottawa, ON K2C 3L6 · +1 613 581 8685 · admin@qafschool.ca. Submit an inquiry or ask us anything about our Islamic JK & SK.",
+    "Contact QAF School: 900 Dynes Rd, Ottawa, ON K2C 3L6 · +1 613 581 8685 · admin@qafschool.ca. Submit an inquiry or ask us anything about Sunday Camp or our Tuesday evening program.",
   alternates: { canonical: "/contact" },
 };
 

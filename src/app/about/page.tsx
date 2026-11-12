@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About Our Islamic Kindergarten in Ottawa",
+  title: "About QAF · Quran & Arabic Programs in Ottawa",
   alternates: { canonical: "/about" },
   description:
-    "Meet QAF, Ottawa's Islamic JK/SK serving families since 2021. Learn our Montessori-inspired philosophy and see what makes us different.",
+    "Meet QAF, serving Ottawa Muslim families since 2021 with Sunday Camp and a Tuesday evening Quran, Tajweed & Sira program for school-age children.",
 };
 
 export default function About() {
@@ -20,10 +20,9 @@ export default function About() {
             ready for the world.
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto leading-relaxed">
-            QAF, the Qabas Academic Foundation, is an Islamic Junior and Senior
-            Kindergarten in Ottawa, serving families who want their child&rsquo;s
-            earliest years of formal learning to be shaped by faith, language,
-            and purposeful play.
+            QAF, the Qabas Academic Foundation, runs weekly Islamic programs in
+            Ottawa for school-age children: Sunday Camp and a Tuesday evening
+            program of Quran, Tajweed, and Sira.
           </p>
         </div>
       </section>
@@ -34,24 +33,22 @@ export default function About() {
           <h2 className="font-heading text-3xl font-bold mb-6">Our Story</h2>
           <div className="space-y-5 text-text-light leading-relaxed">
             <p>
-              QAF was founded in 2021 by Ottawa families who wanted something
-              their city did not yet have: a kindergarten where children would be
-              surrounded by Arabic every day, where Islamic identity would be
-              woven into the rhythm of the classroom, and where learning would be
-              shaped by the best of modern pedagogy, including the Montessori
-              method.
+              QAF was founded in 2021 by Ottawa families who wanted their
+              children surrounded by Arabic and the Quran, with Islamic
+              identity woven into the rhythm of the classroom.
             </p>
             <p>
-              We started small. One classroom, a handful of families, and a
-              clear conviction: that the years between 4 and 5 are among the
-              most formative in a child&rsquo;s life, and that the language,
-              environment, and values a child absorbs in those years stay with
-              them forever.
+              QAF began as a Junior and Senior Kindergarten. Today
+              we focus on what families asked us for most: steady, weekly
+              Quran and Arabic learning for school-age children that fits
+              around the school week.
             </p>
             <p>
-              Since then, QAF has grown into a warm community of families from
-              across Ottawa. We remain intentionally small, because knowing
-              every child by name is not a feature; it is the entire point.
+              Our Sunday Camp brings Quran, Arabic, math &amp; STEM, and soccer
+              together every Sunday for ages 8&ndash;15. Our Tuesday evening
+              program focuses on Quran, Tajweed, and Sira for ages 9&ndash;13.
+              We remain intentionally small, because knowing every child by
+              name is not a feature; it is the entire point.
             </p>
           </div>
         </div>
@@ -64,30 +61,20 @@ export default function About() {
             Our Philosophy
           </h2>
           <p className="text-orange-dark font-heading text-xl italic mb-6">
-            Tarbiyah, in a prepared environment
+            Tarbiyah, one week at a time
           </p>
           <div className="space-y-5 text-text-light leading-relaxed mb-12">
             <p>
               We believe every child arrives with fitrah, a pure, natural
               disposition toward truth, beauty, and their Creator. Our job is
-              not to fill a child with information but to prepare an environment
-              where that fitrah can unfold.
+              not to fill a child with information but to nurture that fitrah
+              through the Quran, the Arabic language, and the example of the
+              Prophet \uFDFA.
             </p>
             <p>
-              That is why our approach is Montessori-inspired. Maria
-              Montessori&rsquo;s insight, that children learn best through
-              purposeful, hands-on engagement with thoughtfully chosen
-              materials, aligns deeply with the Islamic tradition of tarbiyah:
-              the patient, holistic nurture of body, mind, heart, and soul.
-            </p>
-            <p>
-              We say Montessori-inspired, not Montessori-pure, because we also
-              teach to Ontario&rsquo;s Kindergarten Program, and we integrate
-              Islamic Studies, Quran, and Arabic in ways the classical Montessori
-              curriculum does not include. What we take from Montessori is the
-              respect for the child, for the environment, and for the belief
-              that children are not empty vessels to be filled but whole people
-              to be nurtured.
+              That is tarbiyah: the patient, holistic nurture of body, mind,
+              heart, and soul. It shapes how we teach, how we speak to
+              students, and how we build community among families.
             </p>
           </div>
 
@@ -106,11 +93,11 @@ export default function About() {
               },
               {
                 title: "Arabic as a living language",
-                text: "Children hear it, speak it, sing it, and absorb it, not as a school subject but as a daily companion.",
+                text: "Students read it, write it, and use it, not as a dry school subject but as the language of the Quran.",
               },
               {
-                title: "Ontario-aligned rigor",
-                text: "Every child leaves QAF meeting or exceeding Ontario\u2019s Kindergarten Program expectations, ready for Grade 1.",
+                title: "Steady progress",
+                text: "Weekly classes by level mean every student keeps moving forward in recitation, memorization, and understanding.",
               },
             ].map((v, i) => (
               <div
@@ -174,19 +161,12 @@ export default function About() {
             Our Facility
           </h2>
           <p className="text-text-light leading-relaxed mb-4">
-            Our classroom is designed for 4- and 5-year-olds, with child-sized
-            furniture, materials within reach, natural light, and clear zones
-            for quiet work, circle time, and movement. Safety standards meet or
-            exceed Ontario requirements.
-          </p>
-          <p className="text-text-light leading-relaxed mb-4">
-            Our outdoor play area is fenced, age-appropriate, and supervised at
-            all times. QAF is a nut-free facility and all food must be halal.
+            Our programs run at 900 Dynes Rd in Ottawa, with bright classrooms
+            for each class and a field beside the school for soccer in the
+            warm months.
           </p>
           <p className="text-text-light leading-relaxed">
-            Parents stay connected to their child&rsquo;s day through ClassDojo,
-            where they receive photos, videos, and progress updates directly
-            from our educators.
+            QAF is a nut-free facility and all food brought in must be halal.
           </p>
         </div>
       </section>
@@ -195,18 +175,16 @@ export default function About() {
       <section className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-3xl font-bold mb-4 text-white">
-            Now that you know us, come meet us.
+            Now that you know us, come join us.
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            Submit an inquiry and we&rsquo;ll reach out to schedule a tour so
-            you can see whether QAF feels like the right first school for your
-            child.
+            Sunday Camp still has seats available for ages 8&ndash;15.
           </p>
           <Link
-            href="/inquiry"
+            href="/sunday-camp"
             className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
           >
-            Submit Inquiry &rarr;
+            Enrol in Sunday Camp &rarr;
           </Link>
         </div>
       </section>

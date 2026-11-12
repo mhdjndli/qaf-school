@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
         destination: "https://qafschool.com/:path*",
         permanent: true,
       },
+      // The JK/SK program closed in December 2026.
+      { source: "/program", destination: "/", permanent: true },
+      { source: "/parents", destination: "/", permanent: true },
     ];
   },
   experimental: {

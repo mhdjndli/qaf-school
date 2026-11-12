@@ -37,8 +37,21 @@ const INITIAL: FormState = {
   source: "",
 };
 
-export default function InquiryForm() {
-  const [form, setForm] = useState<FormState>(INITIAL);
+export default function InquiryForm({
+  waitlist,
+}: {
+  /** Signs the family up for a full program's waitlist instead of an inquiry. */
+  waitlist?: "tuesday";
+} = {}) {
+  const [form, setForm] = useState<FormState>(() =>
+    waitlist
+      ? {
+          ...INITIAL,
+          wantsTour: "no",
+          expectedStartDate: new Date().toISOString().slice(0, 10),
+        }
+      : INITIAL,
+  );
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">(
     "idle",
   );
@@ -58,6 +71,7 @@ export default function InquiryForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          waitlist,
           wantsTour: form.wantsTour === "yes",
           source: form.source || "Other",
         }),
@@ -84,11 +98,12 @@ export default function InquiryForm() {
       <div className="bg-green/10 border border-green rounded-lg p-8 text-center">
         <div className="text-4xl mb-3">&#10003;</div>
         <h2 className="font-heading text-2xl font-bold mb-2 text-green">
-          Inquiry Received
+          {waitlist ? "You\u2019re on the Waitlist" : "Inquiry Received"}
         </h2>
         <p className="text-text-light">
-          Thank you! We&rsquo;ve received your inquiry and will be in touch
-          within two business days.
+          {waitlist
+            ? "Thank you! We\u2019ll contact you as soon as a seat opens up."
+            : "Thank you! We\u2019ve received your inquiry and will be in touch within two business days."}
         </p>
       </div>
     );
@@ -169,7 +184,7 @@ export default function InquiryForm() {
             />
           </Field>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className={waitlist ? "grid gap-4" : "grid sm:grid-cols-2 gap-4"}>
           <Field label="Date of birth *">
             <input
               type="date"
@@ -179,6 +194,7 @@ export default function InquiryForm() {
               className={inputCls}
             />
           </Field>
+          {!waitlist && (
           <Field label="Expected start date *">
             <input
               type="date"
@@ -188,9 +204,11 @@ export default function InquiryForm() {
               className={inputCls}
             />
           </Field>
+          )}
         </div>
       </fieldset>
 
+      {!waitlist && (
       <Field label="Do you want us to contact you for a tour? *">
         <div className="flex gap-6 pt-1">
           <label className="flex items-center gap-2 text-sm">
@@ -217,6 +235,7 @@ export default function InquiryForm() {
           </label>
         </div>
       </Field>
+      )}
 
       <Field label="How did you hear about us? *">
         <select
@@ -253,7 +272,11 @@ export default function InquiryForm() {
         disabled={status === "submitting"}
         className="w-full bg-orange text-white py-3.5 rounded-lg font-semibold text-lg hover:bg-orange-dark transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
       >
-        {status === "submitting" ? "Submitting..." : "Submit Inquiry \u2192"}
+        {status === "submitting"
+          ? "Submitting..."
+          : waitlist
+            ? "Join the Waitlist \u2192"
+            : "Submit Inquiry \u2192"}
       </button>
     </form>
   );

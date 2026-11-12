@@ -20,10 +20,10 @@ export default function NotFound() {
             Back to Home
           </Link>
           <Link
-            href="/program"
+            href="/sunday-camp"
             className="border-2 border-orange text-orange-dark px-8 py-4 rounded-lg font-semibold hover:bg-orange hover:text-white transition-all hover:-translate-y-0.5"
           >
-            See Our Program
+            See Sunday Camp
           </Link>
         </div>
       </div>

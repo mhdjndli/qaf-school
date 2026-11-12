@@ -8,7 +8,7 @@ const SITE_URL = "https://qafschool.com";
 export const metadata: Metadata = {
   title: "Sunday Camp · Quran, Arabic, Math & STEM, Soccer · Ages 8–15",
   description:
-    "QAF Sunday Camp in Ottawa: four hours of Quran, Arabic, math & STEM, and soccer every Sunday, 11 AM–3 PM, ages 8–15. September 2026 – June 2027. $190/month. Enrol online.",
+    "QAF Sunday Camp in Ottawa: four hours of Quran, Arabic, math & STEM, and soccer every Sunday, 11 AM–3 PM, ages 8–15. September 2026 – June 2027. $190/month. Seats available — enrol online.",
   alternates: { canonical: "/sunday-camp" },
   openGraph: {
     title: "Sunday Camp at QAF · Ottawa · Ages 8–15",
@@ -104,7 +104,7 @@ export default function SundayCamp() {
         <div className="max-w-6xl mx-auto px-6 relative grid md:grid-cols-2 gap-10 items-center">
           <div className="text-center md:text-left">
             <span className="inline-block bg-green/10 text-green font-semibold text-xs uppercase tracking-wider px-4 py-2 rounded-full mb-5">
-              Now enrolling · September 2026 – June 2027
+              Seats available · Enrolling now for 2026/27
             </span>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.4rem] font-bold mb-5 text-text leading-tight">
               Sunday Camp at QAF

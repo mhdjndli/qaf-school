@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addInquiry, type InquirySource } from "@/lib/store";
+import { addInquiry, setWaitlisted, type InquirySource } from "@/lib/store";
 
 const SOURCES: InquirySource[] = [
   "Google Search",
@@ -30,8 +30,12 @@ export async function POST(req: Request) {
   const childDob = str(body.childDob, 20);
   const expectedStartDate = str(body.expectedStartDate, 20);
   const wantsTour = body.wantsTour === true || body.wantsTour === "yes";
+  // Waitlist sign-ups (e.g. the full Tuesday program) skip the inquiry stage.
+  const waitlist = body.waitlist === "tuesday";
   const notesRaw = str(body.notes, 2000);
-  const notes = notesRaw ? notesRaw : null;
+  const notes = waitlist
+    ? `[Tuesday program waitlist]${notesRaw ? ` ${notesRaw}` : ""}`
+    : notesRaw || null;
   const sourceRaw = str(body.source, 40) as InquirySource;
   const source: InquirySource = SOURCES.includes(sourceRaw) ? sourceRaw : "Other";
 
@@ -65,6 +69,8 @@ export async function POST(req: Request) {
     notes,
     source,
   });
+
+  if (waitlist) await setWaitlisted(inquiry.id, true);
 
   return NextResponse.json({ id: inquiry.id }, { status: 201 });
 }

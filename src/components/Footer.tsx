@@ -14,7 +14,7 @@ export default function Footer() {
             </div>
             <p className="text-sm leading-relaxed text-white/70">
               Qabas Academic Foundation<br />
-              Islamic JK &amp; SK &middot; Ottawa &middot; Since 2021
+              Sunday Camp &amp; Tuesday Program &middot; Ottawa &middot; Since 2021
             </p>
             <div className="mt-4 text-sm text-white/60">
               <p>900 Dynes Rd</p>
@@ -41,9 +41,9 @@ export default function Footer() {
               {[
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About" },
-                { href: "/program", label: "JK/SK Program" },
                 { href: "/sunday-camp", label: "Sunday Camp" },
-                { href: "/admissions", label: "Admissions" },
+                { href: "/tuesday", label: "Tuesday Program" },
+                { href: "/admissions", label: "How to Join" },
                 { href: "/faq", label: "FAQ" },
                 { href: "/blog", label: "Blog" },
               ].map((l) => (
@@ -66,9 +66,9 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { href: "/parents", label: "Parent Portal" },
-                { href: "/parents", label: "School Calendar" },
-                { href: "/parents", label: "Parent Handbook" },
+                { href: "/sunday-camp#pricing", label: "Enrol in Sunday Camp" },
+                { href: "/tuesday#waitlist", label: "Tuesday Waitlist" },
+                { href: "/faq", label: "FAQ" },
                 { href: "/contact", label: "Contact Us" },
               ].map((l, i) => (
                 <li key={i}>
@@ -101,10 +101,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/inquiry"
+                  href="/tuesday#waitlist"
                   className="text-sm text-white/60 hover:text-orange transition-colors"
                 >
-                  Submit Inquiry
+                  Tuesday Waitlist
                 </Link>
               </li>
               <li>

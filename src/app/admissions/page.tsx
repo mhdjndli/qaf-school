@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Admissions & Tuition 2026/27 · Islamic JK/SK",
+  title: "How to Join · Sunday Camp & Tuesday Program",
   alternates: { canonical: "/admissions" },
   description:
-    "Enrol your 4- or 5-year-old at QAF, Ottawa's Islamic kindergarten: $690/month, $190 resource fee, sibling discount. Book a tour; spaces are limited.",
+    "How to join QAF's programs in Ottawa: enrol in Sunday Camp online ($190/month, seats available) or join the waitlist for the Tuesday evening Quran, Tajweed & Sira program.",
 };
 
 export default function Admissions() {
@@ -15,166 +15,102 @@ export default function Admissions() {
       <section className="bg-gradient-to-br from-cream via-[#FFF3E6] to-[#FDEBD0] py-16 md:py-20 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="font-heading text-3xl md:text-5xl font-bold mb-5 text-text">
-            Admissions: 2026/2027
+            How to Join
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto leading-relaxed">
-            A simple, transparent process to bring your child into the QAF family.
-            Four steps, no surprises.
+            QAF runs two weekly programs. Here&rsquo;s where each one stands
+            and how to sign up.
           </p>
         </div>
       </section>
 
-      {/* 4 STEP PROCESS */}
+      {/* PROGRAMS */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <h2 className="font-heading text-3xl font-bold text-center mb-12">
-            The 4-Step Process
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                num: "1",
-                title: "Inquire",
-                text: "Submit our short inquiry form or email admin@qafschool.ca. We\u2019ll respond within two business days.",
-              },
-              {
-                num: "2",
-                title: "Tour",
-                text: "Visit QAF in person. A 30-minute tour where you walk through the classroom, meet a teacher, and ask every question you have.",
-              },
-              {
-                num: "3",
-                title: "Apply",
-                text: "Complete our application form and submit the required documents. Applications are reviewed on a rolling basis.",
-              },
-              {
-                num: "4",
-                title: "Enrol",
-                text: "Receive your welcome package, sign the enrollment agreement, pay your first month\u2019s tuition, and join the QAF family.",
-              },
-            ].map((step, i) => (
-              <div key={i} className="text-center">
-                <div className="w-14 h-14 bg-orange text-white rounded-full flex items-center justify-center text-xl font-bold font-heading mx-auto mb-5">
-                  {step.num}
-                </div>
-                <h3 className="font-heading text-xl font-bold mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-text-light text-[0.93rem] leading-relaxed">
-                  {step.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TUITION & FEES */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-3xl font-bold text-center mb-4">
-            Tuition &amp; Fees
-          </h2>
-          <p className="text-text-light text-center mb-10">
-            We believe in transparent pricing. No hidden charges, no surprises
-            mid-year.
-          </p>
-          <div className="overflow-x-auto rounded-lg border border-card-line mb-10">
+          <div className="overflow-x-auto rounded-lg border border-card-line mb-12">
             <table className="w-full bg-white">
               <thead className="bg-red text-white">
                 <tr>
-                  <th className="py-4 px-6 text-left font-semibold text-sm">Item</th>
-                  <th className="py-4 px-6 text-left font-semibold text-sm">Amount</th>
+                  <th className="py-4 px-6 text-left font-semibold text-sm">Program</th>
+                  <th className="py-4 px-6 text-left font-semibold text-sm">When</th>
+                  <th className="py-4 px-6 text-left font-semibold text-sm">Ages</th>
+                  <th className="py-4 px-6 text-left font-semibold text-sm">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ["Monthly tuition (JK and SK)", "$690 / month"],
-                  ["Annual resource & supplies fee", "$190 / year (non-refundable)"],
-                  ["Application fee", "Contact us"],
-                ].map(([item, amount], i) => (
-                  <tr key={i} className="border-b border-card-line last:border-0">
-                    <td className="py-4 px-6 text-sm">{item}</td>
-                    <td className="py-4 px-6 font-bold text-orange-dark text-sm whitespace-nowrap">
-                      {amount}
-                    </td>
-                  </tr>
-                ))}
+                <tr className="border-b border-card-line">
+                  <td className="py-4 px-6 text-sm font-semibold">
+                    <Link href="/sunday-camp" className="hover:text-orange-dark">Sunday Camp</Link>
+                  </td>
+                  <td className="py-4 px-6 text-sm whitespace-nowrap">Sundays 11 AM – 3 PM</td>
+                  <td className="py-4 px-6 text-sm">8–15</td>
+                  <td className="py-4 px-6 text-sm font-bold text-green whitespace-nowrap">Seats available</td>
+                </tr>
+                <tr>
+                  <td className="py-4 px-6 text-sm font-semibold">
+                    <Link href="/tuesday" className="hover:text-orange-dark">Tuesday Evening Program</Link>
+                  </td>
+                  <td className="py-4 px-6 text-sm whitespace-nowrap">Tuesdays 6 – 8:30 PM</td>
+                  <td className="py-4 px-6 text-sm">9–13</td>
+                  <td className="py-4 px-6 text-sm font-bold text-red whitespace-nowrap">Full · Waitlist</td>
+                </tr>
               </tbody>
             </table>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-warm-white rounded-lg p-6 border border-card-line">
-              <h3 className="font-heading text-lg font-bold mb-3">Payment Schedule</h3>
-              <ul className="space-y-2 text-text-light text-[0.93rem]">
-                <li>Tuition: $690/month, billed 1st of each month, September–June (10 months)</li>
-                <li>Resource fee: $190 due once per school year at enrollment</li>
-                <li>Payment via credit card, direct debit, or e-transfer through Parent Portal</li>
-              </ul>
-            </div>
-            <div className="bg-warm-white rounded-lg p-6 border border-card-line">
-              <h3 className="font-heading text-lg font-bold mb-3">Annual Total</h3>
-              <div className="text-text-light text-[0.93rem] space-y-2">
-                <p>$690 &times; 10 months = <strong className="text-text">$6,900</strong> tuition</p>
-                <p>+ $190 resource fee = <strong className="text-orange-dark text-lg">$7,090/year</strong></p>
-                <p className="text-sm mt-3">
-                  Sibling discount available. Contact{" "}
-                  <a href="mailto:admin@qafschool.ca" className="text-orange-dark hover:underline">
-                    admin@qafschool.ca
-                  </a>{" "}
-                  for details.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* REQUIRED DOCUMENTS */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-3xl font-bold text-center mb-10">
-            Required Documents
-          </h2>
-          <div className="max-w-xl mx-auto space-y-3">
-            {[
-              "Child\u2019s birth certificate",
-              "Up-to-date immunization records (per Ontario requirements)",
-              "One passport-sized photo of your child",
-              "Allergy and health information form",
-              "Emergency contacts",
-              "Signed enrollment agreement (provided after acceptance)",
-            ].map((doc, i) => (
-              <div
-                key={i}
-                className="bg-warm-white rounded-lg px-5 py-3.5 border border-card-line flex items-center gap-3"
+            <div className="bg-warm-white rounded-lg p-8 border border-card-line flex flex-col">
+              <h2 className="font-heading text-2xl font-bold mb-3 text-orange-dark">
+                Sunday Camp
+              </h2>
+              <ol className="space-y-2 text-text-light text-[0.95rem] mb-6 list-decimal pl-5">
+                <li>Choose the monthly plan on the Sunday Camp page ($190/month).</li>
+                <li>Complete secure checkout online.</li>
+                <li>We&rsquo;ll email you before the first Sunday with everything you need.</li>
+              </ol>
+              <Link
+                href="/sunday-camp#pricing"
+                className="mt-auto self-start bg-orange text-white px-7 py-3 rounded-lg font-semibold hover:bg-orange-dark transition-all hover:-translate-y-0.5"
               >
-                <span className="text-orange text-lg">&#128196;</span>
-                <span className="text-text text-[0.93rem]">{doc}</span>
-              </div>
-            ))}
+                Enrol in Sunday Camp &rarr;
+              </Link>
+            </div>
+            <div className="bg-warm-white rounded-lg p-8 border border-card-line flex flex-col">
+              <h2 className="font-heading text-2xl font-bold mb-3 text-orange-dark">
+                Tuesday Evening Program
+              </h2>
+              <ol className="space-y-2 text-text-light text-[0.95rem] mb-6 list-decimal pl-5">
+                <li>The program is currently full.</li>
+                <li>Add your child to the waitlist with a short form.</li>
+                <li>We&rsquo;ll contact you as soon as a seat opens up.</li>
+              </ol>
+              <Link
+                href="/tuesday#waitlist"
+                className="mt-auto self-start border-2 border-orange text-orange-dark px-7 py-3 rounded-lg font-semibold hover:bg-orange hover:text-white transition-all"
+              >
+                Join the Waitlist &rarr;
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SUBMIT AN INQUIRY */}
-      <section id="tour" className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
+      {/* QUESTIONS */}
+      <section className="bg-gradient-to-r from-orange to-red py-16 text-center text-white">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-heading text-3xl font-bold mb-4 text-white">
-            Submit an Inquiry
+            Have a question first?
           </h2>
           <p className="text-white/90 text-lg mb-8 max-w-xl mx-auto">
-            Share a few details about your family and your child. Our admissions
-            team will review your inquiry and, if it looks like a good fit,
-            reach out to schedule a tour.
+            Send us a message and we&rsquo;ll get back to you within two
+            business days.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/inquiry"
+              href="/contact"
               className="inline-block bg-white text-orange-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-cream transition-all hover:-translate-y-0.5 hover:shadow-lg"
             >
-              Submit Inquiry &rarr;
+              Contact Us &rarr;
             </Link>
             <a
               href="mailto:admin@qafschool.ca"

@@ -31,7 +31,7 @@ export default function Blog() {
           </h1>
           <p className="text-text-light text-lg max-w-2xl mx-auto">
             Practical guides for Muslim parents from Ottawa&rsquo;s Islamic
-            kindergarten: choosing a school, Quran and Arabic at home, Islamic
+            kids: choosing a school, Quran and Arabic at home, Islamic
             parenting, and the apps and tools that actually help.
           </p>
         </div>
